@@ -1,0 +1,8 @@
+<pragmas>
+<pragma file="Neuron_1/neural_layer.cpp" line="8" pragmaType="interface" parentfunction="runLayer" mode="s_axilite" port="input" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="9" pragmaType="interface" parentfunction="runLayer" mode="s_axilite" port="weights" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="10" pragmaType="interface" parentfunction="runLayer" mode="s_axilite" port="bias" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="11" pragmaType="interface" parentfunction="runLayer" mode="s_axilite" port="output" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="12" pragmaType="interface" parentfunction="runLayer" mode="s_axilite" port="numOfInNeurons" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="13" pragmaType="interface" parentfunction="runLayer" mode="s_axilite" port="" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+</pragmas>

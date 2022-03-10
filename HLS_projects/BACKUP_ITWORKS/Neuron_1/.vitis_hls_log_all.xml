@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog>
+        <logs message="WARNING: [RTGEN 206-101] Design contains AXI ports. Reset is fixed to synchronous and active low." projectName="Neuron_1" solutionName="solution1" date="2022-03-03T10:55:22.763+0100" type="Warning"/>
+        <logs message="WARNING: [HLS 200-960] Cannot flatten loop 'VITIS_LOOP_25_1' (Neuron_1/neural_layer.cpp:16:21) in function 'runLayer' more than one sub loop.&#xD;&#xA;Resolution: For help on HLS 200-960 see www.xilinx.com/cgi-bin/docs/rdoc?v=2021.2;t=hls+guidance;d=200-960.html" projectName="Neuron_1" solutionName="solution1" date="2022-03-03T10:55:21.474+0100" type="Warning"/>
+        <logs message="WARNING: [ANALYSIS 214-31] The program may have out of bound access of array variable 'bias' in function 'runLayer'." projectName="Neuron_1" solutionName="solution1" date="2022-03-03T10:55:21.444+0100" type="Warning"/>
+        <logs message="WARNING: [HLS 214-167] The program may have out of bound array access" projectName="Neuron_1" solutionName="solution1" date="2022-03-03T10:55:21.227+0100" type="Warning"/>
+      </synLog>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>

@@ -1,0 +1,11 @@
+<pragmas>
+<pragma file="Neuron_1/neural_layer.cpp" line="46" pragmaType="pipeline" parentfunction="nnlayer" off="0" ii="-1" rewind="0" style=""/>
+<pragma file="Neuron_1/neural_layer.cpp" line="26" pragmaType="interface" parentfunction="nnlayer" mode="s_axilite" port="input_" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="27" pragmaType="interface" parentfunction="nnlayer" mode="s_axilite" port="output" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="28" pragmaType="interface" parentfunction="nnlayer" mode="s_axilite" port="weights_" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="29" pragmaType="interface" parentfunction="nnlayer" mode="s_axilite" port="bias_" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="30" pragmaType="interface" parentfunction="nnlayer" mode="s_axilite" port="numOfInNeurons" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="31" pragmaType="interface" parentfunction="nnlayer" mode="s_axilite" port="numOfOutNeurons" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="32" pragmaType="interface" parentfunction="nnlayer" mode="s_axilite" port="activation" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+<pragma file="Neuron_1/neural_layer.cpp" line="33" pragmaType="interface" parentfunction="nnlayer" mode="s_axilite" port="" bundle="" offset="-1" name="" clock="" impl="" register="0"/>
+</pragmas>

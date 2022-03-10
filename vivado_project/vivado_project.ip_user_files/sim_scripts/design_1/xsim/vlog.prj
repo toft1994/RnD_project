@@ -1,0 +1,15 @@
+verilog xil_defaultlib --include "C:/Xilinx/Vivado/2021.2/data/xilinx_vip/include" --include "../../../../vivado_project.gen/sources_1/bd/design_1/ipshared/ec67/hdl" --include "../../../../vivado_project.gen/sources_1/bd/design_1/ipshared/3007/hdl" --include "../../../../vivado_project.gen/sources_1/bd/design_1/ip/design_1_nnlayer_0_1/drivers/nnlayer_v1_0/src" \
+"../../../bd/design_1/ip/design_1_processing_system7_0_0/sim/design_1_processing_system7_0_0.v" \
+"../../../../vivado_project.gen/sources_1/bd/design_1/ipshared/a064/hdl/verilog/nnlayer_control_s_axi.v" \
+"../../../../vivado_project.gen/sources_1/bd/design_1/ipshared/a064/hdl/verilog/nnlayer_flow_control_loop_pipe_sequential_init.v" \
+"../../../../vivado_project.gen/sources_1/bd/design_1/ipshared/a064/hdl/verilog/nnlayer_mac_muladd_16s_16s_16ns_16_4_1.v" \
+"../../../../vivado_project.gen/sources_1/bd/design_1/ipshared/a064/hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_10_1.v" \
+"../../../../vivado_project.gen/sources_1/bd/design_1/ipshared/a064/hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_35_2.v" \
+"../../../../vivado_project.gen/sources_1/bd/design_1/ipshared/a064/hdl/verilog/nnlayer.v" \
+"../../../bd/design_1/ip/design_1_nnlayer_0_1/sim/design_1_nnlayer_0_1.v" \
+"../../../bd/design_1/ip/design_1_auto_pc_0/sim/design_1_auto_pc_0.v" \
+"../../../bd/design_1/sim/design_1.v" \
+
+verilog xil_defaultlib "glbl.v"
+
+nosort
