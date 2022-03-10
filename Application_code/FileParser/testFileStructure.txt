@@ -1,1 +1,0 @@
-weight0,...,weightN,FF,ActivationFunctions(1-n),FB,bias0,...,biasN
