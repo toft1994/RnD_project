@@ -44,7 +44,7 @@ set SCTraceOption all
 set TargetInfo xc7z020:-clg484:-1
 set SourceFiles {sc {} c ../neural_layer.cpp}
 set SourceFlags {sc {} c {{}}}
-set DirectiveFile C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/solution1/solution1.directive
+set DirectiveFile C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/solution1/solution1.directive
 set TBFiles {verilog ../test_bench.cpp bc ../test_bench.cpp vhdl ../test_bench.cpp sc ../test_bench.cpp cas ../test_bench.cpp c {}}
 set SpecLanguage C
 set TVInFiles {bc {} c {} sc {} cas {} vhdl {} verilog {}}

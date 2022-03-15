@@ -3,10 +3,10 @@
   <core name="" type="" target="">
     <kernel name="nnlayer" language="c" vlnv="xilinx.com:hls:nnlayer:1.0" attributes="" hash="" preferredWorkGroupSizeMultiple="0" workGroupSize="1" debug="false" interrupt="true">
       <port name="S_AXI_CONTROL" mode="slave" range="0x1000" portType="addressable" base="0x00000000"/>
-      <arg name="input_r" addressQualifier="0" id="0" port="S_AXI_CONTROL" size="0x4" offset="0x100" hostOffset="0x0" hostSize="0x4" type=""/>
-      <arg name="output_r" addressQualifier="0" id="1" port="S_AXI_CONTROL" size="0x4" offset="0x200" hostOffset="0x0" hostSize="0x4" type=""/>
-      <arg name="weights" addressQualifier="0" id="2" port="S_AXI_CONTROL" size="0x4" offset="0x10000" hostOffset="0x0" hostSize="0x4" type=""/>
-      <arg name="bias" addressQualifier="0" id="3" port="S_AXI_CONTROL" size="0x4" offset="0x400" hostOffset="0x0" hostSize="0x4" type=""/>
+      <arg name="input_r" addressQualifier="0" id="0" port="S_AXI_CONTROL" size="0x4" offset="0x200" hostOffset="0x0" hostSize="0x4" type=""/>
+      <arg name="output_r" addressQualifier="0" id="1" port="S_AXI_CONTROL" size="0x4" offset="0x400" hostOffset="0x0" hostSize="0x4" type=""/>
+      <arg name="weights" addressQualifier="0" id="2" port="S_AXI_CONTROL" size="0x4" offset="0x20000" hostOffset="0x0" hostSize="0x4" type=""/>
+      <arg name="bias" addressQualifier="0" id="3" port="S_AXI_CONTROL" size="0x4" offset="0x600" hostOffset="0x0" hostSize="0x4" type=""/>
       <arg name="numOfInNeurons" addressQualifier="0" id="4" port="S_AXI_CONTROL" size="0x4" offset="0x10" hostOffset="0x0" hostSize="0x4" type=""/>
       <arg name="numOfOutNeurons" addressQualifier="0" id="5" port="S_AXI_CONTROL" size="0x4" offset="0x18" hostOffset="0x0" hostSize="0x4" type=""/>
       <arg name="activation" addressQualifier="0" id="6" port="S_AXI_CONTROL" size="0x4" offset="0x20" hostOffset="0x0" hostSize="0x4" type=""/>

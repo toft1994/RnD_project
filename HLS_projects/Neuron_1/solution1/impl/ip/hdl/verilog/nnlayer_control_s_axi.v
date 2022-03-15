@@ -5,7 +5,7 @@
 `timescale 1ns/1ps
 module nnlayer_control_s_axi
 #(parameter
-    C_S_AXI_ADDR_WIDTH = 17,
+    C_S_AXI_ADDR_WIDTH = 18,
     C_S_AXI_DATA_WIDTH = 32
 )(
     input  wire                          ACLK,
@@ -32,7 +32,7 @@ module nnlayer_control_s_axi
     output wire [15:0]                   numOfInNeurons,
     output wire [15:0]                   numOfOutNeurons,
     output wire [7:0]                    activation,
-    input  wire [6:0]                    input_r_address0,
+    input  wire [7:0]                    input_r_address0,
     input  wire                          input_r_ce0,
     output wire [15:0]                   input_r_q0,
     input  wire [7:0]                    output_r_address0,
@@ -43,7 +43,7 @@ module nnlayer_control_s_axi
     input  wire [7:0]                    bias_address0,
     input  wire                          bias_ce0,
     output wire [15:0]                   bias_q0,
-    input  wire [14:0]                   weights_address0,
+    input  wire [15:0]                   weights_address0,
     input  wire                          weights_ce0,
     output wire [15:0]                   weights_q0,
     output wire                          ap_start,
@@ -85,44 +85,44 @@ module nnlayer_control_s_axi
 //           bit 7~0 - activation[7:0] (Read/Write)
 //           others  - reserved
 // 0x00024 : reserved
-// 0x00100 ~
-// 0x001ff : Memory 'input_r' (128 * 16b)
+// 0x00200 ~
+// 0x003ff : Memory 'input_r' (256 * 16b)
 //           Word n : bit [15: 0] - input_r[2n]
 //                    bit [31:16] - input_r[2n+1]
-// 0x00200 ~
-// 0x003ff : Memory 'output_r' (256 * 16b)
+// 0x00400 ~
+// 0x005ff : Memory 'output_r' (256 * 16b)
 //           Word n : bit [15: 0] - output_r[2n]
 //                    bit [31:16] - output_r[2n+1]
-// 0x00400 ~
-// 0x005ff : Memory 'bias' (256 * 16b)
+// 0x00600 ~
+// 0x007ff : Memory 'bias' (256 * 16b)
 //           Word n : bit [15: 0] - bias[2n]
 //                    bit [31:16] - bias[2n+1]
-// 0x10000 ~
-// 0x1ffff : Memory 'weights' (32768 * 16b)
+// 0x20000 ~
+// 0x3ffff : Memory 'weights' (65536 * 16b)
 //           Word n : bit [15: 0] - weights[2n]
 //                    bit [31:16] - weights[2n+1]
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
 localparam
-    ADDR_AP_CTRL                = 17'h00000,
-    ADDR_GIE                    = 17'h00004,
-    ADDR_IER                    = 17'h00008,
-    ADDR_ISR                    = 17'h0000c,
-    ADDR_NUMOFINNEURONS_DATA_0  = 17'h00010,
-    ADDR_NUMOFINNEURONS_CTRL    = 17'h00014,
-    ADDR_NUMOFOUTNEURONS_DATA_0 = 17'h00018,
-    ADDR_NUMOFOUTNEURONS_CTRL   = 17'h0001c,
-    ADDR_ACTIVATION_DATA_0      = 17'h00020,
-    ADDR_ACTIVATION_CTRL        = 17'h00024,
-    ADDR_INPUT_R_BASE           = 17'h00100,
-    ADDR_INPUT_R_HIGH           = 17'h001ff,
-    ADDR_OUTPUT_R_BASE          = 17'h00200,
-    ADDR_OUTPUT_R_HIGH          = 17'h003ff,
-    ADDR_BIAS_BASE              = 17'h00400,
-    ADDR_BIAS_HIGH              = 17'h005ff,
-    ADDR_WEIGHTS_BASE           = 17'h10000,
-    ADDR_WEIGHTS_HIGH           = 17'h1ffff,
+    ADDR_AP_CTRL                = 18'h00000,
+    ADDR_GIE                    = 18'h00004,
+    ADDR_IER                    = 18'h00008,
+    ADDR_ISR                    = 18'h0000c,
+    ADDR_NUMOFINNEURONS_DATA_0  = 18'h00010,
+    ADDR_NUMOFINNEURONS_CTRL    = 18'h00014,
+    ADDR_NUMOFOUTNEURONS_DATA_0 = 18'h00018,
+    ADDR_NUMOFOUTNEURONS_CTRL   = 18'h0001c,
+    ADDR_ACTIVATION_DATA_0      = 18'h00020,
+    ADDR_ACTIVATION_CTRL        = 18'h00024,
+    ADDR_INPUT_R_BASE           = 18'h00200,
+    ADDR_INPUT_R_HIGH           = 18'h003ff,
+    ADDR_OUTPUT_R_BASE          = 18'h00400,
+    ADDR_OUTPUT_R_HIGH          = 18'h005ff,
+    ADDR_BIAS_BASE              = 18'h00600,
+    ADDR_BIAS_HIGH              = 18'h007ff,
+    ADDR_WEIGHTS_BASE           = 18'h20000,
+    ADDR_WEIGHTS_HIGH           = 18'h3ffff,
     WRIDLE                      = 2'd0,
     WRDATA                      = 2'd1,
     WRRESP                      = 2'd2,
@@ -130,7 +130,7 @@ localparam
     RDIDLE                      = 2'd0,
     RDDATA                      = 2'd1,
     RDRESET                     = 2'd2,
-    ADDR_BITS                = 17;
+    ADDR_BITS                = 18;
 
 //------------------------Local signal-------------------
     reg  [1:0]                    wstate = WRRESET;
@@ -162,10 +162,10 @@ localparam
     reg  [15:0]                   int_numOfOutNeurons = 'b0;
     reg  [7:0]                    int_activation = 'b0;
     // memory signals
-    wire [5:0]                    int_input_r_address0;
+    wire [6:0]                    int_input_r_address0;
     wire                          int_input_r_ce0;
     wire [31:0]                   int_input_r_q0;
-    wire [5:0]                    int_input_r_address1;
+    wire [6:0]                    int_input_r_address1;
     wire                          int_input_r_ce1;
     wire                          int_input_r_we1;
     wire [3:0]                    int_input_r_be1;
@@ -200,10 +200,10 @@ localparam
     reg                           int_bias_read;
     reg                           int_bias_write;
     reg  [0:0]                    int_bias_shift0;
-    wire [13:0]                   int_weights_address0;
+    wire [14:0]                   int_weights_address0;
     wire                          int_weights_ce0;
     wire [31:0]                   int_weights_q0;
-    wire [13:0]                   int_weights_address1;
+    wire [14:0]                   int_weights_address1;
     wire                          int_weights_ce1;
     wire                          int_weights_we1;
     wire [3:0]                    int_weights_be1;
@@ -219,7 +219,7 @@ nnlayer_control_s_axi_ram #(
     .MEM_STYLE ( "auto" ),
     .MEM_TYPE  ( "2P" ),
     .BYTES     ( 4 ),
-    .DEPTH     ( 64 )
+    .DEPTH     ( 128 )
 ) int_input_r (
     .clk0      ( ACLK ),
     .address0  ( int_input_r_address0 ),
@@ -279,7 +279,7 @@ nnlayer_control_s_axi_ram #(
     .MEM_STYLE ( "auto" ),
     .MEM_TYPE  ( "2P" ),
     .BYTES     ( 4 ),
-    .DEPTH     ( 16384 )
+    .DEPTH     ( 32768 )
 ) int_weights (
     .clk0      ( ACLK ),
     .address0  ( int_weights_address0 ),
@@ -604,7 +604,7 @@ end
 assign int_input_r_address0  = input_r_address0 >> 1;
 assign int_input_r_ce0       = input_r_ce0;
 assign input_r_q0            = int_input_r_q0 >> (int_input_r_shift0 * 16);
-assign int_input_r_address1  = ar_hs? raddr[7:2] : waddr[7:2];
+assign int_input_r_address1  = ar_hs? raddr[8:2] : waddr[8:2];
 assign int_input_r_ce1       = ar_hs | (int_input_r_write & WVALID);
 assign int_input_r_we1       = int_input_r_write & w_hs;
 assign int_input_r_be1       = int_input_r_we1 ? WSTRB : 'b0;
@@ -633,7 +633,7 @@ assign int_bias_d1           = WDATA;
 assign int_weights_address0  = weights_address0 >> 1;
 assign int_weights_ce0       = weights_ce0;
 assign weights_q0            = int_weights_q0 >> (int_weights_shift0 * 16);
-assign int_weights_address1  = ar_hs? raddr[15:2] : waddr[15:2];
+assign int_weights_address1  = ar_hs? raddr[16:2] : waddr[16:2];
 assign int_weights_ce1       = ar_hs | (int_weights_write & WVALID);
 assign int_weights_we1       = int_weights_write & w_hs;
 assign int_weights_be1       = int_weights_we1 ? WSTRB : 'b0;

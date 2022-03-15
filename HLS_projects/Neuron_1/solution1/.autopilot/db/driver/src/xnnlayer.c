@@ -124,97 +124,97 @@ u32 XNnlayer_Get_activation(XNnlayer *InstancePtr) {
     return Data;
 }
 
-u32 XNnlayer_Get_input_s_BaseAddress(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_input_r_BaseAddress(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_S_BASE);
+    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_R_BASE);
 }
 
-u32 XNnlayer_Get_input_s_HighAddress(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_input_r_HighAddress(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_S_HIGH);
+    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_R_HIGH);
 }
 
-u32 XNnlayer_Get_input_s_TotalBytes(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_input_r_TotalBytes(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (XNNLAYER_CONTROL_ADDR_INPUT_S_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + 1);
+    return (XNNLAYER_CONTROL_ADDR_INPUT_R_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + 1);
 }
 
-u32 XNnlayer_Get_input_s_BitWidth(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_input_r_BitWidth(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return XNNLAYER_CONTROL_WIDTH_INPUT_S;
+    return XNNLAYER_CONTROL_WIDTH_INPUT_R;
 }
 
-u32 XNnlayer_Get_input_s_Depth(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_input_r_Depth(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return XNNLAYER_CONTROL_DEPTH_INPUT_S;
+    return XNNLAYER_CONTROL_DEPTH_INPUT_R;
 }
 
-u32 XNnlayer_Write_input_s_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
+u32 XNnlayer_Write_input_r_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_INPUT_S_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + 1))
+    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_INPUT_R_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + (offset + i)*4) = *(data + i);
+        *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + (offset + i)*4) = *(data + i);
     }
     return length;
 }
 
-u32 XNnlayer_Read_input_s_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
+u32 XNnlayer_Read_input_r_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_INPUT_S_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + 1))
+    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_INPUT_R_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(data + i) = *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + (offset + i)*4);
+        *(data + i) = *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + (offset + i)*4);
     }
     return length;
 }
 
-u32 XNnlayer_Write_input_s_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
+u32 XNnlayer_Write_input_r_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_INPUT_S_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + 1))
+    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_INPUT_R_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + offset + i) = *(data + i);
+        *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + offset + i) = *(data + i);
     }
     return length;
 }
 
-u32 XNnlayer_Read_input_s_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
+u32 XNnlayer_Read_input_r_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_INPUT_S_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + 1))
+    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_INPUT_R_HIGH - XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(data + i) = *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_S_BASE + offset + i);
+        *(data + i) = *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_INPUT_R_BASE + offset + i);
     }
     return length;
 }
@@ -314,192 +314,192 @@ u32 XNnlayer_Read_output_r_Bytes(XNnlayer *InstancePtr, int offset, char *data, 
     return length;
 }
 
-u32 XNnlayer_Get_bias_s_BaseAddress(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_bias_BaseAddress(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_S_BASE);
+    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_BASE);
 }
 
-u32 XNnlayer_Get_bias_s_HighAddress(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_bias_HighAddress(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_S_HIGH);
+    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_HIGH);
 }
 
-u32 XNnlayer_Get_bias_s_TotalBytes(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_bias_TotalBytes(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (XNNLAYER_CONTROL_ADDR_BIAS_S_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + 1);
+    return (XNNLAYER_CONTROL_ADDR_BIAS_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_BASE + 1);
 }
 
-u32 XNnlayer_Get_bias_s_BitWidth(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_bias_BitWidth(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return XNNLAYER_CONTROL_WIDTH_BIAS_S;
+    return XNNLAYER_CONTROL_WIDTH_BIAS;
 }
 
-u32 XNnlayer_Get_bias_s_Depth(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_bias_Depth(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return XNNLAYER_CONTROL_DEPTH_BIAS_S;
+    return XNNLAYER_CONTROL_DEPTH_BIAS;
 }
 
-u32 XNnlayer_Write_bias_s_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
+u32 XNnlayer_Write_bias_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_BIAS_S_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + 1))
+    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_BIAS_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + (offset + i)*4) = *(data + i);
+        *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_BASE + (offset + i)*4) = *(data + i);
     }
     return length;
 }
 
-u32 XNnlayer_Read_bias_s_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
+u32 XNnlayer_Read_bias_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_BIAS_S_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + 1))
+    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_BIAS_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(data + i) = *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + (offset + i)*4);
+        *(data + i) = *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_BASE + (offset + i)*4);
     }
     return length;
 }
 
-u32 XNnlayer_Write_bias_s_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
+u32 XNnlayer_Write_bias_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_BIAS_S_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + 1))
+    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_BIAS_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + offset + i) = *(data + i);
+        *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_BASE + offset + i) = *(data + i);
     }
     return length;
 }
 
-u32 XNnlayer_Read_bias_s_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
+u32 XNnlayer_Read_bias_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_BIAS_S_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + 1))
+    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_BIAS_HIGH - XNNLAYER_CONTROL_ADDR_BIAS_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(data + i) = *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_S_BASE + offset + i);
+        *(data + i) = *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_BIAS_BASE + offset + i);
     }
     return length;
 }
 
-u32 XNnlayer_Get_weights_s_BaseAddress(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_weights_BaseAddress(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE);
+    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE);
 }
 
-u32 XNnlayer_Get_weights_s_HighAddress(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_weights_HighAddress(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_S_HIGH);
+    return (InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_HIGH);
 }
 
-u32 XNnlayer_Get_weights_s_TotalBytes(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_weights_TotalBytes(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return (XNNLAYER_CONTROL_ADDR_WEIGHTS_S_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + 1);
+    return (XNNLAYER_CONTROL_ADDR_WEIGHTS_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + 1);
 }
 
-u32 XNnlayer_Get_weights_s_BitWidth(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_weights_BitWidth(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return XNNLAYER_CONTROL_WIDTH_WEIGHTS_S;
+    return XNNLAYER_CONTROL_WIDTH_WEIGHTS;
 }
 
-u32 XNnlayer_Get_weights_s_Depth(XNnlayer *InstancePtr) {
+u32 XNnlayer_Get_weights_Depth(XNnlayer *InstancePtr) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    return XNNLAYER_CONTROL_DEPTH_WEIGHTS_S;
+    return XNNLAYER_CONTROL_DEPTH_WEIGHTS;
 }
 
-u32 XNnlayer_Write_weights_s_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
+u32 XNnlayer_Write_weights_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_WEIGHTS_S_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + 1))
+    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_WEIGHTS_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + (offset + i)*4) = *(data + i);
+        *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + (offset + i)*4) = *(data + i);
     }
     return length;
 }
 
-u32 XNnlayer_Read_weights_s_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
+u32 XNnlayer_Read_weights_Words(XNnlayer *InstancePtr, int offset, word_type *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_WEIGHTS_S_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + 1))
+    if ((offset + length)*4 > (XNNLAYER_CONTROL_ADDR_WEIGHTS_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(data + i) = *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + (offset + i)*4);
+        *(data + i) = *(int *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + (offset + i)*4);
     }
     return length;
 }
 
-u32 XNnlayer_Write_weights_s_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
+u32 XNnlayer_Write_weights_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_WEIGHTS_S_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + 1))
+    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_WEIGHTS_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + offset + i) = *(data + i);
+        *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + offset + i) = *(data + i);
     }
     return length;
 }
 
-u32 XNnlayer_Read_weights_s_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
+u32 XNnlayer_Read_weights_Bytes(XNnlayer *InstancePtr, int offset, char *data, int length) {
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
 
     int i;
 
-    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_WEIGHTS_S_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + 1))
+    if ((offset + length) > (XNNLAYER_CONTROL_ADDR_WEIGHTS_HIGH - XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + 1))
         return 0;
 
     for (i = 0; i < length; i++) {
-        *(data + i) = *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_S_BASE + offset + i);
+        *(data + i) = *(char *)(InstancePtr->Control_BaseAddress + XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE + offset + i);
     }
     return length;
 }

@@ -13,23 +13,23 @@ use std.textio.all;
 
 entity AESL_axi_slave_control is
   generic (
-      constant    TV_IN_input_s : STRING (1 to 46) := "../tv/cdatafile/c.nnlayer.autotvin_input_s.dat";
+      constant    TV_IN_input_r : STRING (1 to 46) := "../tv/cdatafile/c.nnlayer.autotvin_input_r.dat";
       constant    TV_IN_output_r : STRING (1 to 47) := "../tv/cdatafile/c.nnlayer.autotvin_output_r.dat";
       constant    TV_OUT_output_r : STRING (1 to 52) := "../tv/rtldatafile/rtl.nnlayer.autotvout_output_r.dat";
-      constant    TV_IN_weights_s : STRING (1 to 48) := "../tv/cdatafile/c.nnlayer.autotvin_weights_s.dat";
-      constant    TV_IN_bias_s : STRING (1 to 45) := "../tv/cdatafile/c.nnlayer.autotvin_bias_s.dat";
+      constant    TV_IN_weights : STRING (1 to 46) := "../tv/cdatafile/c.nnlayer.autotvin_weights.dat";
+      constant    TV_IN_bias : STRING (1 to 43) := "../tv/cdatafile/c.nnlayer.autotvin_bias.dat";
       constant    TV_IN_numOfInNeurons : STRING (1 to 53) := "../tv/cdatafile/c.nnlayer.autotvin_numOfInNeurons.dat";
       constant    TV_IN_numOfOutNeurons : STRING (1 to 54) := "../tv/cdatafile/c.nnlayer.autotvin_numOfOutNeurons.dat";
 constant ADDR_WIDTH : INTEGER := 18;
 constant DATA_WIDTH : INTEGER := 32;
-constant input_s_DEPTH : INTEGER := 256;
-constant input_s_c_bitwidth : INTEGER := 16;
+constant input_r_DEPTH : INTEGER := 256;
+constant input_r_c_bitwidth : INTEGER := 16;
 constant output_r_DEPTH : INTEGER := 256;
 constant output_r_c_bitwidth : INTEGER := 16;
-constant weights_s_DEPTH : INTEGER := 65536;
-constant weights_s_c_bitwidth : INTEGER := 16;
-constant bias_s_DEPTH : INTEGER := 256;
-constant bias_s_c_bitwidth : INTEGER := 16;
+constant weights_DEPTH : INTEGER := 65536;
+constant weights_c_bitwidth : INTEGER := 16;
+constant bias_DEPTH : INTEGER := 256;
+constant bias_c_bitwidth : INTEGER := 16;
 constant numOfInNeurons_DEPTH : INTEGER := 1;
 constant numOfInNeurons_c_bitwidth : INTEGER := 16;
 constant numOfOutNeurons_DEPTH : INTEGER := 1;
@@ -40,10 +40,10 @@ constant nnlayer_auto_start_addr : INTEGER := 0;
 constant numOfInNeurons_data_in_addr : INTEGER := 16;
 constant numOfOutNeurons_data_in_addr : INTEGER := 24;
 constant activation_data_in_addr : INTEGER := 32;
-constant input_s_data_in_addr : INTEGER := 512;
+constant input_r_data_in_addr : INTEGER := 512;
 constant output_r_data_in_addr : INTEGER := 1024;
-constant bias_s_data_in_addr : INTEGER := 1536;
-constant weights_s_data_in_addr : INTEGER := 131072;
+constant bias_data_in_addr : INTEGER := 1536;
+constant weights_data_in_addr : INTEGER := 131072;
 constant output_r_data_out_addr : INTEGER := 1024;
 constant ap_local_deadlock_data_out_addr : INTEGER := 0;
 constant STATUS_ADDR : INTEGER := 0;
@@ -87,10 +87,10 @@ end AESL_axi_slave_control;
 
 architecture behav of AESL_axi_slave_control is
 ------------------------Local signal-------------------
-shared variable input_s_OPERATE_DEPTH : INTEGER;
+shared variable input_r_OPERATE_DEPTH : INTEGER;
 shared variable output_r_OPERATE_DEPTH : INTEGER;
-shared variable weights_s_OPERATE_DEPTH : INTEGER;
-shared variable bias_s_OPERATE_DEPTH : INTEGER;
+shared variable weights_OPERATE_DEPTH : INTEGER;
+shared variable bias_OPERATE_DEPTH : INTEGER;
 shared variable numOfInNeurons_OPERATE_DEPTH : INTEGER;
 shared variable numOfOutNeurons_OPERATE_DEPTH : INTEGER;
 signal AWADDR_reg : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
@@ -193,27 +193,27 @@ signal process_5_BREADY_var : STD_LOGIC := '0';
 signal process_6_BREADY_var : STD_LOGIC := '0';
 signal process_7_BREADY_var : STD_LOGIC := '0';
 signal process_8_BREADY_var : STD_LOGIC := '0';
-  type    mem_input_s_arr2D is array(0 to input_s_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-shared variable mem_input_s : mem_input_s_arr2D := (others => (others => '0'));
-  type    image_mem_input_s_arr2D is array(0 to (input_s_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * input_s_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-  shared variable image_mem_input_s : image_mem_input_s_arr2D := (others => (others => '0'));
-signal input_s_write_data_finish : STD_LOGIC := '0';
+  type    mem_input_r_arr2D is array(0 to input_r_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
+shared variable mem_input_r : mem_input_r_arr2D := (others => (others => '0'));
+  type    image_mem_input_r_arr2D is array(0 to (input_r_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * input_r_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
+  shared variable image_mem_input_r : image_mem_input_r_arr2D := (others => (others => '0'));
+signal input_r_write_data_finish : STD_LOGIC := '0';
   type    mem_output_r_arr2D is array(0 to output_r_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
 shared variable mem_output_r : mem_output_r_arr2D := (others => (others => '0'));
   type    image_mem_output_r_arr2D is array(0 to (output_r_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * output_r_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
   shared variable image_mem_output_r : image_mem_output_r_arr2D := (others => (others => '0'));
 signal output_r_write_data_finish : STD_LOGIC := '0';
 signal output_r_read_data_finish : STD_LOGIC := '0';
-  type    mem_weights_s_arr2D is array(0 to weights_s_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-shared variable mem_weights_s : mem_weights_s_arr2D := (others => (others => '0'));
-  type    image_mem_weights_s_arr2D is array(0 to (weights_s_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * weights_s_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-  shared variable image_mem_weights_s : image_mem_weights_s_arr2D := (others => (others => '0'));
-signal weights_s_write_data_finish : STD_LOGIC := '0';
-  type    mem_bias_s_arr2D is array(0 to bias_s_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-shared variable mem_bias_s : mem_bias_s_arr2D := (others => (others => '0'));
-  type    image_mem_bias_s_arr2D is array(0 to (bias_s_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * bias_s_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-  shared variable image_mem_bias_s : image_mem_bias_s_arr2D := (others => (others => '0'));
-signal bias_s_write_data_finish : STD_LOGIC := '0';
+  type    mem_weights_arr2D is array(0 to weights_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
+shared variable mem_weights : mem_weights_arr2D := (others => (others => '0'));
+  type    image_mem_weights_arr2D is array(0 to (weights_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * weights_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
+  shared variable image_mem_weights : image_mem_weights_arr2D := (others => (others => '0'));
+signal weights_write_data_finish : STD_LOGIC := '0';
+  type    mem_bias_arr2D is array(0 to bias_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
+shared variable mem_bias : mem_bias_arr2D := (others => (others => '0'));
+  type    image_mem_bias_arr2D is array(0 to (bias_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * bias_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
+  shared variable image_mem_bias : image_mem_bias_arr2D := (others => (others => '0'));
+signal bias_write_data_finish : STD_LOGIC := '0';
   type    mem_numOfInNeurons_arr2D is array(0 to numOfInNeurons_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
 shared variable mem_numOfInNeurons : mem_numOfInNeurons_arr2D := (others => (others => '0'));
   type    image_mem_numOfInNeurons_arr2D is array(0 to (numOfInNeurons_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * numOfInNeurons_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
@@ -240,22 +240,22 @@ signal process_5_finish : STD_LOGIC := '0';
 signal process_6_finish : STD_LOGIC := '0';
 signal process_7_finish : STD_LOGIC := '0';
 signal process_8_finish : STD_LOGIC := '0';
---write input_s reg
-shared variable write_input_s_count : INTEGER;
-signal write_input_s_run_flag : STD_LOGIC := '0';
-signal write_one_input_s_data_done : STD_LOGIC := '0';
+--write input_r reg
+shared variable write_input_r_count : INTEGER;
+signal write_input_r_run_flag : STD_LOGIC := '0';
+signal write_one_input_r_data_done : STD_LOGIC := '0';
 --write output_r reg
 shared variable write_output_r_count : INTEGER;
 signal write_output_r_run_flag : STD_LOGIC := '0';
 signal write_one_output_r_data_done : STD_LOGIC := '0';
---write weights_s reg
-shared variable write_weights_s_count : INTEGER;
-signal write_weights_s_run_flag : STD_LOGIC := '0';
-signal write_one_weights_s_data_done : STD_LOGIC := '0';
---write bias_s reg
-shared variable write_bias_s_count : INTEGER;
-signal write_bias_s_run_flag : STD_LOGIC := '0';
-signal write_one_bias_s_data_done : STD_LOGIC := '0';
+--write weights reg
+shared variable write_weights_count : INTEGER;
+signal write_weights_run_flag : STD_LOGIC := '0';
+signal write_one_weights_data_done : STD_LOGIC := '0';
+--write bias reg
+shared variable write_bias_count : INTEGER;
+signal write_bias_run_flag : STD_LOGIC := '0';
+signal write_one_bias_data_done : STD_LOGIC := '0';
 --write numOfInNeurons reg
 shared variable write_numOfInNeurons_count : INTEGER;
 signal write_numOfInNeurons_run_flag : STD_LOGIC := '0';
@@ -592,7 +592,7 @@ TRAN_control_ready_out <= AESL_ready_out_index_reg;
 TRAN_control_write_start_finish <= AESL_write_start_finish;
 TRAN_control_idle_out <= AESL_idle_index_reg;
 TRAN_control_read_data_finish <= '1' and output_r_read_data_finish;
-TRAN_control_write_data_finish <= '1' and input_s_write_data_finish and output_r_write_data_finish and weights_s_write_data_finish and bias_s_write_data_finish and numOfInNeurons_write_data_finish and numOfOutNeurons_write_data_finish;
+TRAN_control_write_data_finish <= '1' and input_r_write_data_finish and output_r_write_data_finish and weights_write_data_finish and bias_write_data_finish and numOfInNeurons_write_data_finish and numOfOutNeurons_write_data_finish;
 AESL_ready_reg_proc : process(TRAN_control_ready_in, ready_initial) 
 begin
     AESL_ready_reg <= TRAN_control_ready_in or ready_initial;
@@ -783,33 +783,33 @@ begin
     wait;
 end process;
 
-gen_write_input_s_run_flag : process (reset , clk)
+gen_write_input_r_run_flag : process (reset , clk)
 begin
     if (reset = '0') then
-        input_s_write_data_finish <= '0';
-        write_input_s_run_flag <= '0'; 
-        write_input_s_count := 0;
-        count_operate_depth_by_bitwidth_and_depth (input_s_c_bitwidth, input_s_DEPTH, input_s_OPERATE_DEPTH);
+        input_r_write_data_finish <= '0';
+        write_input_r_run_flag <= '0'; 
+        write_input_r_count := 0;
+        count_operate_depth_by_bitwidth_and_depth (input_r_c_bitwidth, input_r_DEPTH, input_r_OPERATE_DEPTH);
     elsif (clk'event and clk = '1') then
         if (TRAN_control_start_in = '1') then
-            input_s_write_data_finish <= '0';
+            input_r_write_data_finish <= '0';
         end if;
         if (AESL_ready_reg = '1') then
-            write_input_s_run_flag <= '1'; 
-            write_input_s_count := 0;
+            write_input_r_run_flag <= '1'; 
+            write_input_r_count := 0;
         end if;
-        if (write_one_input_s_data_done = '1') then
-            write_input_s_count := write_input_s_count + 1;
-            if (write_input_s_count = input_s_OPERATE_DEPTH) then
-                write_input_s_run_flag <= '0'; 
-                input_s_write_data_finish <= '1';
+        if (write_one_input_r_data_done = '1') then
+            write_input_r_count := write_input_r_count + 1;
+            if (write_input_r_count = input_r_OPERATE_DEPTH) then
+                write_input_r_run_flag <= '0'; 
+                input_r_write_data_finish <= '1';
             end if;
         end if;
     end if;
 end process;
 
-write_input_s_proc : process
-    variable write_input_s_resp : INTEGER;
+write_input_r_proc : process
+    variable write_input_r_resp : INTEGER;
     variable process_num  : INTEGER;
     variable get_ack : INTEGER;
     variable four_byte_num : INTEGER;
@@ -817,14 +817,14 @@ write_input_s_proc : process
     variable i : INTEGER;
     variable j : INTEGER;
     variable process_1_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-    variable input_s_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
+    variable input_r_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
     variable aw_flag : STD_LOGIC;
     variable w_flag : STD_LOGIC;
     variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 );
 begin
     wait until reset = '1';
         wait until clk'event and clk = '1';
-    c_bitwidth := input_s_c_bitwidth;
+    c_bitwidth := input_r_c_bitwidth;
     process_num := 1;
     count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
     while (true) loop
@@ -832,29 +832,29 @@ begin
 
         if (ongoing_process_number = process_num and process_busy = '0' ) then
             get_ack := 1;
-            if (write_input_s_run_flag = '1' and get_ack = 1) then
+            if (write_input_r_run_flag = '1' and get_ack = 1) then
                 process_busy := '1';
-                -- write input_s data 
+                -- write input_r data 
                 for i in 0 to four_byte_num - 1 loop
-                    if (input_s_c_bitwidth < 32) then
-                        input_s_data_tmp_reg := mem_input_s(write_input_s_count);
+                    if (input_r_c_bitwidth < 32) then
+                        input_r_data_tmp_reg := mem_input_r(write_input_r_count);
                     else 
                         for j in 0 to 31 loop
-                            if (i*32 + j < input_s_c_bitwidth) then
-                                input_s_data_tmp_reg(j) := mem_input_s(write_input_s_count)(i*32 + j);
+                            if (i*32 + j < input_r_c_bitwidth) then
+                                input_r_data_tmp_reg(j) := mem_input_r(write_input_r_count)(i*32 + j);
                             else 
-                                input_s_data_tmp_reg(j) := '0';
+                                input_r_data_tmp_reg(j) := '0';
                             end if;
                         end loop;
                     end if;
-                    if(image_mem_input_s(write_input_s_count * four_byte_num  + i)/=input_s_data_tmp_reg) then
+                    if(image_mem_input_r(write_input_r_count * four_byte_num  + i)/=input_r_data_tmp_reg) then
 --=======================one single write operate======================
-                write_input_s_resp := 0;
+                write_input_r_resp := 0;
                 aw_flag := '0';
                 w_flag := '0';
-                process_1_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(input_s_data_in_addr + write_input_s_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
+                process_1_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(input_r_data_in_addr + write_input_r_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
                 process_1_AWVALID_var <= '1';
-                process_1_WDATA_var   <= input_s_data_tmp_reg;
+                process_1_WDATA_var   <= input_r_data_tmp_reg;
                 process_1_WVALID_var  <= '1';
                 for i in 0 to DATA_WIDTH/8 - 1 loop
                     wstrb_tmp(i) := '1';
@@ -880,18 +880,18 @@ begin
                 wait until clk'event and clk = '1';
                 process_1_BREADY_var <= '0';
                 if (TRAN_s_axi_control_BRESP = (2 => '0')) then
-                    write_input_s_resp := 1;
+                    write_input_r_resp := 1;
                     --input success. in fact BRESP is always 2'b00
                 end if;
 --=======================one single write operate======================
 
-                    image_mem_input_s(write_input_s_count * four_byte_num  + i) := input_s_data_tmp_reg;
+                    image_mem_input_r(write_input_r_count * four_byte_num  + i) := input_r_data_tmp_reg;
                     end if;
                 end loop;
                 process_busy := '0';
-                write_one_input_s_data_done <= '1';
+                write_one_input_r_data_done <= '1';
                 wait until clk'event and clk = '1';
-                write_one_input_s_data_done <= '0';
+                write_one_input_r_data_done <= '0';
             end if;
             process_1_finish <= '1';
         end if;
@@ -1012,33 +1012,33 @@ begin
     end loop;
     wait;
 end process;
-gen_write_weights_s_run_flag : process (reset , clk)
+gen_write_weights_run_flag : process (reset , clk)
 begin
     if (reset = '0') then
-        weights_s_write_data_finish <= '0';
-        write_weights_s_run_flag <= '0'; 
-        write_weights_s_count := 0;
-        count_operate_depth_by_bitwidth_and_depth (weights_s_c_bitwidth, weights_s_DEPTH, weights_s_OPERATE_DEPTH);
+        weights_write_data_finish <= '0';
+        write_weights_run_flag <= '0'; 
+        write_weights_count := 0;
+        count_operate_depth_by_bitwidth_and_depth (weights_c_bitwidth, weights_DEPTH, weights_OPERATE_DEPTH);
     elsif (clk'event and clk = '1') then
         if (TRAN_control_start_in = '1') then
-            weights_s_write_data_finish <= '0';
+            weights_write_data_finish <= '0';
         end if;
         if (AESL_ready_reg = '1') then
-            write_weights_s_run_flag <= '1'; 
-            write_weights_s_count := 0;
+            write_weights_run_flag <= '1'; 
+            write_weights_count := 0;
         end if;
-        if (write_one_weights_s_data_done = '1') then
-            write_weights_s_count := write_weights_s_count + 1;
-            if (write_weights_s_count = weights_s_OPERATE_DEPTH) then
-                write_weights_s_run_flag <= '0'; 
-                weights_s_write_data_finish <= '1';
+        if (write_one_weights_data_done = '1') then
+            write_weights_count := write_weights_count + 1;
+            if (write_weights_count = weights_OPERATE_DEPTH) then
+                write_weights_run_flag <= '0'; 
+                weights_write_data_finish <= '1';
             end if;
         end if;
     end if;
 end process;
 
-write_weights_s_proc : process
-    variable write_weights_s_resp : INTEGER;
+write_weights_proc : process
+    variable write_weights_resp : INTEGER;
     variable process_num  : INTEGER;
     variable get_ack : INTEGER;
     variable four_byte_num : INTEGER;
@@ -1046,14 +1046,14 @@ write_weights_s_proc : process
     variable i : INTEGER;
     variable j : INTEGER;
     variable process_3_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-    variable weights_s_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
+    variable weights_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
     variable aw_flag : STD_LOGIC;
     variable w_flag : STD_LOGIC;
     variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 );
 begin
     wait until reset = '1';
         wait until clk'event and clk = '1';
-    c_bitwidth := weights_s_c_bitwidth;
+    c_bitwidth := weights_c_bitwidth;
     process_num := 3;
     count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
     while (true) loop
@@ -1061,29 +1061,29 @@ begin
 
         if (ongoing_process_number = process_num and process_busy = '0' ) then
             get_ack := 1;
-            if (write_weights_s_run_flag = '1' and get_ack = 1) then
+            if (write_weights_run_flag = '1' and get_ack = 1) then
                 process_busy := '1';
-                -- write weights_s data 
+                -- write weights data 
                 for i in 0 to four_byte_num - 1 loop
-                    if (weights_s_c_bitwidth < 32) then
-                        weights_s_data_tmp_reg := mem_weights_s(write_weights_s_count);
+                    if (weights_c_bitwidth < 32) then
+                        weights_data_tmp_reg := mem_weights(write_weights_count);
                     else 
                         for j in 0 to 31 loop
-                            if (i*32 + j < weights_s_c_bitwidth) then
-                                weights_s_data_tmp_reg(j) := mem_weights_s(write_weights_s_count)(i*32 + j);
+                            if (i*32 + j < weights_c_bitwidth) then
+                                weights_data_tmp_reg(j) := mem_weights(write_weights_count)(i*32 + j);
                             else 
-                                weights_s_data_tmp_reg(j) := '0';
+                                weights_data_tmp_reg(j) := '0';
                             end if;
                         end loop;
                     end if;
-                    if(image_mem_weights_s(write_weights_s_count * four_byte_num  + i)/=weights_s_data_tmp_reg) then
+                    if(image_mem_weights(write_weights_count * four_byte_num  + i)/=weights_data_tmp_reg) then
 --=======================one single write operate======================
-                write_weights_s_resp := 0;
+                write_weights_resp := 0;
                 aw_flag := '0';
                 w_flag := '0';
-                process_3_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(weights_s_data_in_addr + write_weights_s_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
+                process_3_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(weights_data_in_addr + write_weights_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
                 process_3_AWVALID_var <= '1';
-                process_3_WDATA_var   <= weights_s_data_tmp_reg;
+                process_3_WDATA_var   <= weights_data_tmp_reg;
                 process_3_WVALID_var  <= '1';
                 for i in 0 to DATA_WIDTH/8 - 1 loop
                     wstrb_tmp(i) := '1';
@@ -1109,18 +1109,18 @@ begin
                 wait until clk'event and clk = '1';
                 process_3_BREADY_var <= '0';
                 if (TRAN_s_axi_control_BRESP = (2 => '0')) then
-                    write_weights_s_resp := 1;
+                    write_weights_resp := 1;
                     --input success. in fact BRESP is always 2'b00
                 end if;
 --=======================one single write operate======================
 
-                    image_mem_weights_s(write_weights_s_count * four_byte_num  + i) := weights_s_data_tmp_reg;
+                    image_mem_weights(write_weights_count * four_byte_num  + i) := weights_data_tmp_reg;
                     end if;
                 end loop;
                 process_busy := '0';
-                write_one_weights_s_data_done <= '1';
+                write_one_weights_data_done <= '1';
                 wait until clk'event and clk = '1';
-                write_one_weights_s_data_done <= '0';
+                write_one_weights_data_done <= '0';
             end if;
             process_3_finish <= '1';
         end if;
@@ -1128,33 +1128,33 @@ begin
     end loop;
     wait;
 end process;
-gen_write_bias_s_run_flag : process (reset , clk)
+gen_write_bias_run_flag : process (reset , clk)
 begin
     if (reset = '0') then
-        bias_s_write_data_finish <= '0';
-        write_bias_s_run_flag <= '0'; 
-        write_bias_s_count := 0;
-        count_operate_depth_by_bitwidth_and_depth (bias_s_c_bitwidth, bias_s_DEPTH, bias_s_OPERATE_DEPTH);
+        bias_write_data_finish <= '0';
+        write_bias_run_flag <= '0'; 
+        write_bias_count := 0;
+        count_operate_depth_by_bitwidth_and_depth (bias_c_bitwidth, bias_DEPTH, bias_OPERATE_DEPTH);
     elsif (clk'event and clk = '1') then
         if (TRAN_control_start_in = '1') then
-            bias_s_write_data_finish <= '0';
+            bias_write_data_finish <= '0';
         end if;
         if (AESL_ready_reg = '1') then
-            write_bias_s_run_flag <= '1'; 
-            write_bias_s_count := 0;
+            write_bias_run_flag <= '1'; 
+            write_bias_count := 0;
         end if;
-        if (write_one_bias_s_data_done = '1') then
-            write_bias_s_count := write_bias_s_count + 1;
-            if (write_bias_s_count = bias_s_OPERATE_DEPTH) then
-                write_bias_s_run_flag <= '0'; 
-                bias_s_write_data_finish <= '1';
+        if (write_one_bias_data_done = '1') then
+            write_bias_count := write_bias_count + 1;
+            if (write_bias_count = bias_OPERATE_DEPTH) then
+                write_bias_run_flag <= '0'; 
+                bias_write_data_finish <= '1';
             end if;
         end if;
     end if;
 end process;
 
-write_bias_s_proc : process
-    variable write_bias_s_resp : INTEGER;
+write_bias_proc : process
+    variable write_bias_resp : INTEGER;
     variable process_num  : INTEGER;
     variable get_ack : INTEGER;
     variable four_byte_num : INTEGER;
@@ -1162,14 +1162,14 @@ write_bias_s_proc : process
     variable i : INTEGER;
     variable j : INTEGER;
     variable process_4_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-    variable bias_s_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
+    variable bias_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
     variable aw_flag : STD_LOGIC;
     variable w_flag : STD_LOGIC;
     variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 );
 begin
     wait until reset = '1';
         wait until clk'event and clk = '1';
-    c_bitwidth := bias_s_c_bitwidth;
+    c_bitwidth := bias_c_bitwidth;
     process_num := 4;
     count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
     while (true) loop
@@ -1177,29 +1177,29 @@ begin
 
         if (ongoing_process_number = process_num and process_busy = '0' ) then
             get_ack := 1;
-            if (write_bias_s_run_flag = '1' and get_ack = 1) then
+            if (write_bias_run_flag = '1' and get_ack = 1) then
                 process_busy := '1';
-                -- write bias_s data 
+                -- write bias data 
                 for i in 0 to four_byte_num - 1 loop
-                    if (bias_s_c_bitwidth < 32) then
-                        bias_s_data_tmp_reg := mem_bias_s(write_bias_s_count);
+                    if (bias_c_bitwidth < 32) then
+                        bias_data_tmp_reg := mem_bias(write_bias_count);
                     else 
                         for j in 0 to 31 loop
-                            if (i*32 + j < bias_s_c_bitwidth) then
-                                bias_s_data_tmp_reg(j) := mem_bias_s(write_bias_s_count)(i*32 + j);
+                            if (i*32 + j < bias_c_bitwidth) then
+                                bias_data_tmp_reg(j) := mem_bias(write_bias_count)(i*32 + j);
                             else 
-                                bias_s_data_tmp_reg(j) := '0';
+                                bias_data_tmp_reg(j) := '0';
                             end if;
                         end loop;
                     end if;
-                    if(image_mem_bias_s(write_bias_s_count * four_byte_num  + i)/=bias_s_data_tmp_reg) then
+                    if(image_mem_bias(write_bias_count * four_byte_num  + i)/=bias_data_tmp_reg) then
 --=======================one single write operate======================
-                write_bias_s_resp := 0;
+                write_bias_resp := 0;
                 aw_flag := '0';
                 w_flag := '0';
-                process_4_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(bias_s_data_in_addr + write_bias_s_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
+                process_4_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(bias_data_in_addr + write_bias_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
                 process_4_AWVALID_var <= '1';
-                process_4_WDATA_var   <= bias_s_data_tmp_reg;
+                process_4_WDATA_var   <= bias_data_tmp_reg;
                 process_4_WVALID_var  <= '1';
                 for i in 0 to DATA_WIDTH/8 - 1 loop
                     wstrb_tmp(i) := '1';
@@ -1225,18 +1225,18 @@ begin
                 wait until clk'event and clk = '1';
                 process_4_BREADY_var <= '0';
                 if (TRAN_s_axi_control_BRESP = (2 => '0')) then
-                    write_bias_s_resp := 1;
+                    write_bias_resp := 1;
                     --input success. in fact BRESP is always 2'b00
                 end if;
 --=======================one single write operate======================
 
-                    image_mem_bias_s(write_bias_s_count * four_byte_num  + i) := bias_s_data_tmp_reg;
+                    image_mem_bias(write_bias_count * four_byte_num  + i) := bias_data_tmp_reg;
                     end if;
                 end loop;
                 process_busy := '0';
-                write_one_bias_s_data_done <= '1';
+                write_one_bias_data_done <= '1';
                 wait until clk'event and clk = '1';
-                write_one_bias_s_data_done <= '0';
+                write_one_bias_data_done <= '0';
             end if;
             process_4_finish <= '1';
         end if;
@@ -1665,12 +1665,12 @@ end process;
 --------------------------Read file------------------------ 
  
 -- Read data from file 
-read_input_s_file_process : process
+read_input_r_file_process : process
   file        fp          :   TEXT;
   variable    fstatus     :   FILE_OPEN_STATUS;
   variable    token_line  :   LINE;
   variable    token       :   STRING(1 to 128);
-  variable    token_tmp : STD_LOGIC_VECTOR(input_s_c_bitwidth - 1 downto 0) := (others => '0'); 
+  variable    token_tmp : STD_LOGIC_VECTOR(input_r_c_bitwidth - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem_8 : STD_LOGIC_VECTOR(8 - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem_16 : STD_LOGIC_VECTOR(16 - 1 downto 0) := (others => '0'); 
@@ -1683,10 +1683,10 @@ read_input_s_file_process : process
   variable    read_counter :   INTEGER; 
 begin
   transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (input_s_c_bitwidth , factor);
-  file_open(fstatus, fp, TV_IN_input_s , READ_MODE);
+  count_seperate_factor_by_bitwidth (input_r_c_bitwidth , factor);
+  file_open(fstatus, fp, TV_IN_input_r , READ_MODE);
   if(fstatus /= OPEN_OK) then
-      assert false report "Open file " & TV_IN_input_s & " failed!!!" severity failure;
+      assert false report "Open file " & TV_IN_input_r & " failed!!!" severity failure;
   end if;
   esl_read_token(fp, token_line, token);
   if(token(1 to 13) /= "[[[runtime]]]") then
@@ -1705,14 +1705,14 @@ begin
           wait for 0.2 ns;
       end loop;
       read_counter := 0;
-      for i in 0 to input_s_DEPTH - 1 loop
+      for i in 0 to input_r_DEPTH - 1 loop
           read_counter := read_counter + 1;
           esl_read_token(fp, token_line, token);
-          token_tmp := esl_str2lv_hex(token, input_s_c_bitwidth);
+          token_tmp := esl_str2lv_hex(token, input_r_c_bitwidth);
           remain := i mod factor;
           if (factor = 4) then
               tmp_cache_mem_8 (7 downto 0) := (others => '0');
-              for j in 0 to input_s_c_bitwidth - 1 loop
+              for j in 0 to input_r_c_bitwidth - 1 loop
                   tmp_cache_mem_8 (j downto j) := token_tmp (j downto j);
               end loop;
               if (remain = 0) then
@@ -1723,41 +1723,41 @@ begin
                   tmp_cache_mem (23 downto 16) := tmp_cache_mem_8;
               elsif (remain = 3) then
                   tmp_cache_mem (31 downto 24) := tmp_cache_mem_8;
-                  mem_input_s(i/factor)(31 downto 0) := tmp_cache_mem;
+                  mem_input_r(i/factor)(31 downto 0) := tmp_cache_mem;
                   tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
               end if;
           elsif (factor = 2) then
               tmp_cache_mem_16 (15 downto 0) := (others => '0');
-              for j in 0 to input_s_c_bitwidth - 1 loop
+              for j in 0 to input_r_c_bitwidth - 1 loop
                   tmp_cache_mem_16 (j downto j) := token_tmp (j downto j);
               end loop;
               if (remain = 0) then
                   tmp_cache_mem (15 downto 0) := tmp_cache_mem_16;
               elsif (remain = 1) then
                   tmp_cache_mem (31 downto 16) := tmp_cache_mem_16;
-                  mem_input_s(i/factor)(31 downto 0) := tmp_cache_mem;
+                  mem_input_r(i/factor)(31 downto 0) := tmp_cache_mem;
                   tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
               end if;
           elsif (factor = 1) then
-              if (input_s_c_bitwidth < 32) then
+              if (input_r_c_bitwidth < 32) then
                   tmp_cache_mem_32 (31 downto 0) := (others => '0');
-                  for j in 0 to input_s_c_bitwidth - 1 loop
+                  for j in 0 to input_r_c_bitwidth - 1 loop
                       tmp_cache_mem_32 (j downto j) := token_tmp (j downto j);
                   end loop;
-                  mem_input_s(i)(31 downto 0) := tmp_cache_mem_32;
+                  mem_input_r(i)(31 downto 0) := tmp_cache_mem_32;
               else
-                  mem_input_s(i) := token_tmp;
+                  mem_input_r(i) := token_tmp;
               end if;
           end if;
       end loop;
       remain := read_counter mod factor;
       if (factor = 4) then
           if (remain /= 0) then
-              mem_input_s(input_s_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
+              mem_input_r(input_r_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
           end if;
       elsif (factor = 2) then
           if (remain /= 0) then
-              mem_input_s(input_s_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
+              mem_input_r(input_r_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
           end if;
       end if;
       esl_read_token(fp, token_line, token);
@@ -1974,12 +1974,12 @@ end process;
 --------------------------Read file------------------------ 
  
 -- Read data from file 
-read_weights_s_file_process : process
+read_weights_file_process : process
   file        fp          :   TEXT;
   variable    fstatus     :   FILE_OPEN_STATUS;
   variable    token_line  :   LINE;
   variable    token       :   STRING(1 to 128);
-  variable    token_tmp : STD_LOGIC_VECTOR(weights_s_c_bitwidth - 1 downto 0) := (others => '0'); 
+  variable    token_tmp : STD_LOGIC_VECTOR(weights_c_bitwidth - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem_8 : STD_LOGIC_VECTOR(8 - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem_16 : STD_LOGIC_VECTOR(16 - 1 downto 0) := (others => '0'); 
@@ -1992,10 +1992,10 @@ read_weights_s_file_process : process
   variable    read_counter :   INTEGER; 
 begin
   transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (weights_s_c_bitwidth , factor);
-  file_open(fstatus, fp, TV_IN_weights_s , READ_MODE);
+  count_seperate_factor_by_bitwidth (weights_c_bitwidth , factor);
+  file_open(fstatus, fp, TV_IN_weights , READ_MODE);
   if(fstatus /= OPEN_OK) then
-      assert false report "Open file " & TV_IN_weights_s & " failed!!!" severity failure;
+      assert false report "Open file " & TV_IN_weights & " failed!!!" severity failure;
   end if;
   esl_read_token(fp, token_line, token);
   if(token(1 to 13) /= "[[[runtime]]]") then
@@ -2014,14 +2014,14 @@ begin
           wait for 0.2 ns;
       end loop;
       read_counter := 0;
-      for i in 0 to weights_s_DEPTH - 1 loop
+      for i in 0 to weights_DEPTH - 1 loop
           read_counter := read_counter + 1;
           esl_read_token(fp, token_line, token);
-          token_tmp := esl_str2lv_hex(token, weights_s_c_bitwidth);
+          token_tmp := esl_str2lv_hex(token, weights_c_bitwidth);
           remain := i mod factor;
           if (factor = 4) then
               tmp_cache_mem_8 (7 downto 0) := (others => '0');
-              for j in 0 to weights_s_c_bitwidth - 1 loop
+              for j in 0 to weights_c_bitwidth - 1 loop
                   tmp_cache_mem_8 (j downto j) := token_tmp (j downto j);
               end loop;
               if (remain = 0) then
@@ -2032,41 +2032,41 @@ begin
                   tmp_cache_mem (23 downto 16) := tmp_cache_mem_8;
               elsif (remain = 3) then
                   tmp_cache_mem (31 downto 24) := tmp_cache_mem_8;
-                  mem_weights_s(i/factor)(31 downto 0) := tmp_cache_mem;
+                  mem_weights(i/factor)(31 downto 0) := tmp_cache_mem;
                   tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
               end if;
           elsif (factor = 2) then
               tmp_cache_mem_16 (15 downto 0) := (others => '0');
-              for j in 0 to weights_s_c_bitwidth - 1 loop
+              for j in 0 to weights_c_bitwidth - 1 loop
                   tmp_cache_mem_16 (j downto j) := token_tmp (j downto j);
               end loop;
               if (remain = 0) then
                   tmp_cache_mem (15 downto 0) := tmp_cache_mem_16;
               elsif (remain = 1) then
                   tmp_cache_mem (31 downto 16) := tmp_cache_mem_16;
-                  mem_weights_s(i/factor)(31 downto 0) := tmp_cache_mem;
+                  mem_weights(i/factor)(31 downto 0) := tmp_cache_mem;
                   tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
               end if;
           elsif (factor = 1) then
-              if (weights_s_c_bitwidth < 32) then
+              if (weights_c_bitwidth < 32) then
                   tmp_cache_mem_32 (31 downto 0) := (others => '0');
-                  for j in 0 to weights_s_c_bitwidth - 1 loop
+                  for j in 0 to weights_c_bitwidth - 1 loop
                       tmp_cache_mem_32 (j downto j) := token_tmp (j downto j);
                   end loop;
-                  mem_weights_s(i)(31 downto 0) := tmp_cache_mem_32;
+                  mem_weights(i)(31 downto 0) := tmp_cache_mem_32;
               else
-                  mem_weights_s(i) := token_tmp;
+                  mem_weights(i) := token_tmp;
               end if;
           end if;
       end loop;
       remain := read_counter mod factor;
       if (factor = 4) then
           if (remain /= 0) then
-              mem_weights_s(weights_s_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
+              mem_weights(weights_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
           end if;
       elsif (factor = 2) then
           if (remain /= 0) then
-              mem_weights_s(weights_s_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
+              mem_weights(weights_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
           end if;
       end if;
       esl_read_token(fp, token_line, token);
@@ -2083,12 +2083,12 @@ end process;
 --------------------------Read file------------------------ 
  
 -- Read data from file 
-read_bias_s_file_process : process
+read_bias_file_process : process
   file        fp          :   TEXT;
   variable    fstatus     :   FILE_OPEN_STATUS;
   variable    token_line  :   LINE;
   variable    token       :   STRING(1 to 128);
-  variable    token_tmp : STD_LOGIC_VECTOR(bias_s_c_bitwidth - 1 downto 0) := (others => '0'); 
+  variable    token_tmp : STD_LOGIC_VECTOR(bias_c_bitwidth - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem_8 : STD_LOGIC_VECTOR(8 - 1 downto 0) := (others => '0'); 
   variable    tmp_cache_mem_16 : STD_LOGIC_VECTOR(16 - 1 downto 0) := (others => '0'); 
@@ -2101,10 +2101,10 @@ read_bias_s_file_process : process
   variable    read_counter :   INTEGER; 
 begin
   transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (bias_s_c_bitwidth , factor);
-  file_open(fstatus, fp, TV_IN_bias_s , READ_MODE);
+  count_seperate_factor_by_bitwidth (bias_c_bitwidth , factor);
+  file_open(fstatus, fp, TV_IN_bias , READ_MODE);
   if(fstatus /= OPEN_OK) then
-      assert false report "Open file " & TV_IN_bias_s & " failed!!!" severity failure;
+      assert false report "Open file " & TV_IN_bias & " failed!!!" severity failure;
   end if;
   esl_read_token(fp, token_line, token);
   if(token(1 to 13) /= "[[[runtime]]]") then
@@ -2123,14 +2123,14 @@ begin
           wait for 0.2 ns;
       end loop;
       read_counter := 0;
-      for i in 0 to bias_s_DEPTH - 1 loop
+      for i in 0 to bias_DEPTH - 1 loop
           read_counter := read_counter + 1;
           esl_read_token(fp, token_line, token);
-          token_tmp := esl_str2lv_hex(token, bias_s_c_bitwidth);
+          token_tmp := esl_str2lv_hex(token, bias_c_bitwidth);
           remain := i mod factor;
           if (factor = 4) then
               tmp_cache_mem_8 (7 downto 0) := (others => '0');
-              for j in 0 to bias_s_c_bitwidth - 1 loop
+              for j in 0 to bias_c_bitwidth - 1 loop
                   tmp_cache_mem_8 (j downto j) := token_tmp (j downto j);
               end loop;
               if (remain = 0) then
@@ -2141,41 +2141,41 @@ begin
                   tmp_cache_mem (23 downto 16) := tmp_cache_mem_8;
               elsif (remain = 3) then
                   tmp_cache_mem (31 downto 24) := tmp_cache_mem_8;
-                  mem_bias_s(i/factor)(31 downto 0) := tmp_cache_mem;
+                  mem_bias(i/factor)(31 downto 0) := tmp_cache_mem;
                   tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
               end if;
           elsif (factor = 2) then
               tmp_cache_mem_16 (15 downto 0) := (others => '0');
-              for j in 0 to bias_s_c_bitwidth - 1 loop
+              for j in 0 to bias_c_bitwidth - 1 loop
                   tmp_cache_mem_16 (j downto j) := token_tmp (j downto j);
               end loop;
               if (remain = 0) then
                   tmp_cache_mem (15 downto 0) := tmp_cache_mem_16;
               elsif (remain = 1) then
                   tmp_cache_mem (31 downto 16) := tmp_cache_mem_16;
-                  mem_bias_s(i/factor)(31 downto 0) := tmp_cache_mem;
+                  mem_bias(i/factor)(31 downto 0) := tmp_cache_mem;
                   tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
               end if;
           elsif (factor = 1) then
-              if (bias_s_c_bitwidth < 32) then
+              if (bias_c_bitwidth < 32) then
                   tmp_cache_mem_32 (31 downto 0) := (others => '0');
-                  for j in 0 to bias_s_c_bitwidth - 1 loop
+                  for j in 0 to bias_c_bitwidth - 1 loop
                       tmp_cache_mem_32 (j downto j) := token_tmp (j downto j);
                   end loop;
-                  mem_bias_s(i)(31 downto 0) := tmp_cache_mem_32;
+                  mem_bias(i)(31 downto 0) := tmp_cache_mem_32;
               else
-                  mem_bias_s(i) := token_tmp;
+                  mem_bias(i) := token_tmp;
               end if;
           end if;
       end loop;
       remain := read_counter mod factor;
       if (factor = 4) then
           if (remain /= 0) then
-              mem_bias_s(bias_s_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
+              mem_bias(bias_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
           end if;
       elsif (factor = 2) then
           if (remain /= 0) then
-              mem_bias_s(bias_s_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
+              mem_bias(bias_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
           end if;
       end if;
       esl_read_token(fp, token_line, token);

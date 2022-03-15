@@ -35,20 +35,20 @@
 //           bit 7~0 - activation[7:0] (Read/Write)
 //           others  - reserved
 // 0x00024 : reserved
-// 0x00100 ~
-// 0x001ff : Memory 'input_r' (128 * 16b)
+// 0x00200 ~
+// 0x003ff : Memory 'input_r' (256 * 16b)
 //           Word n : bit [15: 0] - input_r[2n]
 //                    bit [31:16] - input_r[2n+1]
-// 0x00200 ~
-// 0x003ff : Memory 'output_r' (256 * 16b)
+// 0x00400 ~
+// 0x005ff : Memory 'output_r' (256 * 16b)
 //           Word n : bit [15: 0] - output_r[2n]
 //                    bit [31:16] - output_r[2n+1]
-// 0x00400 ~
-// 0x005ff : Memory 'bias' (256 * 16b)
+// 0x00600 ~
+// 0x007ff : Memory 'bias' (256 * 16b)
 //           Word n : bit [15: 0] - bias[2n]
 //                    bit [31:16] - bias[2n+1]
-// 0x10000 ~
-// 0x1ffff : Memory 'weights' (32768 * 16b)
+// 0x20000 ~
+// 0x3ffff : Memory 'weights' (65536 * 16b)
 //           Word n : bit [15: 0] - weights[2n]
 //                    bit [31:16] - weights[2n+1]
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
@@ -63,20 +63,20 @@
 #define XNNLAYER_CONTROL_BITS_NUMOFOUTNEURONS_DATA 16
 #define XNNLAYER_CONTROL_ADDR_ACTIVATION_DATA      0x00020
 #define XNNLAYER_CONTROL_BITS_ACTIVATION_DATA      8
-#define XNNLAYER_CONTROL_ADDR_INPUT_R_BASE         0x00100
-#define XNNLAYER_CONTROL_ADDR_INPUT_R_HIGH         0x001ff
+#define XNNLAYER_CONTROL_ADDR_INPUT_R_BASE         0x00200
+#define XNNLAYER_CONTROL_ADDR_INPUT_R_HIGH         0x003ff
 #define XNNLAYER_CONTROL_WIDTH_INPUT_R             16
-#define XNNLAYER_CONTROL_DEPTH_INPUT_R             128
-#define XNNLAYER_CONTROL_ADDR_OUTPUT_R_BASE        0x00200
-#define XNNLAYER_CONTROL_ADDR_OUTPUT_R_HIGH        0x003ff
+#define XNNLAYER_CONTROL_DEPTH_INPUT_R             256
+#define XNNLAYER_CONTROL_ADDR_OUTPUT_R_BASE        0x00400
+#define XNNLAYER_CONTROL_ADDR_OUTPUT_R_HIGH        0x005ff
 #define XNNLAYER_CONTROL_WIDTH_OUTPUT_R            16
 #define XNNLAYER_CONTROL_DEPTH_OUTPUT_R            256
-#define XNNLAYER_CONTROL_ADDR_BIAS_BASE            0x00400
-#define XNNLAYER_CONTROL_ADDR_BIAS_HIGH            0x005ff
+#define XNNLAYER_CONTROL_ADDR_BIAS_BASE            0x00600
+#define XNNLAYER_CONTROL_ADDR_BIAS_HIGH            0x007ff
 #define XNNLAYER_CONTROL_WIDTH_BIAS                16
 #define XNNLAYER_CONTROL_DEPTH_BIAS                256
-#define XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE         0x10000
-#define XNNLAYER_CONTROL_ADDR_WEIGHTS_HIGH         0x1ffff
+#define XNNLAYER_CONTROL_ADDR_WEIGHTS_BASE         0x20000
+#define XNNLAYER_CONTROL_ADDR_WEIGHTS_HIGH         0x3ffff
 #define XNNLAYER_CONTROL_WIDTH_WEIGHTS             16
-#define XNNLAYER_CONTROL_DEPTH_WEIGHTS             32768
+#define XNNLAYER_CONTROL_DEPTH_WEIGHTS             65536
 

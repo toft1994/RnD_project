@@ -8,7 +8,7 @@ use IEEE.NUMERIC_STD.all;
 
 entity nnlayer_control_s_axi is
 generic (
-    C_S_AXI_ADDR_WIDTH    : INTEGER := 17;
+    C_S_AXI_ADDR_WIDTH    : INTEGER := 18;
     C_S_AXI_DATA_WIDTH    : INTEGER := 32);
 port (
     ACLK                  :in   STD_LOGIC;
@@ -35,7 +35,7 @@ port (
     numOfInNeurons        :out  STD_LOGIC_VECTOR(15 downto 0);
     numOfOutNeurons       :out  STD_LOGIC_VECTOR(15 downto 0);
     activation            :out  STD_LOGIC_VECTOR(7 downto 0);
-    input_r_address0      :in   STD_LOGIC_VECTOR(6 downto 0);
+    input_r_address0      :in   STD_LOGIC_VECTOR(7 downto 0);
     input_r_ce0           :in   STD_LOGIC;
     input_r_q0            :out  STD_LOGIC_VECTOR(15 downto 0);
     output_r_address0     :in   STD_LOGIC_VECTOR(7 downto 0);
@@ -46,7 +46,7 @@ port (
     bias_address0         :in   STD_LOGIC_VECTOR(7 downto 0);
     bias_ce0              :in   STD_LOGIC;
     bias_q0               :out  STD_LOGIC_VECTOR(15 downto 0);
-    weights_address0      :in   STD_LOGIC_VECTOR(14 downto 0);
+    weights_address0      :in   STD_LOGIC_VECTOR(15 downto 0);
     weights_ce0           :in   STD_LOGIC;
     weights_q0            :out  STD_LOGIC_VECTOR(15 downto 0);
     ap_start              :out  STD_LOGIC;
@@ -90,20 +90,20 @@ end entity nnlayer_control_s_axi;
 --           bit 7~0 - activation[7:0] (Read/Write)
 --           others  - reserved
 -- 0x00024 : reserved
--- 0x00100 ~
--- 0x001ff : Memory 'input_r' (128 * 16b)
+-- 0x00200 ~
+-- 0x003ff : Memory 'input_r' (256 * 16b)
 --           Word n : bit [15: 0] - input_r[2n]
 --                    bit [31:16] - input_r[2n+1]
--- 0x00200 ~
--- 0x003ff : Memory 'output_r' (256 * 16b)
+-- 0x00400 ~
+-- 0x005ff : Memory 'output_r' (256 * 16b)
 --           Word n : bit [15: 0] - output_r[2n]
 --                    bit [31:16] - output_r[2n+1]
--- 0x00400 ~
--- 0x005ff : Memory 'bias' (256 * 16b)
+-- 0x00600 ~
+-- 0x007ff : Memory 'bias' (256 * 16b)
 --           Word n : bit [15: 0] - bias[2n]
 --                    bit [31:16] - bias[2n+1]
--- 0x10000 ~
--- 0x1ffff : Memory 'weights' (32768 * 16b)
+-- 0x20000 ~
+-- 0x3ffff : Memory 'weights' (65536 * 16b)
 --           Word n : bit [15: 0] - weights[2n]
 --                    bit [31:16] - weights[2n+1]
 -- (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
@@ -123,15 +123,15 @@ architecture behave of nnlayer_control_s_axi is
     constant ADDR_NUMOFOUTNEURONS_CTRL   : INTEGER := 16#0001c#;
     constant ADDR_ACTIVATION_DATA_0      : INTEGER := 16#00020#;
     constant ADDR_ACTIVATION_CTRL        : INTEGER := 16#00024#;
-    constant ADDR_INPUT_R_BASE           : INTEGER := 16#00100#;
-    constant ADDR_INPUT_R_HIGH           : INTEGER := 16#001ff#;
-    constant ADDR_OUTPUT_R_BASE          : INTEGER := 16#00200#;
-    constant ADDR_OUTPUT_R_HIGH          : INTEGER := 16#003ff#;
-    constant ADDR_BIAS_BASE              : INTEGER := 16#00400#;
-    constant ADDR_BIAS_HIGH              : INTEGER := 16#005ff#;
-    constant ADDR_WEIGHTS_BASE           : INTEGER := 16#10000#;
-    constant ADDR_WEIGHTS_HIGH           : INTEGER := 16#1ffff#;
-    constant ADDR_BITS         : INTEGER := 17;
+    constant ADDR_INPUT_R_BASE           : INTEGER := 16#00200#;
+    constant ADDR_INPUT_R_HIGH           : INTEGER := 16#003ff#;
+    constant ADDR_OUTPUT_R_BASE          : INTEGER := 16#00400#;
+    constant ADDR_OUTPUT_R_HIGH          : INTEGER := 16#005ff#;
+    constant ADDR_BIAS_BASE              : INTEGER := 16#00600#;
+    constant ADDR_BIAS_HIGH              : INTEGER := 16#007ff#;
+    constant ADDR_WEIGHTS_BASE           : INTEGER := 16#20000#;
+    constant ADDR_WEIGHTS_HIGH           : INTEGER := 16#3ffff#;
+    constant ADDR_BITS         : INTEGER := 18;
 
     signal waddr               : UNSIGNED(ADDR_BITS-1 downto 0);
     signal wmask               : UNSIGNED(C_S_AXI_DATA_WIDTH-1 downto 0);
@@ -162,10 +162,10 @@ architecture behave of nnlayer_control_s_axi is
     signal int_numOfOutNeurons : UNSIGNED(15 downto 0) := (others => '0');
     signal int_activation      : UNSIGNED(7 downto 0) := (others => '0');
     -- memory signals
-    signal int_input_r_address0 : UNSIGNED(5 downto 0);
+    signal int_input_r_address0 : UNSIGNED(6 downto 0);
     signal int_input_r_ce0     : STD_LOGIC;
     signal int_input_r_q0      : UNSIGNED(31 downto 0);
-    signal int_input_r_address1 : UNSIGNED(5 downto 0);
+    signal int_input_r_address1 : UNSIGNED(6 downto 0);
     signal int_input_r_ce1     : STD_LOGIC;
     signal int_input_r_we1     : STD_LOGIC;
     signal int_input_r_be1     : UNSIGNED(3 downto 0);
@@ -200,10 +200,10 @@ architecture behave of nnlayer_control_s_axi is
     signal int_bias_read       : STD_LOGIC;
     signal int_bias_write      : STD_LOGIC;
     signal int_bias_shift0     : UNSIGNED(0 downto 0);
-    signal int_weights_address0 : UNSIGNED(13 downto 0);
+    signal int_weights_address0 : UNSIGNED(14 downto 0);
     signal int_weights_ce0     : STD_LOGIC;
     signal int_weights_q0      : UNSIGNED(31 downto 0);
-    signal int_weights_address1 : UNSIGNED(13 downto 0);
+    signal int_weights_address1 : UNSIGNED(14 downto 0);
     signal int_weights_ce1     : STD_LOGIC;
     signal int_weights_we1     : STD_LOGIC;
     signal int_weights_be1     : UNSIGNED(3 downto 0);
@@ -255,8 +255,8 @@ generic map (
      MEM_STYLE => "auto",
      MEM_TYPE  => "2P",
      BYTES     => 4,
-     DEPTH     => 64,
-     AWIDTH    => log2(64))
+     DEPTH     => 128,
+     AWIDTH    => log2(128))
 port map (
      clk0      => ACLK,
      address0  => int_input_r_address0,
@@ -318,8 +318,8 @@ generic map (
      MEM_STYLE => "auto",
      MEM_TYPE  => "2P",
      BYTES     => 4,
-     DEPTH     => 16384,
-     AWIDTH    => log2(16384))
+     DEPTH     => 32768,
+     AWIDTH    => log2(32768))
 port map (
      clk0      => ACLK,
      address0  => int_weights_address0,
@@ -694,10 +694,10 @@ port map (
 
 -- ----------------------- Memory logic ------------------
     -- input_r
-    int_input_r_address0 <= SHIFT_RIGHT(UNSIGNED(input_r_address0), 1)(5 downto 0);
+    int_input_r_address0 <= SHIFT_RIGHT(UNSIGNED(input_r_address0), 1)(6 downto 0);
     int_input_r_ce0      <= input_r_ce0;
     input_r_q0           <= STD_LOGIC_VECTOR(SHIFT_RIGHT(int_input_r_q0, TO_INTEGER(int_input_r_shift0) * 16)(15 downto 0));
-    int_input_r_address1 <= raddr(7 downto 2) when ar_hs = '1' else waddr(7 downto 2);
+    int_input_r_address1 <= raddr(8 downto 2) when ar_hs = '1' else waddr(8 downto 2);
     int_input_r_ce1      <= '1' when ar_hs = '1' or (int_input_r_write = '1' and WVALID  = '1') else '0';
     int_input_r_we1      <= '1' when int_input_r_write = '1' and w_hs = '1' else '0';
     int_input_r_be1      <= UNSIGNED(WSTRB) when int_input_r_we1 = '1' else (others=>'0');
@@ -723,10 +723,10 @@ port map (
     int_bias_be1         <= UNSIGNED(WSTRB) when int_bias_we1 = '1' else (others=>'0');
     int_bias_d1          <= UNSIGNED(WDATA);
     -- weights
-    int_weights_address0 <= SHIFT_RIGHT(UNSIGNED(weights_address0), 1)(13 downto 0);
+    int_weights_address0 <= SHIFT_RIGHT(UNSIGNED(weights_address0), 1)(14 downto 0);
     int_weights_ce0      <= weights_ce0;
     weights_q0           <= STD_LOGIC_VECTOR(SHIFT_RIGHT(int_weights_q0, TO_INTEGER(int_weights_shift0) * 16)(15 downto 0));
-    int_weights_address1 <= raddr(15 downto 2) when ar_hs = '1' else waddr(15 downto 2);
+    int_weights_address1 <= raddr(16 downto 2) when ar_hs = '1' else waddr(16 downto 2);
     int_weights_ce1      <= '1' when ar_hs = '1' or (int_weights_write = '1' and WVALID  = '1') else '0';
     int_weights_we1      <= '1' when int_weights_write = '1' and w_hs = '1' else '0';
     int_weights_be1      <= UNSIGNED(WSTRB) when int_weights_we1 = '1' else (others=>'0');

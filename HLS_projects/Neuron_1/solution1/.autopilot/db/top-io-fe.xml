@@ -1,22 +1,22 @@
 <root versionMajor = "1" versionMinor = "5">
   <kernel src_name="nnlayer" language="c" hwCtrl="ap_ctrl_hs" mem_layout="fpga64-xilinx-none">
     <args>
-      <arg id="0" access_type="r" src_name="input_" src_type="short*" src_isptr="1" src_bitwidth="16" src_size_or_depth="256">
+      <arg id="0" access_type="r" src_name="input" src_type="ap_fixed&lt;16, 8, AP_TRN, AP_WRAP, 0&gt;*" src_isptr="1" src_bitwidth="16" src_size_or_depth="256">
         <hw hw_usage="data" hw_interface="S_AXILite" hw_name="control" hw_bitwidth="16" hw_size_or_depth="256">
           <constraint constraint_type="pragma interface" mode="s_axilite" register_option="0" offset="512"/>
         </hw>
       </arg>
-      <arg id="1" access_type="rw" src_name="output" src_type="short*" src_isptr="1" src_bitwidth="16" src_size_or_depth="256">
+      <arg id="1" access_type="rw" src_name="output" src_type="ap_fixed&lt;16, 8, AP_TRN, AP_WRAP, 0&gt;*" src_isptr="1" src_bitwidth="16" src_size_or_depth="256">
         <hw hw_usage="data" hw_interface="S_AXILite" hw_name="control" hw_bitwidth="16" hw_size_or_depth="256">
           <constraint constraint_type="pragma interface" mode="s_axilite" register_option="0" offset="1024"/>
         </hw>
       </arg>
-      <arg id="2" access_type="r" src_name="weights_" src_type="short*" src_isptr="1" src_bitwidth="16" src_size_or_depth="65536">
+      <arg id="2" access_type="r" src_name="weights" src_type="ap_fixed&lt;16, 8, AP_TRN, AP_WRAP, 0&gt;*" src_isptr="1" src_bitwidth="16" src_size_or_depth="65536">
         <hw hw_usage="data" hw_interface="S_AXILite" hw_name="control" hw_bitwidth="16" hw_size_or_depth="65536">
           <constraint constraint_type="pragma interface" mode="s_axilite" register_option="0" offset="131072"/>
         </hw>
       </arg>
-      <arg id="3" access_type="r" src_name="bias_" src_type="short*" src_isptr="1" src_bitwidth="16" src_size_or_depth="256">
+      <arg id="3" access_type="r" src_name="bias" src_type="ap_fixed&lt;16, 8, AP_TRN, AP_WRAP, 0&gt;*" src_isptr="1" src_bitwidth="16" src_size_or_depth="256">
         <hw hw_usage="data" hw_interface="S_AXILite" hw_name="control" hw_bitwidth="16" hw_size_or_depth="256">
           <constraint constraint_type="pragma interface" mode="s_axilite" register_option="0" offset="1536"/>
         </hw>

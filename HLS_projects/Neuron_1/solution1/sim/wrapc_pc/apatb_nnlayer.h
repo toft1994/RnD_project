@@ -4,10 +4,10 @@
 // ==============================================================
 
 extern "C" void AESL_WRAP_nnlayer (
-volatile void* input_s,
+volatile void* input_r,
 volatile void* output_r,
-volatile void* weights_s,
-volatile void* bias_s,
+volatile void* weights,
+volatile void* bias,
 short numOfInNeurons,
 short numOfOutNeurons,
 char activation);

@@ -35,20 +35,20 @@ port (
     numOfInNeurons        :out  STD_LOGIC_VECTOR(15 downto 0);
     numOfOutNeurons       :out  STD_LOGIC_VECTOR(15 downto 0);
     activation            :out  STD_LOGIC_VECTOR(7 downto 0);
-    input_s_address0      :in   STD_LOGIC_VECTOR(7 downto 0);
-    input_s_ce0           :in   STD_LOGIC;
-    input_s_q0            :out  STD_LOGIC_VECTOR(15 downto 0);
+    input_r_address0      :in   STD_LOGIC_VECTOR(7 downto 0);
+    input_r_ce0           :in   STD_LOGIC;
+    input_r_q0            :out  STD_LOGIC_VECTOR(15 downto 0);
     output_r_address0     :in   STD_LOGIC_VECTOR(7 downto 0);
     output_r_ce0          :in   STD_LOGIC;
     output_r_we0          :in   STD_LOGIC;
     output_r_d0           :in   STD_LOGIC_VECTOR(15 downto 0);
     output_r_q0           :out  STD_LOGIC_VECTOR(15 downto 0);
-    bias_s_address0       :in   STD_LOGIC_VECTOR(7 downto 0);
-    bias_s_ce0            :in   STD_LOGIC;
-    bias_s_q0             :out  STD_LOGIC_VECTOR(15 downto 0);
-    weights_s_address0    :in   STD_LOGIC_VECTOR(15 downto 0);
-    weights_s_ce0         :in   STD_LOGIC;
-    weights_s_q0          :out  STD_LOGIC_VECTOR(15 downto 0);
+    bias_address0         :in   STD_LOGIC_VECTOR(7 downto 0);
+    bias_ce0              :in   STD_LOGIC;
+    bias_q0               :out  STD_LOGIC_VECTOR(15 downto 0);
+    weights_address0      :in   STD_LOGIC_VECTOR(15 downto 0);
+    weights_ce0           :in   STD_LOGIC;
+    weights_q0            :out  STD_LOGIC_VECTOR(15 downto 0);
     ap_start              :out  STD_LOGIC;
     ap_done               :in   STD_LOGIC;
     ap_ready              :in   STD_LOGIC;
@@ -91,21 +91,21 @@ end entity nnlayer_control_s_axi;
 --           others  - reserved
 -- 0x00024 : reserved
 -- 0x00200 ~
--- 0x003ff : Memory 'input_s' (256 * 16b)
---           Word n : bit [15: 0] - input_s[2n]
---                    bit [31:16] - input_s[2n+1]
+-- 0x003ff : Memory 'input_r' (256 * 16b)
+--           Word n : bit [15: 0] - input_r[2n]
+--                    bit [31:16] - input_r[2n+1]
 -- 0x00400 ~
 -- 0x005ff : Memory 'output_r' (256 * 16b)
 --           Word n : bit [15: 0] - output_r[2n]
 --                    bit [31:16] - output_r[2n+1]
 -- 0x00600 ~
--- 0x007ff : Memory 'bias_s' (256 * 16b)
---           Word n : bit [15: 0] - bias_s[2n]
---                    bit [31:16] - bias_s[2n+1]
+-- 0x007ff : Memory 'bias' (256 * 16b)
+--           Word n : bit [15: 0] - bias[2n]
+--                    bit [31:16] - bias[2n+1]
 -- 0x20000 ~
--- 0x3ffff : Memory 'weights_s' (65536 * 16b)
---           Word n : bit [15: 0] - weights_s[2n]
---                    bit [31:16] - weights_s[2n+1]
+-- 0x3ffff : Memory 'weights' (65536 * 16b)
+--           Word n : bit [15: 0] - weights[2n]
+--                    bit [31:16] - weights[2n+1]
 -- (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 architecture behave of nnlayer_control_s_axi is
@@ -123,14 +123,14 @@ architecture behave of nnlayer_control_s_axi is
     constant ADDR_NUMOFOUTNEURONS_CTRL   : INTEGER := 16#0001c#;
     constant ADDR_ACTIVATION_DATA_0      : INTEGER := 16#00020#;
     constant ADDR_ACTIVATION_CTRL        : INTEGER := 16#00024#;
-    constant ADDR_INPUT_S_BASE           : INTEGER := 16#00200#;
-    constant ADDR_INPUT_S_HIGH           : INTEGER := 16#003ff#;
+    constant ADDR_INPUT_R_BASE           : INTEGER := 16#00200#;
+    constant ADDR_INPUT_R_HIGH           : INTEGER := 16#003ff#;
     constant ADDR_OUTPUT_R_BASE          : INTEGER := 16#00400#;
     constant ADDR_OUTPUT_R_HIGH          : INTEGER := 16#005ff#;
-    constant ADDR_BIAS_S_BASE            : INTEGER := 16#00600#;
-    constant ADDR_BIAS_S_HIGH            : INTEGER := 16#007ff#;
-    constant ADDR_WEIGHTS_S_BASE         : INTEGER := 16#20000#;
-    constant ADDR_WEIGHTS_S_HIGH         : INTEGER := 16#3ffff#;
+    constant ADDR_BIAS_BASE              : INTEGER := 16#00600#;
+    constant ADDR_BIAS_HIGH              : INTEGER := 16#007ff#;
+    constant ADDR_WEIGHTS_BASE           : INTEGER := 16#20000#;
+    constant ADDR_WEIGHTS_HIGH           : INTEGER := 16#3ffff#;
     constant ADDR_BITS         : INTEGER := 18;
 
     signal waddr               : UNSIGNED(ADDR_BITS-1 downto 0);
@@ -162,18 +162,18 @@ architecture behave of nnlayer_control_s_axi is
     signal int_numOfOutNeurons : UNSIGNED(15 downto 0) := (others => '0');
     signal int_activation      : UNSIGNED(7 downto 0) := (others => '0');
     -- memory signals
-    signal int_input_s_address0 : UNSIGNED(6 downto 0);
-    signal int_input_s_ce0     : STD_LOGIC;
-    signal int_input_s_q0      : UNSIGNED(31 downto 0);
-    signal int_input_s_address1 : UNSIGNED(6 downto 0);
-    signal int_input_s_ce1     : STD_LOGIC;
-    signal int_input_s_we1     : STD_LOGIC;
-    signal int_input_s_be1     : UNSIGNED(3 downto 0);
-    signal int_input_s_d1      : UNSIGNED(31 downto 0);
-    signal int_input_s_q1      : UNSIGNED(31 downto 0);
-    signal int_input_s_read    : STD_LOGIC;
-    signal int_input_s_write   : STD_LOGIC;
-    signal int_input_s_shift0  : UNSIGNED(0 downto 0);
+    signal int_input_r_address0 : UNSIGNED(6 downto 0);
+    signal int_input_r_ce0     : STD_LOGIC;
+    signal int_input_r_q0      : UNSIGNED(31 downto 0);
+    signal int_input_r_address1 : UNSIGNED(6 downto 0);
+    signal int_input_r_ce1     : STD_LOGIC;
+    signal int_input_r_we1     : STD_LOGIC;
+    signal int_input_r_be1     : UNSIGNED(3 downto 0);
+    signal int_input_r_d1      : UNSIGNED(31 downto 0);
+    signal int_input_r_q1      : UNSIGNED(31 downto 0);
+    signal int_input_r_read    : STD_LOGIC;
+    signal int_input_r_write   : STD_LOGIC;
+    signal int_input_r_shift0  : UNSIGNED(0 downto 0);
     signal int_output_r_address0 : UNSIGNED(6 downto 0);
     signal int_output_r_ce0    : STD_LOGIC;
     signal int_output_r_be0    : UNSIGNED(3 downto 0);
@@ -188,30 +188,30 @@ architecture behave of nnlayer_control_s_axi is
     signal int_output_r_read   : STD_LOGIC;
     signal int_output_r_write  : STD_LOGIC;
     signal int_output_r_shift0 : UNSIGNED(0 downto 0);
-    signal int_bias_s_address0 : UNSIGNED(6 downto 0);
-    signal int_bias_s_ce0      : STD_LOGIC;
-    signal int_bias_s_q0       : UNSIGNED(31 downto 0);
-    signal int_bias_s_address1 : UNSIGNED(6 downto 0);
-    signal int_bias_s_ce1      : STD_LOGIC;
-    signal int_bias_s_we1      : STD_LOGIC;
-    signal int_bias_s_be1      : UNSIGNED(3 downto 0);
-    signal int_bias_s_d1       : UNSIGNED(31 downto 0);
-    signal int_bias_s_q1       : UNSIGNED(31 downto 0);
-    signal int_bias_s_read     : STD_LOGIC;
-    signal int_bias_s_write    : STD_LOGIC;
-    signal int_bias_s_shift0   : UNSIGNED(0 downto 0);
-    signal int_weights_s_address0 : UNSIGNED(14 downto 0);
-    signal int_weights_s_ce0   : STD_LOGIC;
-    signal int_weights_s_q0    : UNSIGNED(31 downto 0);
-    signal int_weights_s_address1 : UNSIGNED(14 downto 0);
-    signal int_weights_s_ce1   : STD_LOGIC;
-    signal int_weights_s_we1   : STD_LOGIC;
-    signal int_weights_s_be1   : UNSIGNED(3 downto 0);
-    signal int_weights_s_d1    : UNSIGNED(31 downto 0);
-    signal int_weights_s_q1    : UNSIGNED(31 downto 0);
-    signal int_weights_s_read  : STD_LOGIC;
-    signal int_weights_s_write : STD_LOGIC;
-    signal int_weights_s_shift0 : UNSIGNED(0 downto 0);
+    signal int_bias_address0   : UNSIGNED(6 downto 0);
+    signal int_bias_ce0        : STD_LOGIC;
+    signal int_bias_q0         : UNSIGNED(31 downto 0);
+    signal int_bias_address1   : UNSIGNED(6 downto 0);
+    signal int_bias_ce1        : STD_LOGIC;
+    signal int_bias_we1        : STD_LOGIC;
+    signal int_bias_be1        : UNSIGNED(3 downto 0);
+    signal int_bias_d1         : UNSIGNED(31 downto 0);
+    signal int_bias_q1         : UNSIGNED(31 downto 0);
+    signal int_bias_read       : STD_LOGIC;
+    signal int_bias_write      : STD_LOGIC;
+    signal int_bias_shift0     : UNSIGNED(0 downto 0);
+    signal int_weights_address0 : UNSIGNED(14 downto 0);
+    signal int_weights_ce0     : STD_LOGIC;
+    signal int_weights_q0      : UNSIGNED(31 downto 0);
+    signal int_weights_address1 : UNSIGNED(14 downto 0);
+    signal int_weights_ce1     : STD_LOGIC;
+    signal int_weights_we1     : STD_LOGIC;
+    signal int_weights_be1     : UNSIGNED(3 downto 0);
+    signal int_weights_d1      : UNSIGNED(31 downto 0);
+    signal int_weights_q1      : UNSIGNED(31 downto 0);
+    signal int_weights_read    : STD_LOGIC;
+    signal int_weights_write   : STD_LOGIC;
+    signal int_weights_shift0  : UNSIGNED(0 downto 0);
 
     component nnlayer_control_s_axi_ram is
         generic (
@@ -249,8 +249,8 @@ architecture behave of nnlayer_control_s_axi is
 
 begin
 -- ----------------------- Instantiation------------------
--- int_input_s
-int_input_s : nnlayer_control_s_axi_ram
+-- int_input_r
+int_input_r : nnlayer_control_s_axi_ram
 generic map (
      MEM_STYLE => "auto",
      MEM_TYPE  => "2P",
@@ -259,17 +259,17 @@ generic map (
      AWIDTH    => log2(128))
 port map (
      clk0      => ACLK,
-     address0  => int_input_s_address0,
-     ce0       => int_input_s_ce0,
+     address0  => int_input_r_address0,
+     ce0       => int_input_r_ce0,
      we0       => (others=>'0'),
      d0        => (others=>'0'),
-     q0        => int_input_s_q0,
+     q0        => int_input_r_q0,
      clk1      => ACLK,
-     address1  => int_input_s_address1,
-     ce1       => int_input_s_ce1,
-     we1       => int_input_s_be1,
-     d1        => int_input_s_d1,
-     q1        => int_input_s_q1);
+     address1  => int_input_r_address1,
+     ce1       => int_input_r_ce1,
+     we1       => int_input_r_be1,
+     d1        => int_input_r_d1,
+     q1        => int_input_r_q1);
 -- int_output_r
 int_output_r : nnlayer_control_s_axi_ram
 generic map (
@@ -291,8 +291,8 @@ port map (
      we1       => int_output_r_be1,
      d1        => int_output_r_d1,
      q1        => int_output_r_q1);
--- int_bias_s
-int_bias_s : nnlayer_control_s_axi_ram
+-- int_bias
+int_bias : nnlayer_control_s_axi_ram
 generic map (
      MEM_STYLE => "auto",
      MEM_TYPE  => "2P",
@@ -301,19 +301,19 @@ generic map (
      AWIDTH    => log2(128))
 port map (
      clk0      => ACLK,
-     address0  => int_bias_s_address0,
-     ce0       => int_bias_s_ce0,
+     address0  => int_bias_address0,
+     ce0       => int_bias_ce0,
      we0       => (others=>'0'),
      d0        => (others=>'0'),
-     q0        => int_bias_s_q0,
+     q0        => int_bias_q0,
      clk1      => ACLK,
-     address1  => int_bias_s_address1,
-     ce1       => int_bias_s_ce1,
-     we1       => int_bias_s_be1,
-     d1        => int_bias_s_d1,
-     q1        => int_bias_s_q1);
--- int_weights_s
-int_weights_s : nnlayer_control_s_axi_ram
+     address1  => int_bias_address1,
+     ce1       => int_bias_ce1,
+     we1       => int_bias_be1,
+     d1        => int_bias_d1,
+     q1        => int_bias_q1);
+-- int_weights
+int_weights : nnlayer_control_s_axi_ram
 generic map (
      MEM_STYLE => "auto",
      MEM_TYPE  => "2P",
@@ -322,17 +322,17 @@ generic map (
      AWIDTH    => log2(32768))
 port map (
      clk0      => ACLK,
-     address0  => int_weights_s_address0,
-     ce0       => int_weights_s_ce0,
+     address0  => int_weights_address0,
+     ce0       => int_weights_ce0,
      we0       => (others=>'0'),
      d0        => (others=>'0'),
-     q0        => int_weights_s_q0,
+     q0        => int_weights_q0,
      clk1      => ACLK,
-     address1  => int_weights_s_address1,
-     ce1       => int_weights_s_ce1,
-     we1       => int_weights_s_be1,
-     d1        => int_weights_s_d1,
-     q1        => int_weights_s_q1);
+     address1  => int_weights_address1,
+     ce1       => int_weights_ce1,
+     we1       => int_weights_be1,
+     d1        => int_weights_d1,
+     q1        => int_weights_q1);
 
 
 -- ----------------------- AXI WRITE ---------------------
@@ -400,7 +400,7 @@ port map (
     ARREADY <= ARREADY_t;
     RDATA   <= STD_LOGIC_VECTOR(rdata_data);
     RRESP   <= "00";  -- OKAY
-    RVALID_t  <= '1' when (rstate = rddata) and (int_input_s_read = '0') and (int_output_r_read = '0') and (int_bias_s_read = '0') and (int_weights_s_read = '0') else '0';
+    RVALID_t  <= '1' when (rstate = rddata) and (int_input_r_read = '0') and (int_output_r_read = '0') and (int_bias_read = '0') and (int_weights_read = '0') else '0';
     RVALID    <= RVALID_t;
     ar_hs   <= ARVALID and ARREADY_t;
     raddr   <= UNSIGNED(ARADDR(ADDR_BITS-1 downto 0));
@@ -465,14 +465,14 @@ port map (
                     when others =>
                         NULL;
                     end case;
-                elsif (int_input_s_read = '1') then
-                    rdata_data <= int_input_s_q1;
+                elsif (int_input_r_read = '1') then
+                    rdata_data <= int_input_r_q1;
                 elsif (int_output_r_read = '1') then
                     rdata_data <= int_output_r_q1;
-                elsif (int_bias_s_read = '1') then
-                    rdata_data <= int_bias_s_q1;
-                elsif (int_weights_s_read = '1') then
-                    rdata_data <= int_weights_s_q1;
+                elsif (int_bias_read = '1') then
+                    rdata_data <= int_bias_q1;
+                elsif (int_weights_read = '1') then
+                    rdata_data <= int_weights_q1;
                 end if;
             end if;
         end if;
@@ -693,15 +693,15 @@ port map (
 
 
 -- ----------------------- Memory logic ------------------
-    -- input_s
-    int_input_s_address0 <= SHIFT_RIGHT(UNSIGNED(input_s_address0), 1)(6 downto 0);
-    int_input_s_ce0      <= input_s_ce0;
-    input_s_q0           <= STD_LOGIC_VECTOR(SHIFT_RIGHT(int_input_s_q0, TO_INTEGER(int_input_s_shift0) * 16)(15 downto 0));
-    int_input_s_address1 <= raddr(8 downto 2) when ar_hs = '1' else waddr(8 downto 2);
-    int_input_s_ce1      <= '1' when ar_hs = '1' or (int_input_s_write = '1' and WVALID  = '1') else '0';
-    int_input_s_we1      <= '1' when int_input_s_write = '1' and w_hs = '1' else '0';
-    int_input_s_be1      <= UNSIGNED(WSTRB) when int_input_s_we1 = '1' else (others=>'0');
-    int_input_s_d1       <= UNSIGNED(WDATA);
+    -- input_r
+    int_input_r_address0 <= SHIFT_RIGHT(UNSIGNED(input_r_address0), 1)(6 downto 0);
+    int_input_r_ce0      <= input_r_ce0;
+    input_r_q0           <= STD_LOGIC_VECTOR(SHIFT_RIGHT(int_input_r_q0, TO_INTEGER(int_input_r_shift0) * 16)(15 downto 0));
+    int_input_r_address1 <= raddr(8 downto 2) when ar_hs = '1' else waddr(8 downto 2);
+    int_input_r_ce1      <= '1' when ar_hs = '1' or (int_input_r_write = '1' and WVALID  = '1') else '0';
+    int_input_r_we1      <= '1' when int_input_r_write = '1' and w_hs = '1' else '0';
+    int_input_r_be1      <= UNSIGNED(WSTRB) when int_input_r_we1 = '1' else (others=>'0');
+    int_input_r_d1       <= UNSIGNED(WDATA);
     -- output_r
     int_output_r_address0 <= SHIFT_RIGHT(UNSIGNED(output_r_address0), 1)(6 downto 0);
     int_output_r_ce0     <= output_r_ce0;
@@ -713,35 +713,35 @@ port map (
     int_output_r_we1     <= '1' when int_output_r_write = '1' and w_hs = '1' else '0';
     int_output_r_be1     <= UNSIGNED(WSTRB) when int_output_r_we1 = '1' else (others=>'0');
     int_output_r_d1      <= UNSIGNED(WDATA);
-    -- bias_s
-    int_bias_s_address0  <= SHIFT_RIGHT(UNSIGNED(bias_s_address0), 1)(6 downto 0);
-    int_bias_s_ce0       <= bias_s_ce0;
-    bias_s_q0            <= STD_LOGIC_VECTOR(SHIFT_RIGHT(int_bias_s_q0, TO_INTEGER(int_bias_s_shift0) * 16)(15 downto 0));
-    int_bias_s_address1  <= raddr(8 downto 2) when ar_hs = '1' else waddr(8 downto 2);
-    int_bias_s_ce1       <= '1' when ar_hs = '1' or (int_bias_s_write = '1' and WVALID  = '1') else '0';
-    int_bias_s_we1       <= '1' when int_bias_s_write = '1' and w_hs = '1' else '0';
-    int_bias_s_be1       <= UNSIGNED(WSTRB) when int_bias_s_we1 = '1' else (others=>'0');
-    int_bias_s_d1        <= UNSIGNED(WDATA);
-    -- weights_s
-    int_weights_s_address0 <= SHIFT_RIGHT(UNSIGNED(weights_s_address0), 1)(14 downto 0);
-    int_weights_s_ce0    <= weights_s_ce0;
-    weights_s_q0         <= STD_LOGIC_VECTOR(SHIFT_RIGHT(int_weights_s_q0, TO_INTEGER(int_weights_s_shift0) * 16)(15 downto 0));
-    int_weights_s_address1 <= raddr(16 downto 2) when ar_hs = '1' else waddr(16 downto 2);
-    int_weights_s_ce1    <= '1' when ar_hs = '1' or (int_weights_s_write = '1' and WVALID  = '1') else '0';
-    int_weights_s_we1    <= '1' when int_weights_s_write = '1' and w_hs = '1' else '0';
-    int_weights_s_be1    <= UNSIGNED(WSTRB) when int_weights_s_we1 = '1' else (others=>'0');
-    int_weights_s_d1     <= UNSIGNED(WDATA);
+    -- bias
+    int_bias_address0    <= SHIFT_RIGHT(UNSIGNED(bias_address0), 1)(6 downto 0);
+    int_bias_ce0         <= bias_ce0;
+    bias_q0              <= STD_LOGIC_VECTOR(SHIFT_RIGHT(int_bias_q0, TO_INTEGER(int_bias_shift0) * 16)(15 downto 0));
+    int_bias_address1    <= raddr(8 downto 2) when ar_hs = '1' else waddr(8 downto 2);
+    int_bias_ce1         <= '1' when ar_hs = '1' or (int_bias_write = '1' and WVALID  = '1') else '0';
+    int_bias_we1         <= '1' when int_bias_write = '1' and w_hs = '1' else '0';
+    int_bias_be1         <= UNSIGNED(WSTRB) when int_bias_we1 = '1' else (others=>'0');
+    int_bias_d1          <= UNSIGNED(WDATA);
+    -- weights
+    int_weights_address0 <= SHIFT_RIGHT(UNSIGNED(weights_address0), 1)(14 downto 0);
+    int_weights_ce0      <= weights_ce0;
+    weights_q0           <= STD_LOGIC_VECTOR(SHIFT_RIGHT(int_weights_q0, TO_INTEGER(int_weights_shift0) * 16)(15 downto 0));
+    int_weights_address1 <= raddr(16 downto 2) when ar_hs = '1' else waddr(16 downto 2);
+    int_weights_ce1      <= '1' when ar_hs = '1' or (int_weights_write = '1' and WVALID  = '1') else '0';
+    int_weights_we1      <= '1' when int_weights_write = '1' and w_hs = '1' else '0';
+    int_weights_be1      <= UNSIGNED(WSTRB) when int_weights_we1 = '1' else (others=>'0');
+    int_weights_d1       <= UNSIGNED(WDATA);
 
     process (ACLK)
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_input_s_read <= '0';
+                int_input_r_read <= '0';
             elsif (ACLK_EN = '1') then
-                if (ar_hs = '1' and raddr >= ADDR_INPUT_S_BASE and raddr <= ADDR_INPUT_S_HIGH) then
-                    int_input_s_read <= '1';
+                if (ar_hs = '1' and raddr >= ADDR_INPUT_R_BASE and raddr <= ADDR_INPUT_R_HIGH) then
+                    int_input_r_read <= '1';
                 else
-                    int_input_s_read <= '0';
+                    int_input_r_read <= '0';
                 end if;
             end if;
         end if;
@@ -751,12 +751,12 @@ port map (
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_input_s_write <= '0';
+                int_input_r_write <= '0';
             elsif (ACLK_EN = '1') then
-                if (aw_hs = '1' and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) >= ADDR_INPUT_S_BASE and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) <= ADDR_INPUT_S_HIGH) then
-                    int_input_s_write <= '1';
+                if (aw_hs = '1' and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) >= ADDR_INPUT_R_BASE and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) <= ADDR_INPUT_R_HIGH) then
+                    int_input_r_write <= '1';
                 elsif (w_hs = '1') then
-                    int_input_s_write <= '0';
+                    int_input_r_write <= '0';
                 end if;
             end if;
         end if;
@@ -766,10 +766,10 @@ port map (
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_input_s_shift0 <= (others=>'0');
+                int_input_r_shift0 <= (others=>'0');
             elsif (ACLK_EN = '1') then
-                if (input_s_ce0 = '1') then
-                    int_input_s_shift0 <= UNSIGNED(input_s_address0(0 downto 0));
+                if (input_r_ce0 = '1') then
+                    int_input_r_shift0 <= UNSIGNED(input_r_address0(0 downto 0));
                 end if;
             end if;
         end if;
@@ -822,12 +822,12 @@ port map (
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_bias_s_read <= '0';
+                int_bias_read <= '0';
             elsif (ACLK_EN = '1') then
-                if (ar_hs = '1' and raddr >= ADDR_BIAS_S_BASE and raddr <= ADDR_BIAS_S_HIGH) then
-                    int_bias_s_read <= '1';
+                if (ar_hs = '1' and raddr >= ADDR_BIAS_BASE and raddr <= ADDR_BIAS_HIGH) then
+                    int_bias_read <= '1';
                 else
-                    int_bias_s_read <= '0';
+                    int_bias_read <= '0';
                 end if;
             end if;
         end if;
@@ -837,12 +837,12 @@ port map (
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_bias_s_write <= '0';
+                int_bias_write <= '0';
             elsif (ACLK_EN = '1') then
-                if (aw_hs = '1' and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) >= ADDR_BIAS_S_BASE and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) <= ADDR_BIAS_S_HIGH) then
-                    int_bias_s_write <= '1';
+                if (aw_hs = '1' and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) >= ADDR_BIAS_BASE and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) <= ADDR_BIAS_HIGH) then
+                    int_bias_write <= '1';
                 elsif (w_hs = '1') then
-                    int_bias_s_write <= '0';
+                    int_bias_write <= '0';
                 end if;
             end if;
         end if;
@@ -852,10 +852,10 @@ port map (
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_bias_s_shift0 <= (others=>'0');
+                int_bias_shift0 <= (others=>'0');
             elsif (ACLK_EN = '1') then
-                if (bias_s_ce0 = '1') then
-                    int_bias_s_shift0 <= UNSIGNED(bias_s_address0(0 downto 0));
+                if (bias_ce0 = '1') then
+                    int_bias_shift0 <= UNSIGNED(bias_address0(0 downto 0));
                 end if;
             end if;
         end if;
@@ -865,12 +865,12 @@ port map (
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_weights_s_read <= '0';
+                int_weights_read <= '0';
             elsif (ACLK_EN = '1') then
-                if (ar_hs = '1' and raddr >= ADDR_WEIGHTS_S_BASE and raddr <= ADDR_WEIGHTS_S_HIGH) then
-                    int_weights_s_read <= '1';
+                if (ar_hs = '1' and raddr >= ADDR_WEIGHTS_BASE and raddr <= ADDR_WEIGHTS_HIGH) then
+                    int_weights_read <= '1';
                 else
-                    int_weights_s_read <= '0';
+                    int_weights_read <= '0';
                 end if;
             end if;
         end if;
@@ -880,12 +880,12 @@ port map (
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_weights_s_write <= '0';
+                int_weights_write <= '0';
             elsif (ACLK_EN = '1') then
-                if (aw_hs = '1' and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) >= ADDR_WEIGHTS_S_BASE and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) <= ADDR_WEIGHTS_S_HIGH) then
-                    int_weights_s_write <= '1';
+                if (aw_hs = '1' and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) >= ADDR_WEIGHTS_BASE and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) <= ADDR_WEIGHTS_HIGH) then
+                    int_weights_write <= '1';
                 elsif (w_hs = '1') then
-                    int_weights_s_write <= '0';
+                    int_weights_write <= '0';
                 end if;
             end if;
         end if;
@@ -895,10 +895,10 @@ port map (
     begin
         if (ACLK'event and ACLK = '1') then
             if (ARESET = '1') then
-                int_weights_s_shift0 <= (others=>'0');
+                int_weights_shift0 <= (others=>'0');
             elsif (ACLK_EN = '1') then
-                if (weights_s_ce0 = '1') then
-                    int_weights_s_shift0 <= UNSIGNED(weights_s_address0(0 downto 0));
+                if (weights_ce0 = '1') then
+                    int_weights_shift0 <= UNSIGNED(weights_address0(0 downto 0));
                 end if;
             end if;
         end if;

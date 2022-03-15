@@ -4,7 +4,7 @@
 == Synthesis Summary Report of 'nnlayer'
 ================================================================
 + General Information: 
-    * Date:           Thu Mar 10 13:30:35 2022
+    * Date:           Tue Mar 15 15:52:59 2022
     * Version:        2021.2 (Build 3367213 on Tue Oct 19 02:48:09 MDT 2021)
     * Project:        Neuron_1
     * Solution:       solution1 (Vivado IP Flow Target)
@@ -15,23 +15,18 @@
 + Performance & Resource Estimates: 
     
     PS: '+' for module; 'o' for loop; '*' for dataflow
-    +--------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+-----------+---------+-----------+-----------+-----+
-    |                Modules               | Issue|      | Latency |  Latency  | Iteration|         |  Trip |          |           |         |           |           |     |
-    |                & Loops               | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count | Pipelined|   BRAM    |   DSP   |     FF    |    LUT    | URAM|
-    +--------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+-----------+---------+-----------+-----------+-----+
-    |+ nnlayer                             |     -|  0.17|        -|          -|         -|        -|      -|        no|  133 (47%)|  2 (~0%)|  809 (~0%)|  1155 (2%)|    -|
-    | + nnlayer_Pipeline_1                 |     -|  2.24|      258|  2.580e+03|         -|      258|      -|        no|          -|        -|   21 (~0%)|   63 (~0%)|    -|
-    |  o Loop 1                            |     -|  8.75|      256|  2.560e+03|         2|        1|    256|       yes|          -|        -|          -|          -|    -|
-    | + nnlayer_Pipeline_2                 |     -|  2.24|    65538|  6.554e+05|         -|    65538|      -|        no|          -|        -|   37 (~0%)|   75 (~0%)|    -|
-    |  o Loop 1                            |     -|  8.75|    65536|  6.554e+05|         2|        1|  65536|       yes|          -|        -|          -|          -|    -|
-    | + nnlayer_Pipeline_3                 |     -|  2.24|      258|  2.580e+03|         -|      258|      -|        no|          -|        -|   21 (~0%)|   63 (~0%)|    -|
-    |  o Loop 1                            |     -|  8.75|      256|  2.560e+03|         2|        1|    256|       yes|          -|        -|          -|          -|    -|
-    | + nnlayer_Pipeline_VITIS_LOOP_40_1   |     -|  2.24|        -|          -|         -|        -|      -|        no|          -|        -|   35 (~0%)|   74 (~0%)|    -|
-    |  o VITIS_LOOP_40_1                   |     -|  8.75|        -|          -|         2|        1|      -|       yes|          -|        -|          -|          -|    -|
-    | o VITIS_LOOP_44_2                    |     -|  8.75|        -|          -|     65544|        -|      -|        no|          -|        -|          -|          -|    -|
-    |  + nnlayer_Pipeline_VITIS_LOOP_46_3  |     -|  3.42|    65540|  6.554e+05|         -|    65540|      -|        no|          -|  1 (~0%)|  106 (~0%)|  147 (~0%)|    -|
-    |   o VITIS_LOOP_46_3                  |     -|  8.75|    65538|  6.554e+05|         5|        1|  65535|       yes|          -|        -|          -|          -|    -|
-    +--------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+-----------+---------+-----------+-----------+-----+
+    +-------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+----------+---------+-----------+-----------+-----+
+    |               Modules               | Issue|      | Latency |  Latency  | Iteration|         |  Trip |          |          |         |           |           |     |
+    |               & Loops               | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count | Pipelined|   BRAM   |   DSP   |     FF    |    LUT    | URAM|
+    +-------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+----------+---------+-----------+-----------+-----+
+    |+ nnlayer                            |     -|  1.30|        -|          -|         -|        -|      -|        no|  67 (23%)|  1 (~0%)|  661 (~0%)|   923 (1%)|    -|
+    | + nnlayer_Pipeline_VITIS_LOOP_32_1  |     -|  2.24|        -|          -|         -|        -|      -|        no|         -|        -|   35 (~0%)|   74 (~0%)|    -|
+    |  o VITIS_LOOP_32_1                  |     -|  8.75|        -|          -|         2|        1|      -|       yes|         -|        -|          -|          -|    -|
+    | + nnlayer_Pipeline_VITIS_LOOP_10_1  |     -|  2.24|        -|          -|         -|        -|      -|        no|         -|        -|   22 (~0%)|  110 (~0%)|    -|
+    |  o VITIS_LOOP_10_1                  |    II|  8.75|        -|          -|         3|        2|      -|       yes|         -|        -|          -|          -|    -|
+    | o VITIS_LOOP_36_2                   |     -|  8.75|        -|          -|    327678|        -|      -|        no|         -|        -|          -|          -|    -|
+    |  o VITIS_LOOP_38_3                  |     -|  8.75|   327675|  3.277e+06|         5|        -|  65535|        no|         -|        -|          -|          -|    -|
+    +-------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+----------+---------+-----------+-----------+-----+
 
 
 ================================================================
@@ -72,26 +67,26 @@
 == SW I/O Information
 ================================================================
 * Top Function Arguments
-+-----------------+-----------+----------------+
-| Argument        | Direction | Datatype       |
-+-----------------+-----------+----------------+
-| input_          | in        | short*         |
-| output          | inout     | short*         |
-| weights_        | in        | short*         |
-| bias_           | in        | short*         |
-| numOfInNeurons  | in        | unsigned short |
-| numOfOutNeurons | in        | unsigned short |
-| activation      | in        | unsigned char  |
-+-----------------+-----------+----------------+
++-----------------+-----------+--------------------------------------+
+| Argument        | Direction | Datatype                             |
++-----------------+-----------+--------------------------------------+
+| input           | in        | ap_fixed<16, 8, AP_TRN, AP_WRAP, 0>* |
+| output          | inout     | ap_fixed<16, 8, AP_TRN, AP_WRAP, 0>* |
+| weights         | in        | ap_fixed<16, 8, AP_TRN, AP_WRAP, 0>* |
+| bias            | in        | ap_fixed<16, 8, AP_TRN, AP_WRAP, 0>* |
+| numOfInNeurons  | in        | unsigned short                       |
+| numOfOutNeurons | in        | unsigned short                       |
+| activation      | in        | unsigned char                        |
++-----------------+-----------+--------------------------------------+
 
 * SW-to-HW Mapping
 +-----------------+---------------+-----------+-------------------------------------------+
 | Argument        | HW Interface  | HW Type   | HW Info                                   |
 +-----------------+---------------+-----------+-------------------------------------------+
-| input_          | s_axi_control | interface |                                           |
+| input           | s_axi_control | interface |                                           |
 | output          | s_axi_control | interface |                                           |
-| weights_        | s_axi_control | interface |                                           |
-| bias_           | s_axi_control | interface |                                           |
+| weights         | s_axi_control | memory    | name=weights offset=131072 range=131072   |
+| bias            | s_axi_control | memory    | name=bias offset=1536 range=512           |
 | numOfInNeurons  | s_axi_control | register  | name=numOfInNeurons offset=0x10 range=32  |
 | numOfOutNeurons | s_axi_control | register  | name=numOfOutNeurons offset=0x18 range=32 |
 | activation      | s_axi_control | register  | name=activation offset=0x20 range=32      |
@@ -108,42 +103,27 @@
 ================================================================
 == Bind Op Report
 ================================================================
-+---------------------------------------+-----+--------+-------------+-----+--------+---------+
-| Name                                  | DSP | Pragma | Variable    | Op  | Impl   | Latency |
-+---------------------------------------+-----+--------+-------------+-----+--------+---------+
-| + nnlayer                             | 2   |        |             |     |        |         |
-|   mac_muladd_16s_16s_16ns_16_4_1_U18  | 1   |        | mul_ln44    | mul | dsp    | 3       |
-|   mac_muladd_16s_16s_16ns_16_4_1_U18  | 1   |        | add_ln44    | add | dsp    | 3       |
-|   add_ln44_1_fu_208_p2                | -   |        | add_ln44_1  | add | fabric | 0       |
-|   add_ln51_fu_228_p2                  | -   |        | add_ln51    | add | fabric | 0       |
-|  + nnlayer_Pipeline_1                 | 0   |        |             |     |        |         |
-|    empty_20_fu_85_p2                  | -   |        | empty_20    | add | fabric | 0       |
-|  + nnlayer_Pipeline_2                 | 0   |        |             |     |        |         |
-|    empty_19_fu_85_p2                  | -   |        | empty_19    | add | fabric | 0       |
-|  + nnlayer_Pipeline_3                 | 0   |        |             |     |        |         |
-|    empty_18_fu_85_p2                  | -   |        | empty_18    | add | fabric | 0       |
-|  + nnlayer_Pipeline_VITIS_LOOP_40_1   | 0   |        |             |     |        |         |
-|    add_ln40_fu_93_p2                  | -   |        | add_ln40    | add | fabric | 0       |
-|  + nnlayer_Pipeline_VITIS_LOOP_46_3   | 1   |        |             |     |        |         |
-|    inNeurons_2_fu_126_p2              | -   |        | inNeurons_2 | add | fabric | 0       |
-|    add_ln49_fu_132_p2                 | -   |        | add_ln49    | add | fabric | 0       |
-|    mac_muladd_16s_16s_16ns_16_4_1_U10 | 1   |        | mul_ln49    | mul | dsp    | 3       |
-|    mac_muladd_16s_16s_16ns_16_4_1_U10 | 1   |        | add_ln49_1  | add | dsp    | 3       |
-+---------------------------------------+-----+--------+-------------+-----+--------+---------+
++-------------------------------------+-----+--------+--------------------+-----+--------+---------+
+| Name                                | DSP | Pragma | Variable           | Op  | Impl   | Latency |
++-------------------------------------+-----+--------+--------------------+-----+--------+---------+
+| + nnlayer                           | 1   |        |                    |     |        |         |
+|   outNeurons_3_fu_239_p2            | -   |        | outNeurons_3       | add | fabric | 0       |
+|   inNeurons_1_fu_268_p2             | -   |        | inNeurons_1        | add | fabric | 0       |
+|   add_ln41_fu_274_p2                | -   |        | add_ln41           | add | fabric | 0       |
+|   mac_muladd_16s_16s_24ns_24_4_1_U6 | 1   |        | mul_ln1245         | mul | dsp    | 3       |
+|   mac_muladd_16s_16s_24ns_24_4_1_U6 | 1   |        | ret_V              | add | dsp    | 3       |
+|   weightIndexAdded_1_fu_290_p2      | -   |        | weightIndexAdded_1 | add | fabric | 0       |
+|  + nnlayer_Pipeline_VITIS_LOOP_32_1 | 0   |        |                    |     |        |         |
+|    outNeurons_2_fu_93_p2            | -   |        | outNeurons_2       | add | fabric | 0       |
+|  + nnlayer_Pipeline_VITIS_LOOP_10_1 | 0   |        |                    |     |        |         |
+|    i_2_fu_82_p2                     | -   |        | i_2                | add | fabric | 0       |
++-------------------------------------+-----+--------+--------------------+-----+--------+---------+
 
 
 ================================================================
 == Bind Storage Report
 ================================================================
-+-------------+------+------+--------+----------+---------+------+---------+
-| Name        | BRAM | URAM | Pragma | Variable | Storage | Impl | Latency |
-+-------------+------+------+--------+----------+---------+------+---------+
-| + nnlayer   | 133  | 0    |        |          |         |      |         |
-|   input_r_U | 1    | -    |        | input_r  | ram_1p  | auto | 1       |
-|   weights_U | 64   | -    |        | weights  | ram_1p  | auto | 1       |
-|   bias_U    | 1    | -    |        | bias     | ram_1p  | auto | 1       |
-+-------------+------+------+--------+----------+---------+------+---------+
-
+  No bind storage info in design
 
 ================================================================
 == User Pragma Report
@@ -154,15 +134,15 @@
 +-----------+-------------------------------------+----------------------------------------------------------+
 | inline    |                                     | Neuron_1/neural_layer.cpp:9 in relu                      |
 | pipeline  |                                     | Neuron_1/neural_layer.cpp:12 in relu                     |
-| interface | mode=s_axilite port=input_          | Neuron_1/neural_layer.cpp:27 in nnlayer, input_          |
-| interface | mode=s_axilite port=output          | Neuron_1/neural_layer.cpp:28 in nnlayer, output          |
-| interface | mode=s_axilite port=weights_        | Neuron_1/neural_layer.cpp:29 in nnlayer, weights_        |
-| interface | mode=s_axilite port=bias_           | Neuron_1/neural_layer.cpp:30 in nnlayer, bias_           |
-| interface | mode=s_axilite port=numOfInNeurons  | Neuron_1/neural_layer.cpp:31 in nnlayer, numOfInNeurons  |
-| interface | mode=s_axilite port=numOfOutNeurons | Neuron_1/neural_layer.cpp:32 in nnlayer, numOfOutNeurons |
-| interface | mode=s_axilite port=activation      | Neuron_1/neural_layer.cpp:33 in nnlayer, activation      |
-| interface | mode=s_axilite port=return          | Neuron_1/neural_layer.cpp:34 in nnlayer, return          |
-| pipeline  |                                     | Neuron_1/neural_layer.cpp:48 in nnlayer                  |
+| interface | mode=s_axilite port=input           | Neuron_1/neural_layer.cpp:21 in nnlayer, input           |
+| interface | mode=s_axilite port=output          | Neuron_1/neural_layer.cpp:22 in nnlayer, output          |
+| interface | mode=s_axilite port=weights         | Neuron_1/neural_layer.cpp:23 in nnlayer, weights         |
+| interface | mode=s_axilite port=bias            | Neuron_1/neural_layer.cpp:24 in nnlayer, bias            |
+| interface | mode=s_axilite port=numOfInNeurons  | Neuron_1/neural_layer.cpp:25 in nnlayer, numOfInNeurons  |
+| interface | mode=s_axilite port=numOfOutNeurons | Neuron_1/neural_layer.cpp:26 in nnlayer, numOfOutNeurons |
+| interface | mode=s_axilite port=activation      | Neuron_1/neural_layer.cpp:27 in nnlayer, activation      |
+| interface | mode=s_axilite port=return          | Neuron_1/neural_layer.cpp:28 in nnlayer, return          |
+| unroll    |                                     | Neuron_1/neural_layer.cpp:40 in nnlayer                  |
 +-----------+-------------------------------------+----------------------------------------------------------+
 
 

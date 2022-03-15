@@ -1,17 +1,17 @@
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/test_bench.cpp"
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/test_bench.cpp"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/test_bench.cpp"
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/1_neuron_layer.hpp" 1
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/test_bench.cpp"
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/1_neuron_layer.hpp" 1
        
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/defines.hpp" 1
-       
-# 3 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/1_neuron_layer.hpp" 2
+
+
+
 
 
 
 void nnlayer(short int input[256], short int output[256], short int weights[256*256], short int bias[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation);
-# 2 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/test_bench.cpp" 2
+# 2 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/test_bench.cpp" 2
 # 1 "C:/Xilinx/Vitis_HLS/2021.2/tps/win64/msys64/mingw64/include/c++/6.2.0/iostream" 1 3
 # 36 "C:/Xilinx/Vitis_HLS/2021.2/tps/win64/msys64/mingw64/include/c++/6.2.0/iostream" 3
        
@@ -25511,10 +25511,10 @@ namespace std
 
 
 }
-# 3 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/test_bench.cpp" 2
+# 3 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/test_bench.cpp" 2
 
 
-# 4 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/test_bench.cpp"
+# 4 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/test_bench.cpp"
 int main(){
  const int outputSize = 256;
  const int inputSize = 3;

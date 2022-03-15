@@ -2,20 +2,20 @@
 // Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2021.2 (64-bit)
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // ==============================================================
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/neural_layer.cpp"
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/neural_layer.cpp"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/neural_layer.cpp"
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/1_neuron_layer.hpp" 1
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/neural_layer.cpp"
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/1_neuron_layer.hpp" 1
        
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/defines.hpp" 1
-       
-# 3 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/1_neuron_layer.hpp" 2
+
+
+
 
 
 
 void nnlayer(short int input[256], short int output[256], short int weights[256*256], short int bias[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation);
-# 2 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/neural_layer.cpp" 2
+# 2 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/neural_layer.cpp" 2
 # 1 "C:/Xilinx/Vitis_HLS/2021.2/tps/win64/msys64/mingw64/include/c++/6.2.0/cstring" 1 3
 # 39 "C:/Xilinx/Vitis_HLS/2021.2/tps/win64/msys64/mingw64/include/c++/6.2.0/cstring" 3
        
@@ -500,10 +500,10 @@ namespace std
 
 
 }
-# 3 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/neural_layer.cpp" 2
+# 3 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/neural_layer.cpp" 2
 
 
-# 4 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/neural_layer.cpp"
+# 4 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/neural_layer.cpp"
 const int size = 256;
 const int max_size = 256;
 const int max_weight_size = 256*256;
@@ -520,24 +520,17 @@ void relu(short int* data, unsigned char numOfNeurons) {
  }
 }
 
-void nnlayer(short int input_[256], short int output[256], short int weights_[256*256], short int bias_[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
-#pragma HLS INTERFACE mode=s_axilite port=input_
+void nnlayer(short int input[256], short int output[256], short int weights[256*256], short int bias[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
+#pragma HLS INTERFACE mode=s_axilite port=input
 #pragma HLS INTERFACE mode=s_axilite port=output
-#pragma HLS INTERFACE mode=s_axilite port=weights_
-#pragma HLS INTERFACE mode=s_axilite port=bias_
+#pragma HLS INTERFACE mode=s_axilite port=weights
+#pragma HLS INTERFACE mode=s_axilite port=bias
 #pragma HLS INTERFACE mode=s_axilite port=numOfInNeurons
 #pragma HLS INTERFACE mode=s_axilite port=numOfOutNeurons
 #pragma HLS INTERFACE mode=s_axilite port=activation
 #pragma HLS INTERFACE mode=s_axilite port=return
- static unsigned short int outNeurons = 0;
- static unsigned short int weightIndexAdded = 0;
- static short int input[256];
- static short int weights[256*256];
- static short int bias[256];
-
-  memcpy(input,(const short int*)input_,256*sizeof(short int));
-  memcpy(weights,(const short int*)weights_,256*256*sizeof(short int));
-  memcpy(bias,(const short int*)bias_,256*sizeof(short int));
+ unsigned short int outNeurons = 0;
+ unsigned short int weightIndexAdded = 0;
 
  for (outNeurons = 0; outNeurons < numOfOutNeurons; outNeurons++) {
   output[outNeurons] = bias[outNeurons];
@@ -565,17 +558,17 @@ void apatb_nnlayer_ir(short *, short *, short *, short *, unsigned short, unsign
 #ifdef __cplusplus
 extern "C"
 #endif
-void nnlayer_hw_stub(short *input_, short *output, short *weights_, short *bias_, unsigned short numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation){
-nnlayer(input_, output, weights_, bias_, numOfInNeurons, numOfOutNeurons, activation);
+void nnlayer_hw_stub(short *input, short *output, short *weights, short *bias, unsigned short numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation){
+nnlayer(input, output, weights, bias, numOfInNeurons, numOfOutNeurons, activation);
 return ;
 }
 #ifdef __cplusplus
 extern "C"
 #endif
-void apatb_nnlayer_sw(short *input_, short *output, short *weights_, short *bias_, unsigned short numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation){
-apatb_nnlayer_ir(input_, output, weights_, bias_, numOfInNeurons, numOfOutNeurons, activation);
+void apatb_nnlayer_sw(short *input, short *output, short *weights, short *bias, unsigned short numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation){
+apatb_nnlayer_ir(input, output, weights, bias, numOfInNeurons, numOfOutNeurons, activation);
 return ;
 }
 #endif
-# 56 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/neural_layer.cpp"
+# 49 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/neural_layer.cpp"
 

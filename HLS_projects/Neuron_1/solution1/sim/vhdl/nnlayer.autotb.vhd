@@ -14,24 +14,24 @@ use std.textio.all;
 entity apatb_nnlayer_top is
   generic (
        AUTOTB_CLOCK_PERIOD_DIV2 :   TIME := 5.00 ns;
-       AUTOTB_TVIN_input_s : STRING := "../tv/cdatafile/c.nnlayer.autotvin_input_s.dat";
-       AUTOTB_TVIN_weights_s : STRING := "../tv/cdatafile/c.nnlayer.autotvin_weights_s.dat";
-       AUTOTB_TVIN_bias_s : STRING := "../tv/cdatafile/c.nnlayer.autotvin_bias_s.dat";
+       AUTOTB_TVIN_input_r : STRING := "../tv/cdatafile/c.nnlayer.autotvin_input_r.dat";
+       AUTOTB_TVIN_weights : STRING := "../tv/cdatafile/c.nnlayer.autotvin_weights.dat";
+       AUTOTB_TVIN_bias : STRING := "../tv/cdatafile/c.nnlayer.autotvin_bias.dat";
        AUTOTB_TVIN_numOfInNeurons : STRING := "../tv/cdatafile/c.nnlayer.autotvin_numOfInNeurons.dat";
        AUTOTB_TVIN_numOfOutNeurons : STRING := "../tv/cdatafile/c.nnlayer.autotvin_numOfOutNeurons.dat";
-       AUTOTB_TVIN_input_s_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_input_s.dat";
-       AUTOTB_TVIN_weights_s_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_weights_s.dat";
-       AUTOTB_TVIN_bias_s_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_bias_s.dat";
+       AUTOTB_TVIN_input_r_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_input_r.dat";
+       AUTOTB_TVIN_weights_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_weights.dat";
+       AUTOTB_TVIN_bias_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_bias.dat";
        AUTOTB_TVIN_numOfInNeurons_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_numOfInNeurons.dat";
        AUTOTB_TVIN_numOfOutNeurons_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_numOfOutNeurons.dat";
        AUTOTB_TVOUT_output_r : STRING := "../tv/cdatafile/c.nnlayer.autotvout_output_r.dat";
        AUTOTB_TVOUT_output_r_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvout_output_r.dat";
       AUTOTB_LAT_RESULT_FILE    : STRING  := "nnlayer.result.lat.rb";
       AUTOTB_PER_RESULT_TRANS_FILE    : STRING  := "nnlayer.performance.result.transaction.xml";
-      LENGTH_input_s     : INTEGER := 256;
+      LENGTH_input_r     : INTEGER := 256;
       LENGTH_output_r     : INTEGER := 256;
-      LENGTH_weights_s     : INTEGER := 65536;
-      LENGTH_bias_s     : INTEGER := 256;
+      LENGTH_weights     : INTEGER := 65536;
+      LENGTH_bias     : INTEGER := 256;
       LENGTH_numOfInNeurons     : INTEGER := 1;
       LENGTH_numOfOutNeurons     : INTEGER := 1;
       LENGTH_activation     : INTEGER := 1;
@@ -132,14 +132,14 @@ port (
     interrupt :  OUT STD_LOGIC);
 end component;
 
--- The signal of port input_s
-shared variable AESL_REG_input_s : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
+-- The signal of port input_r
+shared variable AESL_REG_input_r : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 -- The signal of port output_r
 shared variable AESL_REG_output_r : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
--- The signal of port weights_s
-shared variable AESL_REG_weights_s : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
--- The signal of port bias_s
-shared variable AESL_REG_bias_s : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
+-- The signal of port weights
+shared variable AESL_REG_weights : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
+-- The signal of port bias
+shared variable AESL_REG_bias : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 -- The signal of port numOfInNeurons
 shared variable AESL_REG_numOfInNeurons : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 -- The signal of port numOfOutNeurons

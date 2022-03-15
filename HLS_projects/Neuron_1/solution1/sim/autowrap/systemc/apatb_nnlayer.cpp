@@ -18,17 +18,17 @@ using namespace sc_core;
 using namespace sc_dt;
 
 // wrapc file define:
-#define AUTOTB_TVIN_input_s "../tv/cdatafile/c.nnlayer.autotvin_input_s.dat"
-#define AUTOTB_TVOUT_input_s "../tv/cdatafile/c.nnlayer.autotvout_input_s.dat"
+#define AUTOTB_TVIN_input_r "../tv/cdatafile/c.nnlayer.autotvin_input_r.dat"
+#define AUTOTB_TVOUT_input_r "../tv/cdatafile/c.nnlayer.autotvout_input_r.dat"
 // wrapc file define:
 #define AUTOTB_TVIN_output_r "../tv/cdatafile/c.nnlayer.autotvin_output_r.dat"
 #define AUTOTB_TVOUT_output_r "../tv/cdatafile/c.nnlayer.autotvout_output_r.dat"
 // wrapc file define:
-#define AUTOTB_TVIN_weights_s "../tv/cdatafile/c.nnlayer.autotvin_weights_s.dat"
-#define AUTOTB_TVOUT_weights_s "../tv/cdatafile/c.nnlayer.autotvout_weights_s.dat"
+#define AUTOTB_TVIN_weights "../tv/cdatafile/c.nnlayer.autotvin_weights.dat"
+#define AUTOTB_TVOUT_weights "../tv/cdatafile/c.nnlayer.autotvout_weights.dat"
 // wrapc file define:
-#define AUTOTB_TVIN_bias_s "../tv/cdatafile/c.nnlayer.autotvin_bias_s.dat"
-#define AUTOTB_TVOUT_bias_s "../tv/cdatafile/c.nnlayer.autotvout_bias_s.dat"
+#define AUTOTB_TVIN_bias "../tv/cdatafile/c.nnlayer.autotvin_bias.dat"
+#define AUTOTB_TVOUT_bias "../tv/cdatafile/c.nnlayer.autotvout_bias.dat"
 // wrapc file define:
 #define AUTOTB_TVIN_numOfInNeurons "../tv/cdatafile/c.nnlayer.autotvin_numOfInNeurons.dat"
 #define AUTOTB_TVOUT_numOfInNeurons "../tv/cdatafile/c.nnlayer.autotvout_numOfInNeurons.dat"
@@ -42,13 +42,13 @@ using namespace sc_dt;
 #define INTER_TCL "../tv/cdatafile/ref.tcl"
 
 // tvout file define:
-#define AUTOTB_TVOUT_PC_input_s "../tv/rtldatafile/rtl.nnlayer.autotvout_input_s.dat"
+#define AUTOTB_TVOUT_PC_input_r "../tv/rtldatafile/rtl.nnlayer.autotvout_input_r.dat"
 // tvout file define:
 #define AUTOTB_TVOUT_PC_output_r "../tv/rtldatafile/rtl.nnlayer.autotvout_output_r.dat"
 // tvout file define:
-#define AUTOTB_TVOUT_PC_weights_s "../tv/rtldatafile/rtl.nnlayer.autotvout_weights_s.dat"
+#define AUTOTB_TVOUT_PC_weights "../tv/rtldatafile/rtl.nnlayer.autotvout_weights.dat"
 // tvout file define:
-#define AUTOTB_TVOUT_PC_bias_s "../tv/rtldatafile/rtl.nnlayer.autotvout_bias_s.dat"
+#define AUTOTB_TVOUT_PC_bias "../tv/rtldatafile/rtl.nnlayer.autotvout_bias.dat"
 // tvout file define:
 #define AUTOTB_TVOUT_PC_numOfInNeurons "../tv/rtldatafile/rtl.nnlayer.autotvout_numOfInNeurons.dat"
 // tvout file define:
@@ -136,10 +136,10 @@ class INTER_TCL_FILE {
   public:
 INTER_TCL_FILE(const char* name) {
   mName = name; 
-  input_s_depth = 0;
+  input_r_depth = 0;
   output_r_depth = 0;
-  weights_s_depth = 0;
-  bias_s_depth = 0;
+  weights_depth = 0;
+  bias_depth = 0;
   numOfInNeurons_depth = 0;
   numOfOutNeurons_depth = 0;
   activation_depth = 0;
@@ -160,10 +160,10 @@ INTER_TCL_FILE(const char* name) {
 }
 string get_depth_list () {
   stringstream total_list;
-  total_list << "{input_s " << input_s_depth << "}\n";
+  total_list << "{input_r " << input_r_depth << "}\n";
   total_list << "{output_r " << output_r_depth << "}\n";
-  total_list << "{weights_s " << weights_s_depth << "}\n";
-  total_list << "{bias_s " << bias_s_depth << "}\n";
+  total_list << "{weights " << weights_depth << "}\n";
+  total_list << "{bias " << bias_depth << "}\n";
   total_list << "{numOfInNeurons " << numOfInNeurons_depth << "}\n";
   total_list << "{numOfOutNeurons " << numOfOutNeurons_depth << "}\n";
   total_list << "{activation " << activation_depth << "}\n";
@@ -176,10 +176,10 @@ void set_string(std::string list, std::string* class_list) {
   (*class_list) = list;
 }
   public:
-    int input_s_depth;
+    int input_r_depth;
     int output_r_depth;
-    int weights_s_depth;
-    int bias_s_depth;
+    int weights_depth;
+    int bias_depth;
     int numOfInNeurons_depth;
     int numOfOutNeurons_depth;
     int activation_depth;
@@ -204,7 +204,7 @@ static bool RTLOutputCheckAndReplacement(std::string &AESL_token, std::string Po
   return err;}
 extern "C" void nnlayer_hw_stub_wrapper(volatile void *, volatile void *, volatile void *, volatile void *, short, short, char);
 
-extern "C" void apatb_nnlayer_hw(volatile void * __xlx_apatb_param_input_s, volatile void * __xlx_apatb_param_output_r, volatile void * __xlx_apatb_param_weights_s, volatile void * __xlx_apatb_param_bias_s, short __xlx_apatb_param_numOfInNeurons, short __xlx_apatb_param_numOfOutNeurons, char __xlx_apatb_param_activation) {
+extern "C" void apatb_nnlayer_hw(volatile void * __xlx_apatb_param_input_r, volatile void * __xlx_apatb_param_output_r, volatile void * __xlx_apatb_param_weights, volatile void * __xlx_apatb_param_bias, short __xlx_apatb_param_numOfInNeurons, short __xlx_apatb_param_numOfOutNeurons, char __xlx_apatb_param_activation) {
   refine_signal_handler();
   fstream wrapc_switch_file_token;
   wrapc_switch_file_token.open(".hls_cosim_wrapc_switch.log");
@@ -286,36 +286,36 @@ static INTER_TCL_FILE tcl_file(INTER_TCL);
 std::vector<char> __xlx_sprintf_buffer(1024);
 CodeState = ENTER_WRAPC;
 CodeState = DUMP_INPUTS;
-unsigned __xlx_offset_byte_param_input_s = 0;
+unsigned __xlx_offset_byte_param_input_r = 0;
 #ifdef USE_BINARY_TV_FILE
 {
-aesl_fh.touch(AUTOTB_TVIN_input_s, 'b');
+aesl_fh.touch(AUTOTB_TVIN_input_r, 'b');
 transaction<16> tr(256);
-  __xlx_offset_byte_param_input_s = 0*2;
-  if (__xlx_apatb_param_input_s) {
-tr.import<2>((char*)__xlx_apatb_param_input_s, 256, 0);
+  __xlx_offset_byte_param_input_r = 0*2;
+  if (__xlx_apatb_param_input_r) {
+tr.import<2>((char*)__xlx_apatb_param_input_r, 256, 0);
   }
 tr.reorder();
-aesl_fh.write(AUTOTB_TVIN_input_s, tr.p, tr.tbytes);
+aesl_fh.write(AUTOTB_TVIN_input_r, tr.p, tr.tbytes);
 }
 
-  tcl_file.set_num(256, &tcl_file.input_s_depth);
+  tcl_file.set_num(256, &tcl_file.input_r_depth);
 #else
-// print input_s Transactions
+// print input_r Transactions
 {
-aesl_fh.write(AUTOTB_TVIN_input_s, begin_str(AESL_transaction));
+aesl_fh.write(AUTOTB_TVIN_input_r, begin_str(AESL_transaction));
 {
-  __xlx_offset_byte_param_input_s = 0*2;
-  if (__xlx_apatb_param_input_s) {
+  __xlx_offset_byte_param_input_r = 0*2;
+  if (__xlx_apatb_param_input_r) {
     for (int j = 0  - 0, e = 256 - 0; j != e; ++j) {
-sc_bv<16> __xlx_tmp_lv = ((short*)__xlx_apatb_param_input_s)[j];
-aesl_fh.write(AUTOTB_TVIN_input_s, __xlx_tmp_lv.to_string(SC_HEX)+string("\n"));
+sc_bv<16> __xlx_tmp_lv = ((short*)__xlx_apatb_param_input_r)[j];
+aesl_fh.write(AUTOTB_TVIN_input_r, __xlx_tmp_lv.to_string(SC_HEX)+string("\n"));
     }
   }
 }
 
-  tcl_file.set_num(256, &tcl_file.input_s_depth);
-aesl_fh.write(AUTOTB_TVIN_input_s, end_str());
+  tcl_file.set_num(256, &tcl_file.input_r_depth);
+aesl_fh.write(AUTOTB_TVIN_input_r, end_str());
 }
 
 #endif
@@ -352,69 +352,69 @@ aesl_fh.write(AUTOTB_TVIN_output_r, end_str());
 }
 
 #endif
-unsigned __xlx_offset_byte_param_weights_s = 0;
+unsigned __xlx_offset_byte_param_weights = 0;
 #ifdef USE_BINARY_TV_FILE
 {
-aesl_fh.touch(AUTOTB_TVIN_weights_s, 'b');
+aesl_fh.touch(AUTOTB_TVIN_weights, 'b');
 transaction<16> tr(65536);
-  __xlx_offset_byte_param_weights_s = 0*2;
-  if (__xlx_apatb_param_weights_s) {
-tr.import<2>((char*)__xlx_apatb_param_weights_s, 65536, 0);
+  __xlx_offset_byte_param_weights = 0*2;
+  if (__xlx_apatb_param_weights) {
+tr.import<2>((char*)__xlx_apatb_param_weights, 65536, 0);
   }
 tr.reorder();
-aesl_fh.write(AUTOTB_TVIN_weights_s, tr.p, tr.tbytes);
+aesl_fh.write(AUTOTB_TVIN_weights, tr.p, tr.tbytes);
 }
 
-  tcl_file.set_num(65536, &tcl_file.weights_s_depth);
+  tcl_file.set_num(65536, &tcl_file.weights_depth);
 #else
-// print weights_s Transactions
+// print weights Transactions
 {
-aesl_fh.write(AUTOTB_TVIN_weights_s, begin_str(AESL_transaction));
+aesl_fh.write(AUTOTB_TVIN_weights, begin_str(AESL_transaction));
 {
-  __xlx_offset_byte_param_weights_s = 0*2;
-  if (__xlx_apatb_param_weights_s) {
+  __xlx_offset_byte_param_weights = 0*2;
+  if (__xlx_apatb_param_weights) {
     for (int j = 0  - 0, e = 65536 - 0; j != e; ++j) {
-sc_bv<16> __xlx_tmp_lv = ((short*)__xlx_apatb_param_weights_s)[j];
-aesl_fh.write(AUTOTB_TVIN_weights_s, __xlx_tmp_lv.to_string(SC_HEX)+string("\n"));
+sc_bv<16> __xlx_tmp_lv = ((short*)__xlx_apatb_param_weights)[j];
+aesl_fh.write(AUTOTB_TVIN_weights, __xlx_tmp_lv.to_string(SC_HEX)+string("\n"));
     }
   }
 }
 
-  tcl_file.set_num(65536, &tcl_file.weights_s_depth);
-aesl_fh.write(AUTOTB_TVIN_weights_s, end_str());
+  tcl_file.set_num(65536, &tcl_file.weights_depth);
+aesl_fh.write(AUTOTB_TVIN_weights, end_str());
 }
 
 #endif
-unsigned __xlx_offset_byte_param_bias_s = 0;
+unsigned __xlx_offset_byte_param_bias = 0;
 #ifdef USE_BINARY_TV_FILE
 {
-aesl_fh.touch(AUTOTB_TVIN_bias_s, 'b');
+aesl_fh.touch(AUTOTB_TVIN_bias, 'b');
 transaction<16> tr(256);
-  __xlx_offset_byte_param_bias_s = 0*2;
-  if (__xlx_apatb_param_bias_s) {
-tr.import<2>((char*)__xlx_apatb_param_bias_s, 256, 0);
+  __xlx_offset_byte_param_bias = 0*2;
+  if (__xlx_apatb_param_bias) {
+tr.import<2>((char*)__xlx_apatb_param_bias, 256, 0);
   }
 tr.reorder();
-aesl_fh.write(AUTOTB_TVIN_bias_s, tr.p, tr.tbytes);
+aesl_fh.write(AUTOTB_TVIN_bias, tr.p, tr.tbytes);
 }
 
-  tcl_file.set_num(256, &tcl_file.bias_s_depth);
+  tcl_file.set_num(256, &tcl_file.bias_depth);
 #else
-// print bias_s Transactions
+// print bias Transactions
 {
-aesl_fh.write(AUTOTB_TVIN_bias_s, begin_str(AESL_transaction));
+aesl_fh.write(AUTOTB_TVIN_bias, begin_str(AESL_transaction));
 {
-  __xlx_offset_byte_param_bias_s = 0*2;
-  if (__xlx_apatb_param_bias_s) {
+  __xlx_offset_byte_param_bias = 0*2;
+  if (__xlx_apatb_param_bias) {
     for (int j = 0  - 0, e = 256 - 0; j != e; ++j) {
-sc_bv<16> __xlx_tmp_lv = ((short*)__xlx_apatb_param_bias_s)[j];
-aesl_fh.write(AUTOTB_TVIN_bias_s, __xlx_tmp_lv.to_string(SC_HEX)+string("\n"));
+sc_bv<16> __xlx_tmp_lv = ((short*)__xlx_apatb_param_bias)[j];
+aesl_fh.write(AUTOTB_TVIN_bias, __xlx_tmp_lv.to_string(SC_HEX)+string("\n"));
     }
   }
 }
 
-  tcl_file.set_num(256, &tcl_file.bias_s_depth);
-aesl_fh.write(AUTOTB_TVIN_bias_s, end_str());
+  tcl_file.set_num(256, &tcl_file.bias_depth);
+aesl_fh.write(AUTOTB_TVIN_bias, end_str());
 }
 
 #endif
@@ -452,7 +452,7 @@ aesl_fh.write(AUTOTB_TVIN_activation, end_str());
 }
 
 CodeState = CALL_C_DUT;
-nnlayer_hw_stub_wrapper(__xlx_apatb_param_input_s, __xlx_apatb_param_output_r, __xlx_apatb_param_weights_s, __xlx_apatb_param_bias_s, __xlx_apatb_param_numOfInNeurons, __xlx_apatb_param_numOfOutNeurons, __xlx_apatb_param_activation);
+nnlayer_hw_stub_wrapper(__xlx_apatb_param_input_r, __xlx_apatb_param_output_r, __xlx_apatb_param_weights, __xlx_apatb_param_bias, __xlx_apatb_param_numOfInNeurons, __xlx_apatb_param_numOfOutNeurons, __xlx_apatb_param_activation);
 CodeState = DUMP_OUTPUTS;
 #ifdef USE_BINARY_TV_FILE
 {

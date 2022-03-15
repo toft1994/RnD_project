@@ -31,21 +31,21 @@
 //           others  - reserved
 // 0x00024 : reserved
 // 0x00200 ~
-// 0x003ff : Memory 'input_s' (256 * 16b)
-//           Word n : bit [15: 0] - input_s[2n]
-//                    bit [31:16] - input_s[2n+1]
+// 0x003ff : Memory 'input_r' (256 * 16b)
+//           Word n : bit [15: 0] - input_r[2n]
+//                    bit [31:16] - input_r[2n+1]
 // 0x00400 ~
 // 0x005ff : Memory 'output_r' (256 * 16b)
 //           Word n : bit [15: 0] - output_r[2n]
 //                    bit [31:16] - output_r[2n+1]
 // 0x00600 ~
-// 0x007ff : Memory 'bias_s' (256 * 16b)
-//           Word n : bit [15: 0] - bias_s[2n]
-//                    bit [31:16] - bias_s[2n+1]
+// 0x007ff : Memory 'bias' (256 * 16b)
+//           Word n : bit [15: 0] - bias[2n]
+//                    bit [31:16] - bias[2n+1]
 // 0x20000 ~
-// 0x3ffff : Memory 'weights_s' (65536 * 16b)
-//           Word n : bit [15: 0] - weights_s[2n]
-//                    bit [31:16] - weights_s[2n+1]
+// 0x3ffff : Memory 'weights' (65536 * 16b)
+//           Word n : bit [15: 0] - weights[2n]
+//                    bit [31:16] - weights[2n+1]
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 #define CONTROL_ADDR_AP_CTRL              0x00000
@@ -58,19 +58,19 @@
 #define CONTROL_BITS_NUMOFOUTNEURONS_DATA 16
 #define CONTROL_ADDR_ACTIVATION_DATA      0x00020
 #define CONTROL_BITS_ACTIVATION_DATA      8
-#define CONTROL_ADDR_INPUT_S_BASE         0x00200
-#define CONTROL_ADDR_INPUT_S_HIGH         0x003ff
-#define CONTROL_WIDTH_INPUT_S             16
-#define CONTROL_DEPTH_INPUT_S             256
+#define CONTROL_ADDR_INPUT_R_BASE         0x00200
+#define CONTROL_ADDR_INPUT_R_HIGH         0x003ff
+#define CONTROL_WIDTH_INPUT_R             16
+#define CONTROL_DEPTH_INPUT_R             256
 #define CONTROL_ADDR_OUTPUT_R_BASE        0x00400
 #define CONTROL_ADDR_OUTPUT_R_HIGH        0x005ff
 #define CONTROL_WIDTH_OUTPUT_R            16
 #define CONTROL_DEPTH_OUTPUT_R            256
-#define CONTROL_ADDR_BIAS_S_BASE          0x00600
-#define CONTROL_ADDR_BIAS_S_HIGH          0x007ff
-#define CONTROL_WIDTH_BIAS_S              16
-#define CONTROL_DEPTH_BIAS_S              256
-#define CONTROL_ADDR_WEIGHTS_S_BASE       0x20000
-#define CONTROL_ADDR_WEIGHTS_S_HIGH       0x3ffff
-#define CONTROL_WIDTH_WEIGHTS_S           16
-#define CONTROL_DEPTH_WEIGHTS_S           65536
+#define CONTROL_ADDR_BIAS_BASE            0x00600
+#define CONTROL_ADDR_BIAS_HIGH            0x007ff
+#define CONTROL_WIDTH_BIAS                16
+#define CONTROL_DEPTH_BIAS                256
+#define CONTROL_ADDR_WEIGHTS_BASE         0x20000
+#define CONTROL_ADDR_WEIGHTS_HIGH         0x3ffff
+#define CONTROL_WIDTH_WEIGHTS             16
+#define CONTROL_DEPTH_WEIGHTS             65536

@@ -80,9 +80,9 @@ proc check_tvin_file {} {
 		puts stdout "[debug_prompt arg check_sim.tcl] start...";
 	}
     set rtlfilelist {
-         "c.nnlayer.autotvin_input_s.dat"
-         "c.nnlayer.autotvin_weights_s.dat"
-         "c.nnlayer.autotvin_bias_s.dat"
+         "c.nnlayer.autotvin_input_r.dat"
+         "c.nnlayer.autotvin_weights.dat"
+         "c.nnlayer.autotvin_bias.dat"
          "c.nnlayer.autotvin_numOfInNeurons.dat"
          "c.nnlayer.autotvin_numOfOutNeurons.dat"
     }

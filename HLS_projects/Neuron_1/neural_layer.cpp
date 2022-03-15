@@ -5,7 +5,7 @@ const int size = SIZE;
 const int max_size = MAX_SIZE;
 const int max_weight_size = MAX_SIZE*SIZE;
 
-void relu(short int* data, unsigned char numOfNeurons) {
+void relu(dataType* data, unsigned char numOfNeurons) {
 	#pragma HLS inline
 	for (unsigned char i = 0; i < numOfNeurons; i++)
 	{
@@ -17,7 +17,7 @@ void relu(short int* data, unsigned char numOfNeurons) {
 	}
 }
 
-void nnlayer(short int input[MAX_SIZE], short int output[SIZE], short int weights[WEIGHT_MAX_SIZE], short int bias[SIZE], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
+void nnlayer(dataType input[MAX_SIZE], dataType output[SIZE], dataType weights[WEIGHT_MAX_SIZE], dataType bias[SIZE], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
 #pragma HLS INTERFACE mode=s_axilite port=input
 #pragma HLS INTERFACE mode=s_axilite port=output
 #pragma HLS INTERFACE mode=s_axilite port=weights
@@ -37,15 +37,15 @@ void nnlayer(short int input[MAX_SIZE], short int output[SIZE], short int weight
 	{
 		for (short int inNeurons = 0; inNeurons < numOfInNeurons; inNeurons++)
 		{
-			#pragma HLS PIPELINE
+			#pragma HLS UNROLL
 			output[outNeurons] += (weights[inNeurons+weightIndexAdded] * input[inNeurons]);
 		}
 		weightIndexAdded+=numOfInNeurons;
 	}
 
-	/*if(activation == 1){
+	if(activation == 1){
 		relu(output, numOfOutNeurons);
-	}*/
+	}
 }
 
 

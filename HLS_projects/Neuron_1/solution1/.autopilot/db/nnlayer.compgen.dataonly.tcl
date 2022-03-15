@@ -26,7 +26,7 @@ activation {
 	offset 32
 	offset_end 39
 }
-input_s { 
+input_r { 
 	dir I
 	width 16
 	depth 256
@@ -50,7 +50,7 @@ output_r {
 	core_latency 1
 	byte_write 0
 }
-bias_s { 
+bias { 
 	dir I
 	width 16
 	depth 256
@@ -62,7 +62,7 @@ bias_s {
 	core_latency 1
 	byte_write 0
 }
-weights_s { 
+weights { 
 	dir I
 	width 16
 	depth 65536

@@ -153,7 +153,7 @@
       <spirit:parameters>
         <spirit:parameter>
           <spirit:name>ADDR_WIDTH</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.S_AXI_CONTROL.ADDR_WIDTH">17</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.S_AXI_CONTROL.ADDR_WIDTH">18</spirit:value>
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>DATA_WIDTH</spirit:name>
@@ -246,7 +246,7 @@
       <spirit:addressBlock>
         <spirit:name>Reg</spirit:name>
         <spirit:baseAddress spirit:format="long">0</spirit:baseAddress>
-        <spirit:range spirit:format="long" spirit:resolve="generated">131072</spirit:range>
+        <spirit:range spirit:format="long" spirit:resolve="generated">262144</spirit:range>
         <spirit:width spirit:format="long">32</spirit:width>
         <spirit:usage>register</spirit:usage>
         <spirit:access>read-write</spirit:access>
@@ -692,8 +692,8 @@
           <spirit:name>Memory_input_r</spirit:name>
           <spirit:displayName>Memory_input_r</spirit:displayName>
           <spirit:description>Memory input_r</spirit:description>
-          <spirit:addressOffset>256</spirit:addressOffset>
-          <spirit:size spirit:format="long">256</spirit:size>
+          <spirit:addressOffset>512</spirit:addressOffset>
+          <spirit:size spirit:format="long">512</spirit:size>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
             <spirit:value spirit:format="long">0</spirit:value>
@@ -703,7 +703,7 @@
           <spirit:name>Memory_output_r</spirit:name>
           <spirit:displayName>Memory_output_r</spirit:displayName>
           <spirit:description>Memory output_r</spirit:description>
-          <spirit:addressOffset>512</spirit:addressOffset>
+          <spirit:addressOffset>1024</spirit:addressOffset>
           <spirit:size spirit:format="long">512</spirit:size>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
@@ -714,7 +714,7 @@
           <spirit:name>Memory_bias</spirit:name>
           <spirit:displayName>Memory_bias</spirit:displayName>
           <spirit:description>Memory bias</spirit:description>
-          <spirit:addressOffset>1024</spirit:addressOffset>
+          <spirit:addressOffset>1536</spirit:addressOffset>
           <spirit:size spirit:format="long">512</spirit:size>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
@@ -725,8 +725,8 @@
           <spirit:name>Memory_weights</spirit:name>
           <spirit:displayName>Memory_weights</spirit:displayName>
           <spirit:description>Memory weights</spirit:description>
-          <spirit:addressOffset>65536</spirit:addressOffset>
-          <spirit:size spirit:format="long">65536</spirit:size>
+          <spirit:addressOffset>131072</spirit:addressOffset>
+          <spirit:size spirit:format="long">131072</spirit:size>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
             <spirit:value spirit:format="long">0</spirit:value>
@@ -749,7 +749,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>f7086791</spirit:value>
+            <spirit:value>60f32de8</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -765,7 +765,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>13a6d2d0</spirit:value>
+            <spirit:value>61ee28b0</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -781,7 +781,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>a3fcbebc</spirit:value>
+            <spirit:value>67cbd84c</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -797,7 +797,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>658f6643</spirit:value>
+            <spirit:value>6f09b03a</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -811,7 +811,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>9ef87bcf</spirit:value>
+            <spirit:value>a078636d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -847,7 +847,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>e7431fef</spirit:value>
+            <spirit:value>c225985e</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -885,7 +885,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_AXI_CONTROL_ADDR_WIDTH&apos;)) - 1)">16</spirit:left>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_AXI_CONTROL_ADDR_WIDTH&apos;)) - 1)">17</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -1031,7 +1031,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_AXI_CONTROL_ADDR_WIDTH&apos;)) - 1)">16</spirit:left>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_AXI_CONTROL_ADDR_WIDTH&apos;)) - 1)">17</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -1172,7 +1172,7 @@
     <spirit:modelParameters>
       <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="integer">
         <spirit:name>C_S_AXI_CONTROL_ADDR_WIDTH</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_AXI_CONTROL_ADDR_WIDTH">17</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_AXI_CONTROL_ADDR_WIDTH">18</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_S_AXI_CONTROL_DATA_WIDTH</spirit:name>
@@ -1197,7 +1197,7 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_mac_muladd_16s_16s_16ns_16_4_1.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_mac_muladd_16s_16s_24ns_24_4_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1205,7 +1205,7 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_35_2.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_32_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1226,7 +1226,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_mac_muladd_16s_16s_16ns_16_4_1.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_mac_muladd_16s_16s_24ns_24_4_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1236,7 +1236,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_35_2.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_32_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1262,7 +1262,7 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_mac_muladd_16s_16s_16ns_16_4_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_mac_muladd_16s_16s_24ns_24_4_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1270,13 +1270,13 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_35_2.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_32_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/vhdl/nnlayer.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_47d9c046</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_8e1b57bc</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -1292,7 +1292,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_mac_muladd_16s_16s_16ns_16_4_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_mac_muladd_16s_16s_24ns_24_4_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1302,7 +1302,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_35_2.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_32_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1366,7 +1366,7 @@
       <spirit:file>
         <spirit:name>xgui/nnlayer_v1_0.tcl</spirit:name>
         <spirit:fileType>tclSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_e7431fef</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_c225985e</spirit:userFileType>
         <spirit:userFileType>XGUI_VERSION_2</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
@@ -1416,8 +1416,8 @@
       </xilinx:taxonomies>
       <xilinx:displayName>Nnlayer</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2112408316</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2022-03-08T14:16:41Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2112418431</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2022-03-15T14:51:56Z</xilinx:coreCreationDateTime>
       <xilinx:sdxKernelAttributes>
         <xilinx:sdx_kernel>true</xilinx:sdx_kernel>
         <xilinx:sdx_kernel_type>hls</xilinx:sdx_kernel_type>
@@ -1425,11 +1425,11 @@
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2021.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="76b462b9"/>
-      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="2e12f75b"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="8774b3b2"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="737d3327"/>
-      <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="8ef6aa6f"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="c1c6470b"/>
+      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="861dafd2"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="35c98aef"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="57bf8acb"/>
+      <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="2e0386bd"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="a1aeb932"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>

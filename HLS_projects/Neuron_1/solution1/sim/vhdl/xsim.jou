@@ -2,12 +2,12 @@
 # xsim v2021.2 (64-bit)
 # SW Build 3367213 on Tue Oct 19 02:48:09 MDT 2021
 # IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
-# Start of session at: Thu Mar 10 13:29:43 2022
-# Process ID: 9656
-# Current directory: C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/solution1/sim/vhdl
+# Start of session at: Tue Mar 15 09:44:04 2022
+# Process ID: 3604
+# Current directory: C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/solution1/sim/vhdl
 # Command line: xsim.exe -mode tcl -source {xsim.dir/nnlayer/xsim_script.tcl}
-# Log file: C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/solution1/sim/vhdl/xsim.log
-# Journal file: C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/HLS_projects/Neuron_1/solution1/sim/vhdl\xsim.jou
+# Log file: C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/solution1/sim/vhdl/xsim.log
+# Journal file: C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_projects/Neuron_1/solution1/sim/vhdl\xsim.jou
 # Running On: DESKTOP-IFL7HB3, OS: Windows, CPU Frequency: 2808 MHz, CPU Physical cores: 4, Host memory: 17024 MB
 #-----------------------------------------------------------
 source xsim.dir/nnlayer/xsim_script.tcl
