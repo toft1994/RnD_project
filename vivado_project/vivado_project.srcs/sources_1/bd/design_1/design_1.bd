@@ -1237,8 +1237,8 @@
       },
       "nnlayer_0": {
         "vlnv": "xilinx.com:hls:nnlayer:1.0",
-        "xci_name": "design_1_nnlayer_0_1",
-        "xci_path": "ip\\design_1_nnlayer_0_1\\design_1_nnlayer_0_1.xci",
+        "xci_name": "design_1_nnlayer_0_3",
+        "xci_path": "ip\\design_1_nnlayer_0_3\\design_1_nnlayer_0_3.xci",
         "inst_hier_path": "nnlayer_0"
       }
     },

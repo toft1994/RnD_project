@@ -1,7 +1,7 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2021.2 (win64) Build 3367213 Tue Oct 19 02:48:09 MDT 2021
-| Date         : Tue Mar  8 15:36:38 2022
+| Date         : Tue Mar 15 14:53:42 2022
 | Host         : DESKTOP-IFL7HB3 running 64-bit major release  (build 9200)
 | Command      : report_drc -file design_1_wrapper_drc_routed.rpt -pb design_1_wrapper_drc_routed.pb -rpx design_1_wrapper_drc_routed.rpx
 | Design       : design_1_wrapper
@@ -35,7 +35,7 @@ Table of Contents
 -----------------
 DPIP-1#1 Warning
 Input pipelining  
-DSP design_1_i/nnlayer_0/inst/grp_nnlayer_Pipeline_VITIS_LOOP_35_2_fu_134/mac_muladd_16s_16s_16ns_16_4_1_U1/nnlayer_mac_muladd_16s_16s_16ns_16_4_1_DSP48_0_U/p_reg_reg input design_1_i/nnlayer_0/inst/grp_nnlayer_Pipeline_VITIS_LOOP_35_2_fu_134/mac_muladd_16s_16s_16ns_16_4_1_U1/nnlayer_mac_muladd_16s_16s_16ns_16_4_1_DSP48_0_U/p_reg_reg/C[47:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP design_1_i/nnlayer_0/inst/grp_nnlayer_Pipeline_VITIS_LOOP_39_3_fu_131/mac_muladd_16s_16s_24ns_24_4_1_U4/nnlayer_mac_muladd_16s_16s_24ns_24_4_1_DSP48_0_U/p_reg_reg input design_1_i/nnlayer_0/inst/grp_nnlayer_Pipeline_VITIS_LOOP_39_3_fu_131/mac_muladd_16s_16s_24ns_24_4_1_U4/nnlayer_mac_muladd_16s_16s_24ns_24_4_1_DSP48_0_U/p_reg_reg/C[47:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 

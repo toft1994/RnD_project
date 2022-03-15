@@ -28,10 +28,10 @@ const std::shared_ptr<CUSTOMTYPE> nnLayer::getBias() const {
     return bias;
 }
 
-unsigned int nnLayer::getActFunction() const {
-    return act_function;
+u8* nnLayer::getActFunction() {
+    return &act_function;
 }
 
-unsigned int nnLayer::getNNeurons() const {
-    return n_neurons;
+u16* nnLayer::getNNeurons() {
+    return &n_neurons;
 }

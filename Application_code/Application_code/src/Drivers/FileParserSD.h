@@ -13,7 +13,7 @@
 #include <vector>
 #include <string>
 #include <regex>
-#include "nnLayer.h"
+#include "../FileParser/nnLayer.h"
 
 class FileParserSD {
 
@@ -27,15 +27,15 @@ public:
     int mount(bool remount=false);
     std::string readfile(bool fromStart=true);
 
-    std::vector<nnLayer> parseString(const std::string);
+    std::vector<nnLayer*> parseString(const std::string);
 
 private:
 
     std::shared_ptr<CUSTOMTYPE> getWeightsFromSMatch(std::string, unsigned int);
     std::shared_ptr<CUSTOMTYPE> getBiasFromSMatch(std::string, unsigned int);
 
-    nnLayer parseline(std::string);
-    std::ifstream filedescrip_;
+    nnLayer* parseline(std::string);
+    //std::ifstream filedescrip_;
 
 
     std::string fileName;

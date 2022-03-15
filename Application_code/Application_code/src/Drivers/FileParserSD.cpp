@@ -98,14 +98,14 @@ std::string FileParserSD::readfile(bool fromStart) {
 /**
  * Parse the whole string from config file to a nnLayer Vector
  */
-std::vector<nnLayer> FileParserSD::parseString(std::string inString) {
+std::vector<nnLayer*> FileParserSD::parseString(std::string inString) {
 
     std::string temp = inString;
 
     unsigned int numbersOfNewline = std::count(temp.begin(), temp.end(), 'A');
 
     // Allocate the numbers of nnLayers Needed
-    std::vector<nnLayer> nnLayerVector;
+    std::vector<nnLayer*> nnLayerVector;
 
     // Find first newline pointer
     unsigned int newLinePointer = temp.find("\r\n");
@@ -114,7 +114,7 @@ std::vector<nnLayer> FileParserSD::parseString(std::string inString) {
 
         std::string workString = temp.substr(0, newLinePointer);
 
-        nnLayer buf = parseline(workString);
+        nnLayer* buf = parseline(workString);
         nnLayerVector.push_back(buf);
 
         // Update Temp TO Be without Parsed line and move newlinePointer
@@ -128,7 +128,7 @@ std::vector<nnLayer> FileParserSD::parseString(std::string inString) {
     return nnLayerVector;
 }
 
-nnLayer FileParserSD::parseline(const std::string inLine) {
+nnLayer* FileParserSD::parseline(const std::string inLine) {
 
     std::smatch SmatchWeights;
     std::smatch SmatchBias;
@@ -151,8 +151,8 @@ nnLayer FileParserSD::parseline(const std::string inLine) {
     std::shared_ptr<CUSTOMTYPE> weights(getWeightsFromSMatch(weightString, numberOfWeights));
     std::shared_ptr<CUSTOMTYPE> bias(getBiasFromSMatch(biasString, numberOfBias));
 
-    nnLayer* bufLayer = new nnLayer(numberOfWeights, weights, bias, act);
-    return *bufLayer;
+    nnLayer* bufLayer = new nnLayer(numberOfBias, weights, bias, act);
+    return bufLayer;
 }
 
 std::shared_ptr<CUSTOMTYPE> FileParserSD::getWeightsFromSMatch(std::string weightString, unsigned int numberOfWeights) {
@@ -164,7 +164,8 @@ std::shared_ptr<CUSTOMTYPE> FileParserSD::getWeightsFromSMatch(std::string weigh
     for (unsigned int i = 0; i < numberOfWeights; ++i) {
         std::getline(sstream, buf, ',');
         // TODO REMEMBER TO FIX WHEN FIXED-POINT
-        w.get()[i] = std::stof(buf);
+
+        w.get()[i] = FIXEDCONVERT(std::stof(buf)).bits_to_uint64(); //std::stof(buf);
     }
 
     return w;
@@ -181,7 +182,7 @@ std::shared_ptr<CUSTOMTYPE> FileParserSD::getBiasFromSMatch(std::string biasStri
     for (unsigned int i = 0; i < numberOfBias; ++i) {
         std::getline(sstream, buf, ',');
         // TODO REMEMBER TO FIX WHEN FIXED-POINT
-        b.get()[i] = std::stof(buf);
+        b.get()[i] = FIXEDCONVERT(std::stof(buf)).bits_to_uint64();//std::stof(buf);
     }
 
     return b;

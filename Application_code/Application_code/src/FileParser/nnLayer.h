@@ -7,7 +7,7 @@
 
 //#include "include/ap_fixed.h"
 #include <memory>
-#include "globals.h"
+#include "../globals.h"
 
 class nnLayer {
 
@@ -18,16 +18,16 @@ public:
 
     const std::shared_ptr<CUSTOMTYPE> getBias() const;
 
-    unsigned int getActFunction() const;
+    u8* getActFunction();
 
-    unsigned int getNNeurons() const;
+    u16* getNNeurons();
 
 
 private:
     std::shared_ptr<CUSTOMTYPE> weights;
     std::shared_ptr<CUSTOMTYPE> bias;
-    unsigned int act_function;
-    unsigned int n_neurons;
+    u8 act_function;
+    u16 n_neurons;
 };
 
 

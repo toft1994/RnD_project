@@ -1,18 +1,53 @@
 #include <string>
 #include <iostream>
 #include "Drivers/NeuralNetwork.h"
+#include "NeuralNetwork/neuralnetworkmanager.h"
+#include "globals.h"
+#include <ap_fixed.h>
 
 int main()
 {
+	u16 testinput[5] = {256, 256, 256};
 	while(1){
-		auto t = NeuralNetwork();
-		t.test();
+
+		//float testing = 0.2;
+
+		//NeuralNetwork nn = NeuralNetwork();
+
+		//nn.test();
+
+		//typedef ap_fixed<16,8> FIXEDCONVERT;
+
+		auto test1 = ap_fixed<16,8>(0.5);
+		auto test2 = ap_fixed<16,8>(0.5);
+
+		test1.V.VAL = 2048;
+
+		//test1 = test1*test2;
+
+		auto f = test1.to_float();
+		auto t = neuralnetwork_manager();
+		t.setup_manager("testFile.txt");
+		t.run_network(testinput, 3);
 	}
 	return 0;
 }
 
 /* Works
- *
+ *		float testing = 0.2;
+
+		CUSTOMTYPE test(testing);
+
+		auto something = test.to_int();
+		auto something1 = test.to_double();
+		auto somethingj = test.bits_to_uint64();
+
+
+		test = 0.1;
+
+		something = test.to_int();
+		something1 = test.to_double();
+		u16 res = test.bits_to_uint64();
  */
 
 /*#include <string>

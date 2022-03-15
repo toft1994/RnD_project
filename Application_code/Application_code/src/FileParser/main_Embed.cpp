@@ -1,4 +1,4 @@
-#include <iostream>
+/*#include <iostream>
 #include "xstatus.h"
 #include "FileParserSD.h"
 #include "nnLayer.h"
@@ -37,8 +37,9 @@ int main(int argc, char *argv[])
 	    std::cout << std::endl;
 	}
 	*/
-
+/*
 	unsigned int test = nnV.size();
 
 	return 0;
 }
+*/

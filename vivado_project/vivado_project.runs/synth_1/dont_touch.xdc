@@ -13,10 +13,10 @@ set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_rs
 # IP: bd/design_1/ip/design_1_ps7_0_axi_periph_1/design_1_ps7_0_axi_periph_1.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_ps7_0_axi_periph_1 || ORIG_REF_NAME==design_1_ps7_0_axi_periph_1} -quiet] -quiet
 
-# IP: bd/design_1/ip/design_1_nnlayer_0_1/design_1_nnlayer_0_1.xci
-set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_nnlayer_0_1 || ORIG_REF_NAME==design_1_nnlayer_0_1} -quiet] -quiet
+# IP: bd/design_1/ip/design_1_nnlayer_0_3/design_1_nnlayer_0_3.xci
+set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_nnlayer_0_3 || ORIG_REF_NAME==design_1_nnlayer_0_3} -quiet] -quiet
 
 # IP: bd/design_1/ip/design_1_auto_pc_0/design_1_auto_pc_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_auto_pc_0 || ORIG_REF_NAME==design_1_auto_pc_0} -quiet] -quiet
 
-# XDC: c:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/vivado_project/vivado_project.gen/sources_1/bd/design_1/design_1_ooc.xdc
+# XDC: c:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/vivado_project/vivado_project.gen/sources_1/bd/design_1/design_1_ooc.xdc

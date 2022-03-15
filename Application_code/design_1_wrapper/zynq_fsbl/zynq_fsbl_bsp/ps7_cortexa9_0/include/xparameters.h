@@ -278,6 +278,25 @@
 
 /******************************************************************/
 
+/* Definitions for driver NNLAYER */
+#define XPAR_XNNLAYER_NUM_INSTANCES 1
+
+/* Definitions for peripheral NNLAYER_0 */
+#define XPAR_NNLAYER_0_DEVICE_ID 0
+#define XPAR_NNLAYER_0_S_AXI_CONTROL_BASEADDR 0x40000000
+#define XPAR_NNLAYER_0_S_AXI_CONTROL_HIGHADDR 0x4000FFFF
+
+
+/******************************************************************/
+
+/* Canonical definitions for peripheral NNLAYER_0 */
+#define XPAR_XNNLAYER_0_DEVICE_ID XPAR_NNLAYER_0_DEVICE_ID
+#define XPAR_XNNLAYER_0_S_AXI_CONTROL_BASEADDR 0x40000000
+#define XPAR_XNNLAYER_0_S_AXI_CONTROL_HIGHADDR 0x4000FFFF
+
+
+/******************************************************************/
+
 /* Definitions for driver QSPIPS */
 #define XPAR_XQSPIPS_NUM_INSTANCES 1
 
