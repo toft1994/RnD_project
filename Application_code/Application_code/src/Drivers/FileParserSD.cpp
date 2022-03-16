@@ -22,7 +22,7 @@ FileParserSD::~FileParserSD() {
 /**
  * Open the file with the @param filename
  */
-int FileParserSD::openfile(std::string filename) {
+int FileParserSD::openfile(std::string & filename) {
 	FRESULT result;
 
 	/* Return Failure if card is not mounted */
@@ -39,7 +39,7 @@ int FileParserSD::openfile(std::string filename) {
 	/* Set the file pointer to the start of the file */
 	result = f_lseek(&mFIL, 0);
 	if(result){
-			return XST_FAILURE;
+		return XST_FAILURE;
 	}
 	return XST_SUCCESS;
 }
@@ -49,7 +49,6 @@ int FileParserSD::openfile(std::string filename) {
  */
 int FileParserSD::mount(bool remount)
 {
-
 	FRESULT result;
 	if (!isMounted or remount) { /* Ensure that we aren't already mounted */
 		result = f_mount(&mFatFS, pathName.c_str(), 0);
@@ -98,37 +97,31 @@ std::string FileParserSD::readfile(bool fromStart) {
 /**
  * Parse the whole string from config file to a nnLayer Vector
  */
-std::vector<nnLayer*> FileParserSD::parseString(std::string inString) {
+std::vector<nnLayer> FileParserSD::parseString(std::string && inString) {
 
-    std::string temp = inString;
-
-    unsigned int numbersOfNewline = std::count(temp.begin(), temp.end(), 'A');
+    unsigned int numbersOfNewline = std::count(inString.begin(), inString.end(), 'A');
 
     // Allocate the numbers of nnLayers Needed
-    std::vector<nnLayer*> nnLayerVector;
+    std::vector<nnLayer> nnLayerVector;
 
     // Find first newline pointer
-    unsigned int newLinePointer = temp.find("\r\n");
+    unsigned int newLinePointer = inString.find("\n");
 
     for (unsigned int i = 0; i<numbersOfNewline; i++) {
 
-        std::string workString = temp.substr(0, newLinePointer);
-
-        nnLayer* buf = parseline(workString);
-        nnLayerVector.push_back(buf);
+        std::string workString = inString.substr(0, newLinePointer);
+        nnLayerVector.push_back(std::move(parseline(workString)));
 
         // Update Temp TO Be without Parsed line and move newlinePointer
-        temp = temp.substr(newLinePointer+2, temp.size()-newLinePointer);
-        if (!temp.empty()){
-            newLinePointer = temp.find("\r\n");
-        }else{
-            break; // TODO PROB NOT NEEDED
+        inString = inString.substr(newLinePointer+1, inString.size()-newLinePointer);
+        if (!inString.empty()){
+            newLinePointer = inString.find("\n");
         }
     }
     return nnLayerVector;
 }
 
-nnLayer* FileParserSD::parseline(const std::string inLine) {
+nnLayer FileParserSD::parseline(const std::string inLine) {
 
     std::smatch SmatchWeights;
     std::smatch SmatchBias;
@@ -151,7 +144,7 @@ nnLayer* FileParserSD::parseline(const std::string inLine) {
     std::shared_ptr<CUSTOMTYPE> weights(getWeightsFromSMatch(weightString, numberOfWeights));
     std::shared_ptr<CUSTOMTYPE> bias(getBiasFromSMatch(biasString, numberOfBias));
 
-    nnLayer* bufLayer = new nnLayer(numberOfBias, weights, bias, act);
+    nnLayer bufLayer = nnLayer(numberOfBias, weights, bias, act);
     return bufLayer;
 }
 
@@ -163,9 +156,7 @@ std::shared_ptr<CUSTOMTYPE> FileParserSD::getWeightsFromSMatch(std::string weigh
     std::shared_ptr<CUSTOMTYPE> w(new CUSTOMTYPE[numberOfWeights]);
     for (unsigned int i = 0; i < numberOfWeights; ++i) {
         std::getline(sstream, buf, ',');
-        // TODO REMEMBER TO FIX WHEN FIXED-POINT
-
-        w.get()[i] = FIXEDCONVERT(std::stof(buf)).bits_to_uint64(); //std::stof(buf);
+        w.get()[i] = FIXEDCONVERT(std::stof(buf)).bits_to_uint64();
     }
 
     return w;
@@ -181,8 +172,7 @@ std::shared_ptr<CUSTOMTYPE> FileParserSD::getBiasFromSMatch(std::string biasStri
     std::shared_ptr<CUSTOMTYPE> b(new CUSTOMTYPE[numberOfBias]);
     for (unsigned int i = 0; i < numberOfBias; ++i) {
         std::getline(sstream, buf, ',');
-        // TODO REMEMBER TO FIX WHEN FIXED-POINT
-        b.get()[i] = FIXEDCONVERT(std::stof(buf)).bits_to_uint64();//std::stof(buf);
+        b.get()[i] = FIXEDCONVERT(std::stof(buf)).bits_to_uint64();
     }
 
     return b;

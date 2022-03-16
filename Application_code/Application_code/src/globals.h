@@ -6,7 +6,7 @@
 #define FILEPARSER_GLOBALS_H
 
 #define MAX_NN_SIZE 2048
-#define MAX_INPUT_FILE_CHAR_SIZE 7000
+#define MAX_INPUT_FILE_CHAR_SIZE 12000
 #include "xil_types.h"
 #include <ap_fixed.h>
 

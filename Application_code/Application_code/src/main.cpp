@@ -7,28 +7,37 @@
 
 int main()
 {
-	u16 testinput[5] = {256, 256, 256};
+	float testinput[20] = {4.413851,
+			-2.3967223,
+			-1.8479078,
+			0.50134146,
+			-3.1577559,
+			1.5717111,
+			-0.90460753,
+			-1.6261601,
+			-1.7929299,
+			-0.34403673,
+			0.026094172,
+			1.253253,
+			-0.11076248,
+			0.016034037,
+			-0.93397224,
+			1.1119237,
+			-0.686241,
+			-0.22292998,
+			0.6829099,
+			0.44102368};
+
+	u16 tin[20] = {0};
+
+	for(char i = 0; i<15; i++){
+		tin[i] = FIXEDCONVERT(testinput[i]).bits_to_uint64();
+	}
+
 	while(1){
-
-		//float testing = 0.2;
-
-		//NeuralNetwork nn = NeuralNetwork();
-
-		//nn.test();
-
-		//typedef ap_fixed<16,8> FIXEDCONVERT;
-
-		auto test1 = ap_fixed<16,8>(0.5);
-		auto test2 = ap_fixed<16,8>(0.5);
-
-		test1.V.VAL = 2048;
-
-		//test1 = test1*test2;
-
-		auto f = test1.to_float();
 		auto t = neuralnetwork_manager();
 		t.setup_manager("testFile.txt");
-		t.run_network(testinput, 3);
+		t.run_network(tin, 20);
 	}
 	return 0;
 }

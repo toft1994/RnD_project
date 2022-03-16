@@ -1,7 +1,0 @@
-nnlayer_flow_control_loop_pipe_sequential_init
-nnlayer_flow_control_loop_pipe_sequential_init
-nnlayer_mac_muladd_16s_16s_24ns_24_4_1
-nnlayer_control_s_axi
-nnlayer_Pipeline_VITIS_LOOP_32_1
-nnlayer_Pipeline_VITIS_LOOP_10_1
-nnlayer

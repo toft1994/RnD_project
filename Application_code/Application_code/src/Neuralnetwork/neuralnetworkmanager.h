@@ -27,7 +27,7 @@ private:
 	uint8_t currentLayer_ = 0;
 	uint16_t currentHardware = 0;
 
-	std::vector<nnLayer*> nnLV_;
+	std::vector<nnLayer> nnLV_;
 	NeuralNetwork nn_ = NeuralNetwork();
 };
 

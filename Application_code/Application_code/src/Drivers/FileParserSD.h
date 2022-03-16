@@ -22,21 +22,18 @@ public:
     virtual ~FileParserSD();
 
     //Should be reimplemented with SD Card Methods
-    int openfile(std::string filename);
+    int openfile(std::string & filename);
     int closefile();
     int mount(bool remount=false);
     std::string readfile(bool fromStart=true);
 
-    std::vector<nnLayer*> parseString(const std::string);
+    std::vector<nnLayer> parseString(std::string && str);
 
 private:
-
     std::shared_ptr<CUSTOMTYPE> getWeightsFromSMatch(std::string, unsigned int);
     std::shared_ptr<CUSTOMTYPE> getBiasFromSMatch(std::string, unsigned int);
 
-    nnLayer* parseline(std::string);
-    //std::ifstream filedescrip_;
-
+    nnLayer parseline(std::string);
 
     std::string fileName;
     std::string pathName;
@@ -48,7 +45,6 @@ private:
     FIL mFIL;
 
     bool isMounted = false;
-
 };
 
 

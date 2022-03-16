@@ -31,7 +31,7 @@ int8_t neuralnetwork_manager::setup_manager(std::string fileName) {
 	if(fileP.closefile()){
 		return -1;
 	}
-	nnLV_ = std::move(fileP.parseString(out));
+	nnLV_ = std::move(fileP.parseString(std::move(out)));
 	totalLayers_ = nnLV_.size();
 	return 0;
 }
@@ -43,14 +43,14 @@ u16 neuralnetwork_manager::run_network(u16 * input, u16 inputSize) {
 		u16 output[MAX_SIZE] = { 0 };
 		u16 tmp[MAX_SIZE] = { 0 };
 
-		u16* lastSize = nnLV_[0]->getNNeurons();
-		nn_.run(input, output, nnLV_[0]->getWeights().get(), nnLV_[0]->getBias().get(), &inputSize, nnLV_[0]->getNNeurons(), nnLV_[0]->getActFunction());
+		u16* lastSize = nnLV_[0].getNNeurons();
+		nn_.run(input, output, nnLV_[0].getWeights().get(), nnLV_[0].getBias().get(), &inputSize, nnLV_[0].getNNeurons(), nnLV_[0].getActFunction());
 
 		// Run each layer!
 		for(u8 i = 1; i < nnLV_.size(); i++) {
 			std::swap(output, tmp);
-			nn_.run(tmp, output, nnLV_[i]->getWeights().get(), nnLV_[i]->getBias().get(), lastSize, nnLV_[i]->getNNeurons(), nnLV_[i]->getActFunction());
-			lastSize = nnLV_[i]->getNNeurons();
+			nn_.run(tmp, output, nnLV_[i].getWeights().get(), nnLV_[i].getBias().get(), lastSize, nnLV_[i].getNNeurons(), nnLV_[i].getActFunction());
+			lastSize = nnLV_[i].getNNeurons();
 
 			// Do hardware swap
 
@@ -63,6 +63,7 @@ u16 neuralnetwork_manager::run_network(u16 * input, u16 inputSize) {
 			tmp1.V.VAL = output[i];
 			o2[i] = tmp1.to_float();
 		}
+		std::cout << "Hej" << std::endl;
 	}
 
 	return res;

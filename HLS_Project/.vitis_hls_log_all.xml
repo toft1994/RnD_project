@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog>
+        <logs message="WARNING: [RTGEN 206-101] Design contains AXI ports. Reset is fixed to synchronous and active low." projectName="HLS_Project" solutionName="solution1" date="2022-03-16T13:52:25.127+0100" type="Warning"/>
+        <logs message="WARNING: [HLS 200-885] The II Violation in module 'nnlayer_Pipeline_VITIS_LOOP_10_1' (loop 'VITIS_LOOP_10_1'): Unable to schedule 'load' operation ('output_r_load') on array 'output_r' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'output_r'.&#xD;&#xA;Resolution: For help on HLS 200-885 see www.xilinx.com/cgi-bin/docs/rdoc?v=2021.2;t=hls+guidance;d=200-885.html" projectName="HLS_Project" solutionName="solution1" date="2022-03-16T13:52:24.063+0100" type="Warning"/>
+        <logs message="WARNING: [HLS 200-880] The II Violation in module 'nnlayer_Pipeline_VITIS_LOOP_37_2_VITIS_LOOP_39_3' (loop 'VITIS_LOOP_37_2_VITIS_LOOP_39_3'): Unable to enforce a carried dependence constraint (II = 1, distance = 2, offset = 1) between 'store' operation ('output_r_addr_write_ln717') of variable 'trunc_ln' on array 'output_r' and 'load' operation ('output_r_load') on array 'output_r'.&#xD;&#xA;Resolution: For help on HLS 200-880 see www.xilinx.com/cgi-bin/docs/rdoc?v=2021.2;t=hls+guidance;d=200-880.html" projectName="HLS_Project" solutionName="solution1" date="2022-03-16T13:52:23.796+0100" type="Warning"/>
+        <logs message="WARNING: [HLS 200-936] Cannot unroll loop 'VITIS_LOOP_39_3' (HLS_Project/neural_layer.cpp:29) in function 'nnlayer': cannot completely unroll a loop with a variable trip count.&#xD;&#xA;Resolution: For help on HLS 200-936 see www.xilinx.com/cgi-bin/docs/rdoc?v=2021.2;t=hls+guidance;d=200-936.html" projectName="HLS_Project" solutionName="solution1" date="2022-03-16T13:52:23.219+0100" type="Warning"/>
+        <logs message="WARNING: [HLS 207-997] '/*' within block comment (HLS_Project/neural_layer.cpp:99:2)" projectName="HLS_Project" solutionName="solution1" date="2022-03-16T13:52:16.737+0100" type="Warning"/>
+      </synLog>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>
