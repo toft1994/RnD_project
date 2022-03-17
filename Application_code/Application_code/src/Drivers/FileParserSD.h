@@ -25,12 +25,8 @@ public:
     int openfile(std::string & filename);
     int closefile();
     int mount(bool remount=false);
-    std::string readfile(bool fromStart=true);
 
-    std::vector<nnLayer> parseString(std::string && str);
-
-    std::vector<nnLayer> parseStringTest(std::string & fileName);
-
+    std::vector<nnLayer> parseString(std::string & fileName);
 
 private:
     std::shared_ptr<CUSTOMTYPE> getWeightsFromSMatch(std::string, unsigned int);

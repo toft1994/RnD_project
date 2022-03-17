@@ -14,7 +14,7 @@ neuralnetwork_manager::neuralnetwork_manager() {
 neuralnetwork_manager::~neuralnetwork_manager() {
 }
 
-int8_t neuralnetwork_manager::setup_manager(std::string fileName) {
+u8 neuralnetwork_manager::setup_manager(std::string fileName) {
 	FileParserSD fileP = FileParserSD();
 	if(fileP.mount()){
 		return -1;
@@ -23,7 +23,7 @@ int8_t neuralnetwork_manager::setup_manager(std::string fileName) {
 		return -1;
 	}
 
-	nnLV_ = std::move(fileP.parseStringTest(fileName));
+	nnLV_ = std::move(fileP.parseString(fileName));
 	totalLayers_ = nnLV_.size();
 
 	if(fileP.closefile()){
@@ -33,34 +33,12 @@ int8_t neuralnetwork_manager::setup_manager(std::string fileName) {
 	return 0;
 }
 
-/*int8_t neuralnetwork_manager::setup_manager(std::string fileName) {
-	FileParserSD fileP = FileParserSD();
-	if(fileP.mount()){
-		return -1;
-	}
-	if(fileP.openfile(fileName)){
-		return -1;
-	}
-	std::string out = fileP.readfile();
-	if(out == "FF"){
-		fileP.closefile();
-		return -1;
-	}
-
-	if(fileP.closefile()){
-		return -1;
-	}
-	nnLV_ = std::move(fileP.parseString(std::move(out)));
-	totalLayers_ = nnLV_.size();
-	return 0;
-}*/
-
 u16 neuralnetwork_manager::run_network(u16 * input, u16 inputSize) {
 	u16 res = 0xffff;
 
 	if(inputSize > 0 && nnLV_.size() > 0) {
-		u16 output[MAX_SIZE] = { 0 };
-		u16 tmp[MAX_SIZE] = { 0 };
+		u16 output[MAX_NN_SIZE] = { 0 };
+		u16 tmp[MAX_NN_SIZE] = { 0 };
 
 		u16* lastSize = nnLV_[0].getNNeurons();
 		nn_.run(input, output, nnLV_[0].getWeights().get(), nnLV_[0].getBias().get(), &inputSize, nnLV_[0].getNNeurons(), nnLV_[0].getActFunction());
@@ -76,13 +54,12 @@ u16 neuralnetwork_manager::run_network(u16 * input, u16 inputSize) {
 			// Run activation function
 		}
 
-		float o2[MAX_SIZE] = {0};
+		float o2[MAX_NN_SIZE] = {0};
 		FIXEDCONVERT tmp1 = FIXEDCONVERT();
 		for(u8 i = 0; i < *lastSize; i++) {
 			tmp1.V.VAL = output[i];
 			o2[i] = tmp1.to_float();
 		}
-		std::cout << "Hej" << std::endl;
 	}
 
 	return res;

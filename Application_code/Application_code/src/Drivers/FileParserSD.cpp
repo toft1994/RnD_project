@@ -72,8 +72,11 @@ int FileParserSD::closefile() {
 	return XST_SUCCESS;
 }
 
+/**
+ * Parse the whole string from config file to a nnLayer Vector
+ */
 
-std::vector<nnLayer> FileParserSD::parseStringTest(std::string & fileName) {
+std::vector<nnLayer> FileParserSD::parseString(std::string & fileName) {
 
     std::vector<nnLayer> nnLayerVector;
     unsigned int index = 0;
@@ -95,7 +98,7 @@ std::vector<nnLayer> FileParserSD::parseStringTest(std::string & fileName) {
 
 
 std::string FileParserSD::getFileLine(std::string fileName, unsigned int oldStop, unsigned int totalSize) {
-	char tmpArray[256];
+	char tmpArray[MAX_FILE_INPUT];
 	std::string ret = "";
 	FRESULT result;
 
@@ -117,55 +120,6 @@ std::string FileParserSD::getFileLine(std::string fileName, unsigned int oldStop
 
 	ret = ret.substr(0, ret.find("\n"));
 	return ret;
-}
-
-std::string FileParserSD::readfile(bool fromStart) {
-
-	//TODO FIX THE STATIC BUFFER SIZE
-	char buf[MAX_INPUT_FILE_CHAR_SIZE];
-
-	FRESULT result;
-	if (fromStart) { /* Move filepointer to start */
-		result = f_lseek(&mFIL, 0);
-		if (result) {
-			return "FF";
-		}
-	}
-	result = f_read(&mFIL, (void*)buf, sizeof(buf), &NumberOfBytesRead);
-	if (result) {
-		return "FF";
-	}
-
-	std::string ret(buf, buf+NumberOfBytesRead);
-
-	return ret;
-}
-
-/**
- * Parse the whole string from config file to a nnLayer Vector
- */
-std::vector<nnLayer> FileParserSD::parseString(std::string && inString) {
-
-    unsigned int numbersOfNewline = std::count(inString.begin(), inString.end(), 'A');
-
-    // Allocate the numbers of nnLayers Needed
-    std::vector<nnLayer> nnLayerVector;
-
-    // Find first newline pointer
-    unsigned int newLinePointer = inString.find("\n");
-
-    for (unsigned int i = 0; i<numbersOfNewline; i++) {
-
-        std::string workString = inString.substr(0, newLinePointer);
-        nnLayerVector.push_back(std::move(parseline(workString)));
-
-        // Update Temp TO Be without Parsed line and move newlinePointer
-        inString = inString.substr(newLinePointer+1, inString.size()-newLinePointer);
-        if (!inString.empty()){
-            newLinePointer = inString.find("\n");
-        }
-    }
-    return nnLayerVector;
 }
 
 nnLayer FileParserSD::parseline(const std::string inLine) {

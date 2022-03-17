@@ -1,4 +1,4 @@
-#include "1_neuron_layer.hpp"
+#include "nnLayer.hpp"
 
 void relu(dataType* data) {
 	#pragma HLS inline
@@ -15,7 +15,7 @@ static unsigned short int outNeurons = 0;
 static unsigned short int weightIndexAdded = 0;
 static unsigned short int inNeurons = 0;
 
-void nnlayer(dataType input[MAX_SIZE], dataType output[SIZE], dataType weights[WEIGHT_MAX_SIZE], dataType bias[SIZE], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
+void nnlayer(dataType input[SIZE], dataType output[SIZE], dataType weights[WEIGHT_SIZE], dataType bias[SIZE], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
 #pragma HLS INTERFACE mode=s_axilite port=input //storage_impl=bram bundle=nnI1
 #pragma HLS INTERFACE mode=s_axilite port=output //storage_impl=bram bundle=nnIn2
 #pragma HLS INTERFACE mode=s_axilite port=weights //storage_impl=bram bundle=nnIn3
