@@ -29,9 +29,14 @@ public:
 
     std::vector<nnLayer> parseString(std::string && str);
 
+    std::vector<nnLayer> parseStringTest(std::string & fileName);
+
+
 private:
     std::shared_ptr<CUSTOMTYPE> getWeightsFromSMatch(std::string, unsigned int);
     std::shared_ptr<CUSTOMTYPE> getBiasFromSMatch(std::string, unsigned int);
+
+    std::string getFileLine(std::string fileName, unsigned int oldStop, unsigned int totalSize);
 
     nnLayer parseline(std::string);
 

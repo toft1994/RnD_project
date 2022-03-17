@@ -55153,6 +55153,8 @@ int main(){
   bias[i] = 1;
  }
 
+ bias[256 -1] = -100;
+
  for(int i = 0; i < 256*256; i++) {
   weights[i] = dataType(incrementer);
   if(counter >= inputSize){
@@ -55167,10 +55169,10 @@ int main(){
 #ifndef HLS_FASTSIM
 #define nnlayer apatb_nnlayer_sw
 #endif
-# 29 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/test_bench.cpp"
+# 31 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/test_bench.cpp"
 nnlayer(input, output, weights, bias, inputSize, outputSize, 1);
 #undef nnlayer
-# 29 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/test_bench.cpp"
+# 31 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/test_bench.cpp"
 
 
  for(int i = 0; i < 30; i++) {
@@ -55179,8 +55181,13 @@ nnlayer(input, output, weights, bias, inputSize, outputSize, 1);
   }
  }
 
+ if(output[256 -1] == 0)
+ {
+  return -1;
+ }
+
  return 0;
 }
 #endif
-# 38 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/test_bench.cpp"
+# 45 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/test_bench.cpp"
 

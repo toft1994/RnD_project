@@ -55143,6 +55143,8 @@ int main(){
   bias[i] = 1;
  }
 
+ bias[256 -1] = -100;
+
  for(int i = 0; i < 256*256; i++) {
   weights[i] = dataType(incrementer);
   if(counter >= inputSize){
@@ -55159,6 +55161,11 @@ int main(){
   if (output[i] != dataType(i+i+i+1)) {
    return -i;
   }
+ }
+
+ if(output[256 -1] == 0)
+ {
+  return -1;
  }
 
  return 0;

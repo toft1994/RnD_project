@@ -55136,15 +55136,10 @@ void nnlayer(dataType input[256], dataType output[256], dataType weights[256*256
 # 40 "C:/Xilinx/Vitis_HLS/2021.2/tps/win64/msys64/mingw64/include/c++/6.2.0/cstring" 3
 # 3 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/neural_layer.cpp" 2
 
-const int size = 256;
-const int max_size = 256;
-const int max_weight_size = 256*256;
-
 void relu(dataType* data) {
 #pragma HLS inline
- for (short int i = 0; i < 256; i++)
+ for (unsigned short int i = 0; i < 256; i++)
  {
-#pragma HLS PIPELINE
   if (data[i] < 0)
   {
    data[i] = 0;
@@ -55152,7 +55147,15 @@ void relu(dataType* data) {
  }
 }
 
-void nnlayer(dataType input[256], dataType output[256], dataType weights[256*256], dataType bias[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
+static unsigned short int outNeurons = 0;
+static unsigned short int weightIndexAdded = 0;
+static unsigned short int inNeurons = 0;
+static dataType input[256];
+static dataType output[256];
+static dataType weights[256*256];
+static dataType bias[256];
+
+void nnlayer(dataType input_[256], dataType output_[256], dataType weights_[256*256], dataType bias_[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
 #pragma HLS INTERFACE mode=s_axilite port=input
 #pragma HLS INTERFACE mode=s_axilite port=output
 #pragma HLS INTERFACE mode=s_axilite port=weights
@@ -55161,27 +55164,36 @@ void nnlayer(dataType input[256], dataType output[256], dataType weights[256*256
 #pragma HLS INTERFACE mode=s_axilite port=numOfOutNeurons
 #pragma HLS INTERFACE mode=s_axilite port=activation
 #pragma HLS INTERFACE mode=s_axilite port=return
- unsigned short int outNeurons = 0;
- unsigned short int inNeurons = 0;
- unsigned short int weightIndexAdded = 0;
 
- for (outNeurons = 0; outNeurons < numOfOutNeurons; outNeurons++) {
-  output[outNeurons] = bias[outNeurons];
+
+
+
+
+
+
+  memcpy(input,(const dataType*)input_,256*sizeof(dataType));
+  memcpy(weights,(const dataType*)weights_,256*sizeof(dataType));
+  memcpy(bias,(const dataType*)bias_,256*sizeof(dataType));
+
+ for (inNeurons = 0; inNeurons < 256; inNeurons++)
+ {
+  for (outNeurons = 0; outNeurons < 256; outNeurons++)
+  {
+
+   output[outNeurons] += (weights[inNeurons+weightIndexAdded] * input[inNeurons]);
+  }
+  weightIndexAdded+=numOfInNeurons;
  }
 
- for (inNeurons = 0; inNeurons < numOfInNeurons; inNeurons++)
- {
-  for (outNeurons = 0; outNeurons < numOfOutNeurons; outNeurons++)
-  {
-#pragma HLS UNROLL
-   output[outNeurons] += (weights[outNeurons+weightIndexAdded] * input[inNeurons]);
-  }
-  weightIndexAdded+=numOfOutNeurons;
+ for (outNeurons = 0; outNeurons < 256; outNeurons++) {
+  output[outNeurons] += bias[outNeurons];
  }
 
  if(activation == 1) {
   relu(output);
  }
+ weightIndexAdded = 0;
+ memcpy(output_,(const dataType*)output,256*sizeof(dataType));
 }
 #ifndef HLS_FASTSIM
 #ifdef __cplusplus
@@ -55191,17 +55203,17 @@ void apatb_nnlayer_ir(ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *, ap_fixed<16, 8, AP_
 #ifdef __cplusplus
 extern "C"
 #endif
-void nnlayer_hw_stub(ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *input, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *output, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *weights, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *bias, unsigned short numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation){
-nnlayer(input, output, weights, bias, numOfInNeurons, numOfOutNeurons, activation);
+void nnlayer_hw_stub(ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *input_, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *output_, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *weights_, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *bias_, unsigned short numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation){
+nnlayer(input_, output_, weights_, bias_, numOfInNeurons, numOfOutNeurons, activation);
 return ;
 }
 #ifdef __cplusplus
 extern "C"
 #endif
-void apatb_nnlayer_sw(ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *input, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *output, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *weights, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *bias, unsigned short numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation){
-apatb_nnlayer_ir(input, output, weights, bias, numOfInNeurons, numOfOutNeurons, activation);
+void apatb_nnlayer_sw(ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *input_, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *output_, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *weights_, ap_fixed<16, 8, AP_TRN, AP_WRAP, 0> *bias_, unsigned short numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation){
+apatb_nnlayer_ir(input_, output_, weights_, bias_, numOfInNeurons, numOfOutNeurons, activation);
 return ;
 }
 #endif
-# 50 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/neural_layer.cpp"
+# 62 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/neural_layer.cpp"
 

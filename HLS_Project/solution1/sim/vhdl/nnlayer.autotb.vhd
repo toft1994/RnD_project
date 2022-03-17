@@ -14,26 +14,26 @@ use std.textio.all;
 entity apatb_nnlayer_top is
   generic (
        AUTOTB_CLOCK_PERIOD_DIV2 :   TIME := 5.00 ns;
-       AUTOTB_TVIN_input_r : STRING := "../tv/cdatafile/c.nnlayer.autotvin_input_r.dat";
-       AUTOTB_TVIN_weights : STRING := "../tv/cdatafile/c.nnlayer.autotvin_weights.dat";
-       AUTOTB_TVIN_bias : STRING := "../tv/cdatafile/c.nnlayer.autotvin_bias.dat";
+       AUTOTB_TVIN_input_s : STRING := "../tv/cdatafile/c.nnlayer.autotvin_input_s.dat";
+       AUTOTB_TVIN_output_s : STRING := "../tv/cdatafile/c.nnlayer.autotvin_output_s.dat";
+       AUTOTB_TVIN_weights_s : STRING := "../tv/cdatafile/c.nnlayer.autotvin_weights_s.dat";
+       AUTOTB_TVIN_bias_s : STRING := "../tv/cdatafile/c.nnlayer.autotvin_bias_s.dat";
        AUTOTB_TVIN_numOfInNeurons : STRING := "../tv/cdatafile/c.nnlayer.autotvin_numOfInNeurons.dat";
-       AUTOTB_TVIN_numOfOutNeurons : STRING := "../tv/cdatafile/c.nnlayer.autotvin_numOfOutNeurons.dat";
        AUTOTB_TVIN_activation : STRING := "../tv/cdatafile/c.nnlayer.autotvin_activation.dat";
-       AUTOTB_TVIN_input_r_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_input_r.dat";
-       AUTOTB_TVIN_weights_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_weights.dat";
-       AUTOTB_TVIN_bias_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_bias.dat";
+       AUTOTB_TVIN_input_s_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_input_s.dat";
+       AUTOTB_TVIN_output_s_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_output_s.dat";
+       AUTOTB_TVIN_weights_s_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_weights_s.dat";
+       AUTOTB_TVIN_bias_s_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_bias_s.dat";
        AUTOTB_TVIN_numOfInNeurons_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_numOfInNeurons.dat";
-       AUTOTB_TVIN_numOfOutNeurons_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_numOfOutNeurons.dat";
        AUTOTB_TVIN_activation_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvin_activation.dat";
-       AUTOTB_TVOUT_output_r : STRING := "../tv/cdatafile/c.nnlayer.autotvout_output_r.dat";
-       AUTOTB_TVOUT_output_r_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvout_output_r.dat";
+       AUTOTB_TVOUT_output_s : STRING := "../tv/cdatafile/c.nnlayer.autotvout_output_s.dat";
+       AUTOTB_TVOUT_output_s_out_wrapc : STRING := "../tv/rtldatafile/rtl.nnlayer.autotvout_output_s.dat";
       AUTOTB_LAT_RESULT_FILE    : STRING  := "nnlayer.result.lat.rb";
       AUTOTB_PER_RESULT_TRANS_FILE    : STRING  := "nnlayer.performance.result.transaction.xml";
-      LENGTH_input_r     : INTEGER := 256;
-      LENGTH_output_r     : INTEGER := 256;
-      LENGTH_weights     : INTEGER := 65536;
-      LENGTH_bias     : INTEGER := 256;
+      LENGTH_input_s     : INTEGER := 256;
+      LENGTH_output_s     : INTEGER := 256;
+      LENGTH_weights_s     : INTEGER := 65536;
+      LENGTH_bias_s     : INTEGER := 256;
       LENGTH_numOfInNeurons     : INTEGER := 1;
       LENGTH_numOfOutNeurons     : INTEGER := 1;
       LENGTH_activation     : INTEGER := 1;
@@ -62,14 +62,14 @@ architecture behav of apatb_nnlayer_top is
   signal ready :   STD_LOGIC := '0';
   signal ready_wire :   STD_LOGIC := '0';
 
-  signal control_AWADDR:  STD_LOGIC_VECTOR (17 DOWNTO 0);
+  signal control_AWADDR:  STD_LOGIC_VECTOR (5 DOWNTO 0);
   signal control_AWVALID:  STD_LOGIC;
   signal control_AWREADY:  STD_LOGIC;
   signal control_WVALID:  STD_LOGIC;
   signal control_WREADY:  STD_LOGIC;
   signal control_WDATA:  STD_LOGIC_VECTOR (31 DOWNTO 0);
   signal control_WSTRB:  STD_LOGIC_VECTOR (3 DOWNTO 0);
-  signal control_ARADDR:  STD_LOGIC_VECTOR (17 DOWNTO 0);
+  signal control_ARADDR:  STD_LOGIC_VECTOR (5 DOWNTO 0);
   signal control_ARVALID:  STD_LOGIC;
   signal control_ARREADY:  STD_LOGIC;
   signal control_RVALID:  STD_LOGIC;
@@ -83,6 +83,19 @@ architecture behav of apatb_nnlayer_top is
   signal ap_local_block :  STD_LOGIC;
   signal ap_clk :  STD_LOGIC;
   signal ap_rst_n :  STD_LOGIC;
+  signal input_s_address0 :  STD_LOGIC_VECTOR (7 DOWNTO 0);
+  signal input_s_ce0 :  STD_LOGIC;
+  signal input_s_q0 :  STD_LOGIC_VECTOR (15 DOWNTO 0);
+  signal output_s_address0 :  STD_LOGIC_VECTOR (7 DOWNTO 0);
+  signal output_s_ce0 :  STD_LOGIC;
+  signal output_s_we0 :  STD_LOGIC;
+  signal output_s_d0 :  STD_LOGIC_VECTOR (15 DOWNTO 0);
+  signal weights_s_address0 :  STD_LOGIC_VECTOR (15 DOWNTO 0);
+  signal weights_s_ce0 :  STD_LOGIC;
+  signal weights_s_q0 :  STD_LOGIC_VECTOR (15 DOWNTO 0);
+  signal bias_s_address0 :  STD_LOGIC_VECTOR (7 DOWNTO 0);
+  signal bias_s_ce0 :  STD_LOGIC;
+  signal bias_s_q0 :  STD_LOGIC_VECTOR (15 DOWNTO 0);
 
   signal ready_cnt : STD_LOGIC_VECTOR(31 DOWNTO 0);
   signal done_cnt	: STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -114,16 +127,29 @@ port (
     ap_local_block :  OUT STD_LOGIC;
     ap_clk :  IN STD_LOGIC;
     ap_rst_n :  IN STD_LOGIC;
+    input_s_address0 :  OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    input_s_ce0 :  OUT STD_LOGIC;
+    input_s_q0 :  IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+    output_s_address0 :  OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    output_s_ce0 :  OUT STD_LOGIC;
+    output_s_we0 :  OUT STD_LOGIC;
+    output_s_d0 :  OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+    weights_s_address0 :  OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+    weights_s_ce0 :  OUT STD_LOGIC;
+    weights_s_q0 :  IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+    bias_s_address0 :  OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    bias_s_ce0 :  OUT STD_LOGIC;
+    bias_s_q0 :  IN STD_LOGIC_VECTOR (15 DOWNTO 0);
     s_axi_control_AWVALID :  IN STD_LOGIC;
     s_axi_control_AWREADY :  OUT STD_LOGIC;
-    s_axi_control_AWADDR :  IN STD_LOGIC_VECTOR (17 DOWNTO 0);
+    s_axi_control_AWADDR :  IN STD_LOGIC_VECTOR (5 DOWNTO 0);
     s_axi_control_WVALID :  IN STD_LOGIC;
     s_axi_control_WREADY :  OUT STD_LOGIC;
     s_axi_control_WDATA :  IN STD_LOGIC_VECTOR (31 DOWNTO 0);
     s_axi_control_WSTRB :  IN STD_LOGIC_VECTOR (3 DOWNTO 0);
     s_axi_control_ARVALID :  IN STD_LOGIC;
     s_axi_control_ARREADY :  OUT STD_LOGIC;
-    s_axi_control_ARADDR :  IN STD_LOGIC_VECTOR (17 DOWNTO 0);
+    s_axi_control_ARADDR :  IN STD_LOGIC_VECTOR (5 DOWNTO 0);
     s_axi_control_RVALID :  OUT STD_LOGIC;
     s_axi_control_RREADY :  IN STD_LOGIC;
     s_axi_control_RDATA :  OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
@@ -134,14 +160,114 @@ port (
     interrupt :  OUT STD_LOGIC);
 end component;
 
--- The signal of port input_r
-shared variable AESL_REG_input_r : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
--- The signal of port output_r
-shared variable AESL_REG_output_r : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
--- The signal of port weights
-shared variable AESL_REG_weights : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
--- The signal of port bias
-shared variable AESL_REG_bias : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
+signal arrayinput_s_ce0, arrayinput_s_ce1 : STD_LOGIC;
+signal arrayinput_s_we0, arrayinput_s_we1 : STD_LOGIC_VECTOR(1 downto 0);
+signal arrayinput_s_address0, arrayinput_s_address1 : STD_LOGIC_VECTOR(7 downto 0);
+signal arrayinput_s_din0, arrayinput_s_din1 : STD_LOGIC_VECTOR(15 downto 0);
+signal arrayinput_s_dout0, arrayinput_s_dout1 :  STD_LOGIC_VECTOR(15 downto 0);
+signal arrayinput_s_ready : STD_LOGIC;
+signal arrayinput_s_done : STD_LOGIC;
+
+component AESL_automem_input_s is
+  port(
+    clk        :  IN  STD_LOGIC;
+    rst        :  IN  STD_LOGIC;
+    ce0        :  IN  STD_LOGIC;
+    we0        :  IN  STD_LOGIC_VECTOR;
+    address0   :  IN  STD_LOGIC_VECTOR;
+    din0       :  IN  STD_LOGIC_VECTOR;
+    dout0      :  OUT STD_LOGIC_VECTOR;
+    ce1        :  IN  STD_LOGIC;
+    we1        :  IN  STD_LOGIC_VECTOR;
+    address1   :  IN  STD_LOGIC_VECTOR;
+    din1       :  IN  STD_LOGIC_VECTOR;
+    dout1      :  OUT STD_LOGIC_VECTOR;
+    ready	     :  IN  STD_LOGIC;
+    done	     :  IN  STD_LOGIC
+  );
+end component;
+
+signal arrayoutput_s_ce0, arrayoutput_s_ce1 : STD_LOGIC;
+signal arrayoutput_s_we0, arrayoutput_s_we1 : STD_LOGIC_VECTOR(1 downto 0);
+signal arrayoutput_s_address0, arrayoutput_s_address1 : STD_LOGIC_VECTOR(7 downto 0);
+signal arrayoutput_s_din0, arrayoutput_s_din1 : STD_LOGIC_VECTOR(15 downto 0);
+signal arrayoutput_s_dout0, arrayoutput_s_dout1 :  STD_LOGIC_VECTOR(15 downto 0);
+signal arrayoutput_s_ready : STD_LOGIC;
+signal arrayoutput_s_done : STD_LOGIC;
+
+component AESL_automem_output_s is
+  port(
+    clk        :  IN  STD_LOGIC;
+    rst        :  IN  STD_LOGIC;
+    ce0        :  IN  STD_LOGIC;
+    we0        :  IN  STD_LOGIC_VECTOR;
+    address0   :  IN  STD_LOGIC_VECTOR;
+    din0       :  IN  STD_LOGIC_VECTOR;
+    dout0      :  OUT STD_LOGIC_VECTOR;
+    ce1        :  IN  STD_LOGIC;
+    we1        :  IN  STD_LOGIC_VECTOR;
+    address1   :  IN  STD_LOGIC_VECTOR;
+    din1       :  IN  STD_LOGIC_VECTOR;
+    dout1      :  OUT STD_LOGIC_VECTOR;
+    ready	     :  IN  STD_LOGIC;
+    done	     :  IN  STD_LOGIC
+  );
+end component;
+
+signal arrayweights_s_ce0, arrayweights_s_ce1 : STD_LOGIC;
+signal arrayweights_s_we0, arrayweights_s_we1 : STD_LOGIC_VECTOR(1 downto 0);
+signal arrayweights_s_address0, arrayweights_s_address1 : STD_LOGIC_VECTOR(15 downto 0);
+signal arrayweights_s_din0, arrayweights_s_din1 : STD_LOGIC_VECTOR(15 downto 0);
+signal arrayweights_s_dout0, arrayweights_s_dout1 :  STD_LOGIC_VECTOR(15 downto 0);
+signal arrayweights_s_ready : STD_LOGIC;
+signal arrayweights_s_done : STD_LOGIC;
+
+component AESL_automem_weights_s is
+  port(
+    clk        :  IN  STD_LOGIC;
+    rst        :  IN  STD_LOGIC;
+    ce0        :  IN  STD_LOGIC;
+    we0        :  IN  STD_LOGIC_VECTOR;
+    address0   :  IN  STD_LOGIC_VECTOR;
+    din0       :  IN  STD_LOGIC_VECTOR;
+    dout0      :  OUT STD_LOGIC_VECTOR;
+    ce1        :  IN  STD_LOGIC;
+    we1        :  IN  STD_LOGIC_VECTOR;
+    address1   :  IN  STD_LOGIC_VECTOR;
+    din1       :  IN  STD_LOGIC_VECTOR;
+    dout1      :  OUT STD_LOGIC_VECTOR;
+    ready	     :  IN  STD_LOGIC;
+    done	     :  IN  STD_LOGIC
+  );
+end component;
+
+signal arraybias_s_ce0, arraybias_s_ce1 : STD_LOGIC;
+signal arraybias_s_we0, arraybias_s_we1 : STD_LOGIC_VECTOR(1 downto 0);
+signal arraybias_s_address0, arraybias_s_address1 : STD_LOGIC_VECTOR(7 downto 0);
+signal arraybias_s_din0, arraybias_s_din1 : STD_LOGIC_VECTOR(15 downto 0);
+signal arraybias_s_dout0, arraybias_s_dout1 :  STD_LOGIC_VECTOR(15 downto 0);
+signal arraybias_s_ready : STD_LOGIC;
+signal arraybias_s_done : STD_LOGIC;
+
+component AESL_automem_bias_s is
+  port(
+    clk        :  IN  STD_LOGIC;
+    rst        :  IN  STD_LOGIC;
+    ce0        :  IN  STD_LOGIC;
+    we0        :  IN  STD_LOGIC_VECTOR;
+    address0   :  IN  STD_LOGIC_VECTOR;
+    din0       :  IN  STD_LOGIC_VECTOR;
+    dout0      :  OUT STD_LOGIC_VECTOR;
+    ce1        :  IN  STD_LOGIC;
+    we1        :  IN  STD_LOGIC_VECTOR;
+    address1   :  IN  STD_LOGIC_VECTOR;
+    din1       :  IN  STD_LOGIC_VECTOR;
+    dout1      :  OUT STD_LOGIC_VECTOR;
+    ready	     :  IN  STD_LOGIC;
+    done	     :  IN  STD_LOGIC
+  );
+end component;
+
 -- The signal of port numOfInNeurons
 shared variable AESL_REG_numOfInNeurons : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 -- The signal of port numOfOutNeurons
@@ -162,7 +288,6 @@ shared variable AESL_REG_ap_local_deadlock : STD_LOGIC_VECTOR(0 downto 0) := (ot
     signal ready_rise : STD_LOGIC := '0';
     signal slave_done_status : STD_LOGIC := '0';
     signal ap_done_lock : STD_LOGIC := '0';
-    signal control_read_data_finish : STD_LOGIC;
     signal control_write_data_finish : STD_LOGIC;
 component AESL_AXI_SLAVE_control is
   port(
@@ -186,7 +311,6 @@ component AESL_AXI_SLAVE_control is
     TRAN_s_axi_control_BREADY : OUT STD_LOGIC;
     TRAN_s_axi_control_BRESP : IN STD_LOGIC_VECTOR;
     TRAN_control_interrupt   : IN STD_LOGIC;
-    TRAN_control_read_data_finish : OUT STD_LOGIC;
     TRAN_control_write_data_finish : OUT STD_LOGIC;
     TRAN_control_ready_out : OUT STD_LOGIC;
     TRAN_control_ready_in  : IN STD_LOGIC;
@@ -533,7 +657,20 @@ AESL_inst_nnlayer    :   nnlayer port map (
    interrupt  =>  control_INTERRUPT,
    ap_local_block  =>  ap_local_block,
    ap_clk  =>  ap_clk,
-   ap_rst_n  =>  ap_rst_n
+   ap_rst_n  =>  ap_rst_n,
+   input_s_address0  =>  input_s_address0,
+   input_s_ce0  =>  input_s_ce0,
+   input_s_q0  =>  input_s_q0,
+   output_s_address0  =>  output_s_address0,
+   output_s_ce0  =>  output_s_ce0,
+   output_s_we0  =>  output_s_we0,
+   output_s_d0  =>  output_s_d0,
+   weights_s_address0  =>  weights_s_address0,
+   weights_s_ce0  =>  weights_s_ce0,
+   weights_s_q0  =>  weights_s_q0,
+   bias_s_address0  =>  bias_s_address0,
+   bias_s_ce0  =>  bias_s_ce0,
+   bias_s_q0  =>  bias_s_q0
 );
 
 -- Assignment for control signal
@@ -545,7 +682,7 @@ AESL_inst_nnlayer    :   nnlayer port map (
   AESL_continue <= continue;
   AESL_slave_write_start_in <= slave_start_status  and control_write_data_finish;
   AESL_slave_start <= AESL_slave_write_start_finish;
-  AESL_done <= slave_done_status  and control_read_data_finish;
+  AESL_done <= slave_done_status ;
 
 slave_start_proc : process(AESL_clock)
 begin
@@ -598,6 +735,118 @@ begin
     end if;
   end if;
 end process;
+AESL_inst_input_s : AESL_automem_input_s port map (
+    clk       =>  AESL_clock,
+    rst       =>  AESL_reset,
+    ce0       =>  arrayinput_s_ce0,
+    we0       =>  arrayinput_s_we0,
+    address0  =>  arrayinput_s_address0,
+    din0      =>  arrayinput_s_din0,
+    dout0     =>  arrayinput_s_dout0,
+    ce1       =>  arrayinput_s_ce1,
+    we1       =>  arrayinput_s_we1,
+    address1  =>  arrayinput_s_address1,
+    din1      =>  arrayinput_s_din1,
+    dout1     =>  arrayinput_s_dout1,
+    ready	    =>  arrayinput_s_ready,
+    done	    =>  arrayinput_s_done
+);
+
+-- Assignment between dut and arrayinput_s
+arrayinput_s_address0 <= input_s_address0;
+arrayinput_s_ce0 <= input_s_ce0;
+input_s_q0 <= arrayinput_s_dout0;
+arrayinput_s_we0 <= (others => '0');
+arrayinput_s_din0 <= (others => '0');
+arrayinput_s_we1 <= (others => '0');
+arrayinput_s_din1 <= (others => '0');
+arrayinput_s_ready <=	ready;
+arrayinput_s_done <= '0';
+
+AESL_inst_output_s : AESL_automem_output_s port map (
+    clk       =>  AESL_clock,
+    rst       =>  AESL_reset,
+    ce0       =>  arrayoutput_s_ce0,
+    we0       =>  arrayoutput_s_we0,
+    address0  =>  arrayoutput_s_address0,
+    din0      =>  arrayoutput_s_din0,
+    dout0     =>  arrayoutput_s_dout0,
+    ce1       =>  arrayoutput_s_ce1,
+    we1       =>  arrayoutput_s_we1,
+    address1  =>  arrayoutput_s_address1,
+    din1      =>  arrayoutput_s_din1,
+    dout1     =>  arrayoutput_s_dout1,
+    ready	    =>  arrayoutput_s_ready,
+    done	    =>  arrayoutput_s_done
+);
+
+-- Assignment between dut and arrayoutput_s
+arrayoutput_s_address0 <= output_s_address0;
+arrayoutput_s_ce0 <= output_s_ce0;
+arrayoutput_s_we0(0) <= output_s_we0;
+arrayoutput_s_we0(1) <= output_s_we0;
+arrayoutput_s_din0 <= output_s_d0;
+arrayoutput_s_we1 <= (others => '0');
+arrayoutput_s_din1 <= (others => '0');
+arrayoutput_s_ready <= ready_initial or arrayoutput_s_done;
+arrayoutput_s_done <=	AESL_done_delay;
+
+AESL_inst_weights_s : AESL_automem_weights_s port map (
+    clk       =>  AESL_clock,
+    rst       =>  AESL_reset,
+    ce0       =>  arrayweights_s_ce0,
+    we0       =>  arrayweights_s_we0,
+    address0  =>  arrayweights_s_address0,
+    din0      =>  arrayweights_s_din0,
+    dout0     =>  arrayweights_s_dout0,
+    ce1       =>  arrayweights_s_ce1,
+    we1       =>  arrayweights_s_we1,
+    address1  =>  arrayweights_s_address1,
+    din1      =>  arrayweights_s_din1,
+    dout1     =>  arrayweights_s_dout1,
+    ready	    =>  arrayweights_s_ready,
+    done	    =>  arrayweights_s_done
+);
+
+-- Assignment between dut and arrayweights_s
+arrayweights_s_address0 <= weights_s_address0;
+arrayweights_s_ce0 <= weights_s_ce0;
+weights_s_q0 <= arrayweights_s_dout0;
+arrayweights_s_we0 <= (others => '0');
+arrayweights_s_din0 <= (others => '0');
+arrayweights_s_we1 <= (others => '0');
+arrayweights_s_din1 <= (others => '0');
+arrayweights_s_ready <=	ready;
+arrayweights_s_done <= '0';
+
+AESL_inst_bias_s : AESL_automem_bias_s port map (
+    clk       =>  AESL_clock,
+    rst       =>  AESL_reset,
+    ce0       =>  arraybias_s_ce0,
+    we0       =>  arraybias_s_we0,
+    address0  =>  arraybias_s_address0,
+    din0      =>  arraybias_s_din0,
+    dout0     =>  arraybias_s_dout0,
+    ce1       =>  arraybias_s_ce1,
+    we1       =>  arraybias_s_we1,
+    address1  =>  arraybias_s_address1,
+    din1      =>  arraybias_s_din1,
+    dout1     =>  arraybias_s_dout1,
+    ready	    =>  arraybias_s_ready,
+    done	    =>  arraybias_s_done
+);
+
+-- Assignment between dut and arraybias_s
+arraybias_s_address0 <= bias_s_address0;
+arraybias_s_ce0 <= bias_s_ce0;
+bias_s_q0 <= arraybias_s_dout0;
+arraybias_s_we0 <= (others => '0');
+arraybias_s_din0 <= (others => '0');
+arraybias_s_we1 <= (others => '0');
+arraybias_s_din1 <= (others => '0');
+arraybias_s_ready <=	ready;
+arraybias_s_done <= '0';
+
 AESL_axi_slave_inst_control : AESL_AXI_SLAVE_control port map (
     clk   =>  AESL_clock,
     reset =>  AESL_reset,
@@ -619,7 +868,6 @@ AESL_axi_slave_inst_control : AESL_AXI_SLAVE_control port map (
     TRAN_s_axi_control_BREADY => control_BREADY,
     TRAN_s_axi_control_BRESP => control_BRESP,
     TRAN_control_interrupt => control_INTERRUPT,
-    TRAN_control_read_data_finish => control_read_data_finish,
     TRAN_control_write_data_finish => control_write_data_finish,
     TRAN_control_ready_out => AESL_ready,
     TRAN_control_ready_in => AESL_slave_ready,
@@ -810,15 +1058,15 @@ begin
     end if;
 end process;
 -- Write "[[[runtime]]]" and "[[[/runtime]]]" for output transactor 
-write_output_transactor_output_r_runtime_proc : process
+write_output_transactor_output_s_runtime_proc : process
   file        fp              :   TEXT;
   variable    fstatus         :   FILE_OPEN_STATUS;
   variable    token_line      :   LINE;
   variable    token           :   STRING(1 to 1024);
 begin
-    file_open(fstatus, fp, AUTOTB_TVOUT_output_r_out_wrapc, WRITE_MODE);
+    file_open(fstatus, fp, AUTOTB_TVOUT_output_s_out_wrapc, WRITE_MODE);
     if(fstatus /= OPEN_OK) then
-        assert false report "Open file " & AUTOTB_TVOUT_output_r_out_wrapc & " failed!!!" severity note;
+        assert false report "Open file " & AUTOTB_TVOUT_output_s_out_wrapc & " failed!!!" severity note;
         assert false report "ERROR: Simulation using HLS TB failed." severity failure;
     end if;
     write(token_line, string'("[[[runtime]]]"));
@@ -832,9 +1080,9 @@ begin
     wait until AESL_clock'event and AESL_clock = '1';
     wait until AESL_clock'event and AESL_clock = '1';
     wait until AESL_clock'event and AESL_clock = '1';
-    file_open(fstatus, fp, AUTOTB_TVOUT_output_r_out_wrapc, APPEND_MODE);
+    file_open(fstatus, fp, AUTOTB_TVOUT_output_s_out_wrapc, APPEND_MODE);
     if(fstatus /= OPEN_OK) then
-        assert false report "Open file " & AUTOTB_TVOUT_output_r_out_wrapc & " failed!!!" severity note;
+        assert false report "Open file " & AUTOTB_TVOUT_output_s_out_wrapc & " failed!!!" severity note;
         assert false report "ERROR: Simulation using HLS TB failed." severity failure;
     end if;
     write(token_line, string'("[[[/runtime]]]"));

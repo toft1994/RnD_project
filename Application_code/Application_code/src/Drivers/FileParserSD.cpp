@@ -72,6 +72,53 @@ int FileParserSD::closefile() {
 	return XST_SUCCESS;
 }
 
+
+std::vector<nnLayer> FileParserSD::parseStringTest(std::string & fileName) {
+
+    std::vector<nnLayer> nnLayerVector;
+    unsigned int index = 0;
+    FILINFO info;
+    FRESULT result = f_stat(fileName.c_str(), &info);
+
+    /*if (result) {
+    	return nnLayerVector;
+    }*/
+
+    while(index < info.fsize) {
+        std::string line = getFileLine(fileName, index, info.fsize);
+        nnLayerVector.push_back(std::move(parseline(line)));
+        index += line.length() + 1;
+    }
+
+    return nnLayerVector;
+}
+
+
+std::string FileParserSD::getFileLine(std::string fileName, unsigned int oldStop, unsigned int totalSize) {
+	char tmpArray[256];
+	std::string ret = "";
+	FRESULT result;
+
+	result = f_lseek(&mFIL, oldStop);
+	if (result) {
+		return "FF";
+	}
+
+	NumberOfBytesRead = 0;
+
+	do {
+		result = f_read(&mFIL, (void*)tmpArray, sizeof(tmpArray), &NumberOfBytesRead);
+		if (result) {
+			return "FF";
+		}
+		ret.append(tmpArray, NumberOfBytesRead);
+	}
+	while(ret.find("\n") == std::string::npos || totalSize < ret.size() + oldStop);
+
+	ret = ret.substr(0, ret.find("\n"));
+	return ret;
+}
+
 std::string FileParserSD::readfile(bool fromStart) {
 
 	//TODO FIX THE STATIC BUFFER SIZE

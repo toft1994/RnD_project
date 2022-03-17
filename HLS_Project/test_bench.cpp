@@ -16,6 +16,8 @@ int main(){
 		bias[i] = 1;
 	}
 
+	bias[SIZE-1] = -100;
+
 	for(int i = 0; i < WEIGHT_MAX_SIZE; i++) {
 		weights[i] = dataType(incrementer);
 		if(counter >= inputSize){
@@ -32,6 +34,11 @@ int main(){
 		if (output[i] != dataType(i+i+i+1)) {
 			return -i;
 		}
+	}
+
+	if(output[SIZE-1] == 0)
+	{
+		return -1;
 	}
 
 	return 0;

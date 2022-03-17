@@ -80,11 +80,11 @@ proc check_tvin_file {} {
 		puts stdout "[debug_prompt arg check_sim.tcl] start...";
 	}
     set rtlfilelist {
-         "c.nnlayer.autotvin_input_r.dat"
-         "c.nnlayer.autotvin_weights.dat"
-         "c.nnlayer.autotvin_bias.dat"
+         "c.nnlayer.autotvin_input_s.dat"
+         "c.nnlayer.autotvin_output_s.dat"
+         "c.nnlayer.autotvin_weights_s.dat"
+         "c.nnlayer.autotvin_bias_s.dat"
          "c.nnlayer.autotvin_numOfInNeurons.dat"
-         "c.nnlayer.autotvin_numOfOutNeurons.dat"
          "c.nnlayer.autotvin_activation.dat"
     }
     foreach rtlfile $rtlfilelist {
@@ -105,7 +105,7 @@ proc check_tvout_file {} {
 		puts stdout "[debug_prompt arg check_sim.tcl] start...";
 	}
     set rtlfilelist {
-         "rtl.nnlayer.autotvout_output_r.dat"
+         "rtl.nnlayer.autotvout_output_s.dat"
     }
     foreach rtlfile $rtlfilelist {
         if {[file isfile $rtlfile]} {

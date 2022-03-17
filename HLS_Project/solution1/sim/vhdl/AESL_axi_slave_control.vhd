@@ -13,28 +13,12 @@ use std.textio.all;
 
 entity AESL_axi_slave_control is
   generic (
-      constant    TV_IN_input_r : STRING (1 to 46) := "../tv/cdatafile/c.nnlayer.autotvin_input_r.dat";
-      constant    TV_IN_output_r : STRING (1 to 47) := "../tv/cdatafile/c.nnlayer.autotvin_output_r.dat";
-      constant    TV_OUT_output_r : STRING (1 to 52) := "../tv/rtldatafile/rtl.nnlayer.autotvout_output_r.dat";
-      constant    TV_IN_weights : STRING (1 to 46) := "../tv/cdatafile/c.nnlayer.autotvin_weights.dat";
-      constant    TV_IN_bias : STRING (1 to 43) := "../tv/cdatafile/c.nnlayer.autotvin_bias.dat";
       constant    TV_IN_numOfInNeurons : STRING (1 to 53) := "../tv/cdatafile/c.nnlayer.autotvin_numOfInNeurons.dat";
-      constant    TV_IN_numOfOutNeurons : STRING (1 to 54) := "../tv/cdatafile/c.nnlayer.autotvin_numOfOutNeurons.dat";
       constant    TV_IN_activation : STRING (1 to 49) := "../tv/cdatafile/c.nnlayer.autotvin_activation.dat";
-constant ADDR_WIDTH : INTEGER := 18;
+constant ADDR_WIDTH : INTEGER := 6;
 constant DATA_WIDTH : INTEGER := 32;
-constant input_r_DEPTH : INTEGER := 256;
-constant input_r_c_bitwidth : INTEGER := 16;
-constant output_r_DEPTH : INTEGER := 256;
-constant output_r_c_bitwidth : INTEGER := 16;
-constant weights_DEPTH : INTEGER := 65536;
-constant weights_c_bitwidth : INTEGER := 16;
-constant bias_DEPTH : INTEGER := 256;
-constant bias_c_bitwidth : INTEGER := 16;
 constant numOfInNeurons_DEPTH : INTEGER := 1;
 constant numOfInNeurons_c_bitwidth : INTEGER := 16;
-constant numOfOutNeurons_DEPTH : INTEGER := 1;
-constant numOfOutNeurons_c_bitwidth : INTEGER := 16;
 constant activation_DEPTH : INTEGER := 1;
 constant activation_c_bitwidth : INTEGER := 8;
 constant START_ADDR : INTEGER := 0;
@@ -43,11 +27,6 @@ constant nnlayer_auto_start_addr : INTEGER := 0;
 constant numOfInNeurons_data_in_addr : INTEGER := 16;
 constant numOfOutNeurons_data_in_addr : INTEGER := 24;
 constant activation_data_in_addr : INTEGER := 32;
-constant input_r_data_in_addr : INTEGER := 512;
-constant output_r_data_in_addr : INTEGER := 1024;
-constant bias_data_in_addr : INTEGER := 1536;
-constant weights_data_in_addr : INTEGER := 131072;
-constant output_r_data_out_addr : INTEGER := 1024;
 constant ap_local_deadlock_data_out_addr : INTEGER := 0;
 constant STATUS_ADDR : INTEGER := 0;
       constant    INTERFACE_TYPE : STRING (1 to 7) := "control"
@@ -75,7 +54,6 @@ TRAN_s_axi_control_BREADY  : OUT STD_LOGIC;
 TRAN_s_axi_control_BRESP  : IN STD_LOGIC_VECTOR(2 - 1 downto 0);
 TRAN_control_interrupt   : IN STD_LOGIC;
 TRAN_control_write_data_finish   : OUT STD_LOGIC;
-TRAN_control_read_data_finish   : OUT STD_LOGIC;
 TRAN_control_start_in   : IN STD_LOGIC;
 TRAN_control_done_out   : OUT STD_LOGIC;
 TRAN_control_ready_out   : OUT STD_LOGIC;
@@ -90,154 +68,63 @@ end AESL_axi_slave_control;
 
 architecture behav of AESL_axi_slave_control is
 ------------------------Local signal-------------------
-shared variable input_r_OPERATE_DEPTH : INTEGER;
-shared variable output_r_OPERATE_DEPTH : INTEGER;
-shared variable weights_OPERATE_DEPTH : INTEGER;
-shared variable bias_OPERATE_DEPTH : INTEGER;
 shared variable numOfInNeurons_OPERATE_DEPTH : INTEGER;
-shared variable numOfOutNeurons_OPERATE_DEPTH : INTEGER;
 shared variable activation_OPERATE_DEPTH : INTEGER;
 signal AWADDR_reg : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal process_0_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal process_1_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal process_2_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal process_3_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_4_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_5_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_6_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_7_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_8_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_9_AWADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal AWVALID_reg : STD_LOGIC := '0';
 signal process_0_AWVALID_var : STD_LOGIC := '0';
 signal process_1_AWVALID_var : STD_LOGIC := '0';
 signal process_2_AWVALID_var : STD_LOGIC := '0';
 signal process_3_AWVALID_var : STD_LOGIC := '0';
-signal process_4_AWVALID_var : STD_LOGIC := '0';
-signal process_5_AWVALID_var : STD_LOGIC := '0';
-signal process_6_AWVALID_var : STD_LOGIC := '0';
-signal process_7_AWVALID_var : STD_LOGIC := '0';
-signal process_8_AWVALID_var : STD_LOGIC := '0';
-signal process_9_AWVALID_var : STD_LOGIC := '0';
 signal WVALID_reg : STD_LOGIC := '0';
 signal process_0_WVALID_var : STD_LOGIC := '0';
 signal process_1_WVALID_var : STD_LOGIC := '0';
 signal process_2_WVALID_var : STD_LOGIC := '0';
 signal process_3_WVALID_var : STD_LOGIC := '0';
-signal process_4_WVALID_var : STD_LOGIC := '0';
-signal process_5_WVALID_var : STD_LOGIC := '0';
-signal process_6_WVALID_var : STD_LOGIC := '0';
-signal process_7_WVALID_var : STD_LOGIC := '0';
-signal process_8_WVALID_var : STD_LOGIC := '0';
-signal process_9_WVALID_var : STD_LOGIC := '0';
 signal WDATA_reg : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal process_0_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal process_1_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal process_2_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal process_3_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_4_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_5_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_6_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_7_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_8_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_9_WDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal WSTRB_reg : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
 signal process_0_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
 signal process_1_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
 signal process_2_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
 signal process_3_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
-signal process_4_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
-signal process_5_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
-signal process_6_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
-signal process_7_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
-signal process_8_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
-signal process_9_WSTRB_var : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0) := (others => '0');
 signal ARADDR_reg : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal process_0_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal process_1_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal process_2_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal process_3_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_4_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_5_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_6_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_7_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_8_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
-signal process_9_ARADDR_var : STD_LOGIC_VECTOR(ADDR_WIDTH - 1 downto 0) := (others => '0');
 signal ARVALID_reg : STD_LOGIC := '0';
 signal process_0_ARVALID_var : STD_LOGIC := '0';
 signal process_1_ARVALID_var : STD_LOGIC := '0';
 signal process_2_ARVALID_var : STD_LOGIC := '0';
 signal process_3_ARVALID_var : STD_LOGIC := '0';
-signal process_4_ARVALID_var : STD_LOGIC := '0';
-signal process_5_ARVALID_var : STD_LOGIC := '0';
-signal process_6_ARVALID_var : STD_LOGIC := '0';
-signal process_7_ARVALID_var : STD_LOGIC := '0';
-signal process_8_ARVALID_var : STD_LOGIC := '0';
-signal process_9_ARVALID_var : STD_LOGIC := '0';
 signal RREADY_reg : STD_LOGIC := '0';
 signal process_0_RREADY_var : STD_LOGIC := '0';
 signal process_1_RREADY_var : STD_LOGIC := '0';
 signal process_2_RREADY_var : STD_LOGIC := '0';
 signal process_3_RREADY_var : STD_LOGIC := '0';
-signal process_4_RREADY_var : STD_LOGIC := '0';
-signal process_5_RREADY_var : STD_LOGIC := '0';
-signal process_6_RREADY_var : STD_LOGIC := '0';
-signal process_7_RREADY_var : STD_LOGIC := '0';
-signal process_8_RREADY_var : STD_LOGIC := '0';
-signal process_9_RREADY_var : STD_LOGIC := '0';
 signal RDATA_reg : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal process_0_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal process_1_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal process_2_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal process_3_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_4_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_5_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_6_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_7_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_8_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-signal process_9_RDATA_var : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
 signal BREADY_reg : STD_LOGIC := '0';
 signal process_0_BREADY_var : STD_LOGIC := '0';
 signal process_1_BREADY_var : STD_LOGIC := '0';
 signal process_2_BREADY_var : STD_LOGIC := '0';
 signal process_3_BREADY_var : STD_LOGIC := '0';
-signal process_4_BREADY_var : STD_LOGIC := '0';
-signal process_5_BREADY_var : STD_LOGIC := '0';
-signal process_6_BREADY_var : STD_LOGIC := '0';
-signal process_7_BREADY_var : STD_LOGIC := '0';
-signal process_8_BREADY_var : STD_LOGIC := '0';
-signal process_9_BREADY_var : STD_LOGIC := '0';
-  type    mem_input_r_arr2D is array(0 to input_r_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-shared variable mem_input_r : mem_input_r_arr2D := (others => (others => '0'));
-  type    image_mem_input_r_arr2D is array(0 to (input_r_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * input_r_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-  shared variable image_mem_input_r : image_mem_input_r_arr2D := (others => (others => '0'));
-signal input_r_write_data_finish : STD_LOGIC := '0';
-  type    mem_output_r_arr2D is array(0 to output_r_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-shared variable mem_output_r : mem_output_r_arr2D := (others => (others => '0'));
-  type    image_mem_output_r_arr2D is array(0 to (output_r_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * output_r_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-  shared variable image_mem_output_r : image_mem_output_r_arr2D := (others => (others => '0'));
-signal output_r_write_data_finish : STD_LOGIC := '0';
-signal output_r_read_data_finish : STD_LOGIC := '0';
-  type    mem_weights_arr2D is array(0 to weights_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-shared variable mem_weights : mem_weights_arr2D := (others => (others => '0'));
-  type    image_mem_weights_arr2D is array(0 to (weights_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * weights_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-  shared variable image_mem_weights : image_mem_weights_arr2D := (others => (others => '0'));
-signal weights_write_data_finish : STD_LOGIC := '0';
-  type    mem_bias_arr2D is array(0 to bias_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-shared variable mem_bias : mem_bias_arr2D := (others => (others => '0'));
-  type    image_mem_bias_arr2D is array(0 to (bias_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * bias_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-  shared variable image_mem_bias : image_mem_bias_arr2D := (others => (others => '0'));
-signal bias_write_data_finish : STD_LOGIC := '0';
   type    mem_numOfInNeurons_arr2D is array(0 to numOfInNeurons_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
 shared variable mem_numOfInNeurons : mem_numOfInNeurons_arr2D := (others => (others => '0'));
   type    image_mem_numOfInNeurons_arr2D is array(0 to (numOfInNeurons_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * numOfInNeurons_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
   shared variable image_mem_numOfInNeurons : image_mem_numOfInNeurons_arr2D := (others => (others => '0'));
 signal numOfInNeurons_write_data_finish : STD_LOGIC := '0';
-  type    mem_numOfOutNeurons_arr2D is array(0 to numOfOutNeurons_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-shared variable mem_numOfOutNeurons : mem_numOfOutNeurons_arr2D := (others => (others => '0'));
-  type    image_mem_numOfOutNeurons_arr2D is array(0 to (numOfOutNeurons_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * numOfOutNeurons_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-  shared variable image_mem_numOfOutNeurons : image_mem_numOfOutNeurons_arr2D := (others => (others => '0'));
-signal numOfOutNeurons_write_data_finish : STD_LOGIC := '0';
   type    mem_activation_arr2D is array(0 to activation_DEPTH - 1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
 shared variable mem_activation : mem_activation_arr2D := (others => (others => '0'));
   type    image_mem_activation_arr2D is array(0 to (activation_c_bitwidth+DATA_WIDTH-1)/DATA_WIDTH * activation_DEPTH -1) of STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
@@ -254,44 +141,14 @@ signal process_0_finish : STD_LOGIC := '0';
 signal process_1_finish : STD_LOGIC := '0';
 signal process_2_finish : STD_LOGIC := '0';
 signal process_3_finish : STD_LOGIC := '0';
-signal process_4_finish : STD_LOGIC := '0';
-signal process_5_finish : STD_LOGIC := '0';
-signal process_6_finish : STD_LOGIC := '0';
-signal process_7_finish : STD_LOGIC := '0';
-signal process_8_finish : STD_LOGIC := '0';
-signal process_9_finish : STD_LOGIC := '0';
---write input_r reg
-shared variable write_input_r_count : INTEGER;
-signal write_input_r_run_flag : STD_LOGIC := '0';
-signal write_one_input_r_data_done : STD_LOGIC := '0';
---write output_r reg
-shared variable write_output_r_count : INTEGER;
-signal write_output_r_run_flag : STD_LOGIC := '0';
-signal write_one_output_r_data_done : STD_LOGIC := '0';
---write weights reg
-shared variable write_weights_count : INTEGER;
-signal write_weights_run_flag : STD_LOGIC := '0';
-signal write_one_weights_data_done : STD_LOGIC := '0';
---write bias reg
-shared variable write_bias_count : INTEGER;
-signal write_bias_run_flag : STD_LOGIC := '0';
-signal write_one_bias_data_done : STD_LOGIC := '0';
 --write numOfInNeurons reg
 shared variable write_numOfInNeurons_count : INTEGER;
 signal write_numOfInNeurons_run_flag : STD_LOGIC := '0';
 signal write_one_numOfInNeurons_data_done : STD_LOGIC := '0';
---write numOfOutNeurons reg
-shared variable write_numOfOutNeurons_count : INTEGER;
-signal write_numOfOutNeurons_run_flag : STD_LOGIC := '0';
-signal write_one_numOfOutNeurons_data_done : STD_LOGIC := '0';
 --write activation reg
 shared variable write_activation_count : INTEGER;
 signal write_activation_run_flag : STD_LOGIC := '0';
 signal write_one_activation_data_done : STD_LOGIC := '0';
---read output_r reg
-shared variable read_output_r_count : INTEGER;
-signal read_output_r_run_flag : STD_LOGIC := '0';
-signal read_one_output_r_data_done : STD_LOGIC := '0';
 shared variable write_start_count : INTEGER;
 signal write_start_run_flag : STD_LOGIC := '0';
 
@@ -615,8 +472,7 @@ TRAN_control_done_out <= AESL_done_index_reg;
 TRAN_control_ready_out <= AESL_ready_out_index_reg;
 TRAN_control_write_start_finish <= AESL_write_start_finish;
 TRAN_control_idle_out <= AESL_idle_index_reg;
-TRAN_control_read_data_finish <= '1' and output_r_read_data_finish;
-TRAN_control_write_data_finish <= '1' and input_r_write_data_finish and output_r_write_data_finish and weights_write_data_finish and bias_write_data_finish and numOfInNeurons_write_data_finish and numOfOutNeurons_write_data_finish and activation_write_data_finish;
+TRAN_control_write_data_finish <= '1' and numOfInNeurons_write_data_finish and activation_write_data_finish;
 AESL_ready_reg_proc : process(TRAN_control_ready_in, ready_initial) 
 begin
     AESL_ready_reg <= TRAN_control_ready_in or ready_initial;
@@ -632,7 +488,7 @@ begin
     wait;
 end process;
 
-ongoing_process_number_gen : process(reset , process_0_finish , process_1_finish , process_2_finish , process_3_finish , process_4_finish , process_5_finish , process_6_finish , process_7_finish , process_8_finish , process_9_finish )
+ongoing_process_number_gen : process(reset , process_0_finish , process_1_finish , process_2_finish , process_3_finish )
 begin
     if (reset = '0') then
         ongoing_process_number <= 0;
@@ -643,18 +499,6 @@ begin
     elsif (ongoing_process_number = 2 and process_2_finish = '1') then
             ongoing_process_number <= ongoing_process_number + 1;
     elsif (ongoing_process_number = 3 and process_3_finish = '1') then
-            ongoing_process_number <= ongoing_process_number + 1;
-    elsif (ongoing_process_number = 4 and process_4_finish = '1') then
-            ongoing_process_number <= ongoing_process_number + 1;
-    elsif (ongoing_process_number = 5 and process_5_finish = '1') then
-            ongoing_process_number <= ongoing_process_number + 1;
-    elsif (ongoing_process_number = 6 and process_6_finish = '1') then
-            ongoing_process_number <= ongoing_process_number + 1;
-    elsif (ongoing_process_number = 7 and process_7_finish = '1') then
-            ongoing_process_number <= ongoing_process_number + 1;
-    elsif (ongoing_process_number = 8 and process_8_finish = '1') then
-            ongoing_process_number <= ongoing_process_number + 1;
-    elsif (ongoing_process_number = 9 and process_9_finish = '1') then
             ongoing_process_number <= 0;
     end if;
 end process;
@@ -704,66 +548,6 @@ begin
             ARVALID_reg <= process_3_ARVALID_var;
             RREADY_reg <= process_3_RREADY_var;
             BREADY_reg <= process_3_BREADY_var;
-        elsif (ongoing_process_number = 4 ) then
-            AWADDR_reg <= process_4_AWADDR_var;
-            AWVALID_reg <= process_4_AWVALID_var;
-            WVALID_reg <= process_4_WVALID_var;
-            WDATA_reg <= process_4_WDATA_var;
-            WSTRB_reg <= process_4_WSTRB_var;
-            ARADDR_reg <= process_4_ARADDR_var;
-            ARVALID_reg <= process_4_ARVALID_var;
-            RREADY_reg <= process_4_RREADY_var;
-            BREADY_reg <= process_4_BREADY_var;
-        elsif (ongoing_process_number = 5 ) then
-            AWADDR_reg <= process_5_AWADDR_var;
-            AWVALID_reg <= process_5_AWVALID_var;
-            WVALID_reg <= process_5_WVALID_var;
-            WDATA_reg <= process_5_WDATA_var;
-            WSTRB_reg <= process_5_WSTRB_var;
-            ARADDR_reg <= process_5_ARADDR_var;
-            ARVALID_reg <= process_5_ARVALID_var;
-            RREADY_reg <= process_5_RREADY_var;
-            BREADY_reg <= process_5_BREADY_var;
-        elsif (ongoing_process_number = 6 ) then
-            AWADDR_reg <= process_6_AWADDR_var;
-            AWVALID_reg <= process_6_AWVALID_var;
-            WVALID_reg <= process_6_WVALID_var;
-            WDATA_reg <= process_6_WDATA_var;
-            WSTRB_reg <= process_6_WSTRB_var;
-            ARADDR_reg <= process_6_ARADDR_var;
-            ARVALID_reg <= process_6_ARVALID_var;
-            RREADY_reg <= process_6_RREADY_var;
-            BREADY_reg <= process_6_BREADY_var;
-        elsif (ongoing_process_number = 7 ) then
-            AWADDR_reg <= process_7_AWADDR_var;
-            AWVALID_reg <= process_7_AWVALID_var;
-            WVALID_reg <= process_7_WVALID_var;
-            WDATA_reg <= process_7_WDATA_var;
-            WSTRB_reg <= process_7_WSTRB_var;
-            ARADDR_reg <= process_7_ARADDR_var;
-            ARVALID_reg <= process_7_ARVALID_var;
-            RREADY_reg <= process_7_RREADY_var;
-            BREADY_reg <= process_7_BREADY_var;
-        elsif (ongoing_process_number = 8 ) then
-            AWADDR_reg <= process_8_AWADDR_var;
-            AWVALID_reg <= process_8_AWVALID_var;
-            WVALID_reg <= process_8_WVALID_var;
-            WDATA_reg <= process_8_WDATA_var;
-            WSTRB_reg <= process_8_WSTRB_var;
-            ARADDR_reg <= process_8_ARADDR_var;
-            ARVALID_reg <= process_8_ARVALID_var;
-            RREADY_reg <= process_8_RREADY_var;
-            BREADY_reg <= process_8_BREADY_var;
-        elsif (ongoing_process_number = 9 ) then
-            AWADDR_reg <= process_9_AWADDR_var;
-            AWVALID_reg <= process_9_AWVALID_var;
-            WVALID_reg <= process_9_WVALID_var;
-            WDATA_reg <= process_9_WDATA_var;
-            WSTRB_reg <= process_9_WSTRB_var;
-            ARADDR_reg <= process_9_ARADDR_var;
-            ARVALID_reg <= process_9_ARVALID_var;
-            RREADY_reg <= process_9_RREADY_var;
-            BREADY_reg <= process_9_BREADY_var;
         end if;
         wait until clk'event and clk = '1';
     end loop;
@@ -819,467 +603,6 @@ begin
     wait;
 end process;
 
-gen_write_input_r_run_flag : process (reset , clk)
-begin
-    if (reset = '0') then
-        input_r_write_data_finish <= '0';
-        write_input_r_run_flag <= '0'; 
-        write_input_r_count := 0;
-        count_operate_depth_by_bitwidth_and_depth (input_r_c_bitwidth, input_r_DEPTH, input_r_OPERATE_DEPTH);
-    elsif (clk'event and clk = '1') then
-        if (TRAN_control_start_in = '1') then
-            input_r_write_data_finish <= '0';
-        end if;
-        if (AESL_ready_reg = '1') then
-            write_input_r_run_flag <= '1'; 
-            write_input_r_count := 0;
-        end if;
-        if (write_one_input_r_data_done = '1') then
-            write_input_r_count := write_input_r_count + 1;
-            if (write_input_r_count = input_r_OPERATE_DEPTH) then
-                write_input_r_run_flag <= '0'; 
-                input_r_write_data_finish <= '1';
-            end if;
-        end if;
-    end if;
-end process;
-
-write_input_r_proc : process
-    variable write_input_r_resp : INTEGER;
-    variable process_num  : INTEGER;
-    variable get_ack : INTEGER;
-    variable four_byte_num : INTEGER;
-    variable c_bitwidth : INTEGER;
-    variable i : INTEGER;
-    variable j : INTEGER;
-    variable process_1_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-    variable input_r_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
-    variable aw_flag : STD_LOGIC;
-    variable w_flag : STD_LOGIC;
-    variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 );
-begin
-    wait until reset = '1';
-        wait until clk'event and clk = '1';
-    c_bitwidth := input_r_c_bitwidth;
-    process_num := 1;
-    count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
-    while (true) loop
-        process_1_finish <= '0';
-
-        if (ongoing_process_number = process_num and process_busy = '0' ) then
-            get_ack := 1;
-            if (write_input_r_run_flag = '1' and get_ack = 1) then
-                process_busy := '1';
-                -- write input_r data 
-                for i in 0 to four_byte_num - 1 loop
-                    if (input_r_c_bitwidth < 32) then
-                        input_r_data_tmp_reg := mem_input_r(write_input_r_count);
-                    else 
-                        for j in 0 to 31 loop
-                            if (i*32 + j < input_r_c_bitwidth) then
-                                input_r_data_tmp_reg(j) := mem_input_r(write_input_r_count)(i*32 + j);
-                            else 
-                                input_r_data_tmp_reg(j) := '0';
-                            end if;
-                        end loop;
-                    end if;
-                    if(image_mem_input_r(write_input_r_count * four_byte_num  + i)/=input_r_data_tmp_reg) then
---=======================one single write operate======================
-                write_input_r_resp := 0;
-                aw_flag := '0';
-                w_flag := '0';
-                process_1_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(input_r_data_in_addr + write_input_r_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
-                process_1_AWVALID_var <= '1';
-                process_1_WDATA_var   <= input_r_data_tmp_reg;
-                process_1_WVALID_var  <= '1';
-                for i in 0 to DATA_WIDTH/8 - 1 loop
-                    wstrb_tmp(i) := '1';
-                end loop;
-                process_1_WSTRB_var <= wstrb_tmp;
-                while (aw_flag = '0' or w_flag = '0') loop
-                    wait until clk'event and clk = '1';
-                    if (aw_flag /= '1') then
-                        aw_flag := TRAN_s_axi_control_AWREADY and AWVALID_reg;
-                    end if;
-                    if (w_flag /= '1') then
-                        w_flag := TRAN_s_axi_control_WREADY and WVALID_reg;
-                    end if;
-                    process_1_AWVALID_var <= not aw_flag;
-                    process_1_WVALID_var <= not w_flag;
-                end loop;
-
-                process_1_BREADY_var <= '1';
-                while (TRAN_s_axi_control_BVALID /= '1') loop
-                    --wait for response 
-                    wait until clk'event and clk = '1';
-                end loop;
-                wait until clk'event and clk = '1';
-                process_1_BREADY_var <= '0';
-                if (TRAN_s_axi_control_BRESP = (2 => '0')) then
-                    write_input_r_resp := 1;
-                    --input success. in fact BRESP is always 2'b00
-                end if;
---=======================one single write operate======================
-
-                    image_mem_input_r(write_input_r_count * four_byte_num  + i) := input_r_data_tmp_reg;
-                    end if;
-                end loop;
-                process_busy := '0';
-                write_one_input_r_data_done <= '1';
-                wait until clk'event and clk = '1';
-                write_one_input_r_data_done <= '0';
-            end if;
-            process_1_finish <= '1';
-        end if;
-        wait until clk'event and clk = '1';
-    end loop;
-    wait;
-end process;
-gen_write_output_r_run_flag : process (reset , clk)
-begin
-    if (reset = '0') then
-        output_r_write_data_finish <= '0';
-        write_output_r_run_flag <= '0'; 
-        write_output_r_count := 0;
-        count_operate_depth_by_bitwidth_and_depth (output_r_c_bitwidth, output_r_DEPTH, output_r_OPERATE_DEPTH);
-    elsif (clk'event and clk = '1') then
-        if (TRAN_control_start_in = '1') then
-            output_r_write_data_finish <= '0';
-        end if;
-        if (AESL_ready_reg = '1') then
-            write_output_r_run_flag <= '1'; 
-            write_output_r_count := 0;
-        end if;
-        if (write_one_output_r_data_done = '1') then
-            write_output_r_count := write_output_r_count + 1;
-            if (write_output_r_count = output_r_OPERATE_DEPTH) then
-                write_output_r_run_flag <= '0'; 
-                output_r_write_data_finish <= '1';
-            end if;
-        end if;
-    end if;
-end process;
-
-write_output_r_proc : process
-    variable write_output_r_resp : INTEGER;
-    variable process_num  : INTEGER;
-    variable get_ack : INTEGER;
-    variable four_byte_num : INTEGER;
-    variable c_bitwidth : INTEGER;
-    variable i : INTEGER;
-    variable j : INTEGER;
-    variable process_2_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-    variable output_r_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
-    variable aw_flag : STD_LOGIC;
-    variable w_flag : STD_LOGIC;
-    variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 );
-begin
-    wait until reset = '1';
-        wait until clk'event and clk = '1';
-    c_bitwidth := output_r_c_bitwidth;
-    process_num := 2;
-    count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
-    while (true) loop
-        process_2_finish <= '0';
-
-        if (ongoing_process_number = process_num and process_busy = '0' ) then
-            get_ack := 1;
-            if (write_output_r_run_flag = '1' and get_ack = 1) then
-                process_busy := '1';
-                -- write output_r data 
-                for i in 0 to four_byte_num - 1 loop
-                    if (output_r_c_bitwidth < 32) then
-                        output_r_data_tmp_reg := mem_output_r(write_output_r_count);
-                    else 
-                        for j in 0 to 31 loop
-                            if (i*32 + j < output_r_c_bitwidth) then
-                                output_r_data_tmp_reg(j) := mem_output_r(write_output_r_count)(i*32 + j);
-                            else 
-                                output_r_data_tmp_reg(j) := '0';
-                            end if;
-                        end loop;
-                    end if;
---=======================one single write operate======================
-                write_output_r_resp := 0;
-                aw_flag := '0';
-                w_flag := '0';
-                process_2_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(output_r_data_in_addr + write_output_r_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
-                process_2_AWVALID_var <= '1';
-                process_2_WDATA_var   <= output_r_data_tmp_reg;
-                process_2_WVALID_var  <= '1';
-                for i in 0 to DATA_WIDTH/8 - 1 loop
-                    wstrb_tmp(i) := '1';
-                end loop;
-                process_2_WSTRB_var <= wstrb_tmp;
-                while (aw_flag = '0' or w_flag = '0') loop
-                    wait until clk'event and clk = '1';
-                    if (aw_flag /= '1') then
-                        aw_flag := TRAN_s_axi_control_AWREADY and AWVALID_reg;
-                    end if;
-                    if (w_flag /= '1') then
-                        w_flag := TRAN_s_axi_control_WREADY and WVALID_reg;
-                    end if;
-                    process_2_AWVALID_var <= not aw_flag;
-                    process_2_WVALID_var <= not w_flag;
-                end loop;
-
-                process_2_BREADY_var <= '1';
-                while (TRAN_s_axi_control_BVALID /= '1') loop
-                    --wait for response 
-                    wait until clk'event and clk = '1';
-                end loop;
-                wait until clk'event and clk = '1';
-                process_2_BREADY_var <= '0';
-                if (TRAN_s_axi_control_BRESP = (2 => '0')) then
-                    write_output_r_resp := 1;
-                    --input success. in fact BRESP is always 2'b00
-                end if;
---=======================one single write operate======================
-
-                end loop;
-                process_busy := '0';
-                write_one_output_r_data_done <= '1';
-                wait until clk'event and clk = '1';
-                write_one_output_r_data_done <= '0';
-            end if;
-            process_2_finish <= '1';
-        end if;
-        wait until clk'event and clk = '1';
-    end loop;
-    wait;
-end process;
-gen_write_weights_run_flag : process (reset , clk)
-begin
-    if (reset = '0') then
-        weights_write_data_finish <= '0';
-        write_weights_run_flag <= '0'; 
-        write_weights_count := 0;
-        count_operate_depth_by_bitwidth_and_depth (weights_c_bitwidth, weights_DEPTH, weights_OPERATE_DEPTH);
-    elsif (clk'event and clk = '1') then
-        if (TRAN_control_start_in = '1') then
-            weights_write_data_finish <= '0';
-        end if;
-        if (AESL_ready_reg = '1') then
-            write_weights_run_flag <= '1'; 
-            write_weights_count := 0;
-        end if;
-        if (write_one_weights_data_done = '1') then
-            write_weights_count := write_weights_count + 1;
-            if (write_weights_count = weights_OPERATE_DEPTH) then
-                write_weights_run_flag <= '0'; 
-                weights_write_data_finish <= '1';
-            end if;
-        end if;
-    end if;
-end process;
-
-write_weights_proc : process
-    variable write_weights_resp : INTEGER;
-    variable process_num  : INTEGER;
-    variable get_ack : INTEGER;
-    variable four_byte_num : INTEGER;
-    variable c_bitwidth : INTEGER;
-    variable i : INTEGER;
-    variable j : INTEGER;
-    variable process_3_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-    variable weights_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
-    variable aw_flag : STD_LOGIC;
-    variable w_flag : STD_LOGIC;
-    variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 );
-begin
-    wait until reset = '1';
-        wait until clk'event and clk = '1';
-    c_bitwidth := weights_c_bitwidth;
-    process_num := 3;
-    count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
-    while (true) loop
-        process_3_finish <= '0';
-
-        if (ongoing_process_number = process_num and process_busy = '0' ) then
-            get_ack := 1;
-            if (write_weights_run_flag = '1' and get_ack = 1) then
-                process_busy := '1';
-                -- write weights data 
-                for i in 0 to four_byte_num - 1 loop
-                    if (weights_c_bitwidth < 32) then
-                        weights_data_tmp_reg := mem_weights(write_weights_count);
-                    else 
-                        for j in 0 to 31 loop
-                            if (i*32 + j < weights_c_bitwidth) then
-                                weights_data_tmp_reg(j) := mem_weights(write_weights_count)(i*32 + j);
-                            else 
-                                weights_data_tmp_reg(j) := '0';
-                            end if;
-                        end loop;
-                    end if;
-                    if(image_mem_weights(write_weights_count * four_byte_num  + i)/=weights_data_tmp_reg) then
---=======================one single write operate======================
-                write_weights_resp := 0;
-                aw_flag := '0';
-                w_flag := '0';
-                process_3_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(weights_data_in_addr + write_weights_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
-                process_3_AWVALID_var <= '1';
-                process_3_WDATA_var   <= weights_data_tmp_reg;
-                process_3_WVALID_var  <= '1';
-                for i in 0 to DATA_WIDTH/8 - 1 loop
-                    wstrb_tmp(i) := '1';
-                end loop;
-                process_3_WSTRB_var <= wstrb_tmp;
-                while (aw_flag = '0' or w_flag = '0') loop
-                    wait until clk'event and clk = '1';
-                    if (aw_flag /= '1') then
-                        aw_flag := TRAN_s_axi_control_AWREADY and AWVALID_reg;
-                    end if;
-                    if (w_flag /= '1') then
-                        w_flag := TRAN_s_axi_control_WREADY and WVALID_reg;
-                    end if;
-                    process_3_AWVALID_var <= not aw_flag;
-                    process_3_WVALID_var <= not w_flag;
-                end loop;
-
-                process_3_BREADY_var <= '1';
-                while (TRAN_s_axi_control_BVALID /= '1') loop
-                    --wait for response 
-                    wait until clk'event and clk = '1';
-                end loop;
-                wait until clk'event and clk = '1';
-                process_3_BREADY_var <= '0';
-                if (TRAN_s_axi_control_BRESP = (2 => '0')) then
-                    write_weights_resp := 1;
-                    --input success. in fact BRESP is always 2'b00
-                end if;
---=======================one single write operate======================
-
-                    image_mem_weights(write_weights_count * four_byte_num  + i) := weights_data_tmp_reg;
-                    end if;
-                end loop;
-                process_busy := '0';
-                write_one_weights_data_done <= '1';
-                wait until clk'event and clk = '1';
-                write_one_weights_data_done <= '0';
-            end if;
-            process_3_finish <= '1';
-        end if;
-        wait until clk'event and clk = '1';
-    end loop;
-    wait;
-end process;
-gen_write_bias_run_flag : process (reset , clk)
-begin
-    if (reset = '0') then
-        bias_write_data_finish <= '0';
-        write_bias_run_flag <= '0'; 
-        write_bias_count := 0;
-        count_operate_depth_by_bitwidth_and_depth (bias_c_bitwidth, bias_DEPTH, bias_OPERATE_DEPTH);
-    elsif (clk'event and clk = '1') then
-        if (TRAN_control_start_in = '1') then
-            bias_write_data_finish <= '0';
-        end if;
-        if (AESL_ready_reg = '1') then
-            write_bias_run_flag <= '1'; 
-            write_bias_count := 0;
-        end if;
-        if (write_one_bias_data_done = '1') then
-            write_bias_count := write_bias_count + 1;
-            if (write_bias_count = bias_OPERATE_DEPTH) then
-                write_bias_run_flag <= '0'; 
-                bias_write_data_finish <= '1';
-            end if;
-        end if;
-    end if;
-end process;
-
-write_bias_proc : process
-    variable write_bias_resp : INTEGER;
-    variable process_num  : INTEGER;
-    variable get_ack : INTEGER;
-    variable four_byte_num : INTEGER;
-    variable c_bitwidth : INTEGER;
-    variable i : INTEGER;
-    variable j : INTEGER;
-    variable process_4_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-    variable bias_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
-    variable aw_flag : STD_LOGIC;
-    variable w_flag : STD_LOGIC;
-    variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 );
-begin
-    wait until reset = '1';
-        wait until clk'event and clk = '1';
-    c_bitwidth := bias_c_bitwidth;
-    process_num := 4;
-    count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
-    while (true) loop
-        process_4_finish <= '0';
-
-        if (ongoing_process_number = process_num and process_busy = '0' ) then
-            get_ack := 1;
-            if (write_bias_run_flag = '1' and get_ack = 1) then
-                process_busy := '1';
-                -- write bias data 
-                for i in 0 to four_byte_num - 1 loop
-                    if (bias_c_bitwidth < 32) then
-                        bias_data_tmp_reg := mem_bias(write_bias_count);
-                    else 
-                        for j in 0 to 31 loop
-                            if (i*32 + j < bias_c_bitwidth) then
-                                bias_data_tmp_reg(j) := mem_bias(write_bias_count)(i*32 + j);
-                            else 
-                                bias_data_tmp_reg(j) := '0';
-                            end if;
-                        end loop;
-                    end if;
-                    if(image_mem_bias(write_bias_count * four_byte_num  + i)/=bias_data_tmp_reg) then
---=======================one single write operate======================
-                write_bias_resp := 0;
-                aw_flag := '0';
-                w_flag := '0';
-                process_4_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(bias_data_in_addr + write_bias_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
-                process_4_AWVALID_var <= '1';
-                process_4_WDATA_var   <= bias_data_tmp_reg;
-                process_4_WVALID_var  <= '1';
-                for i in 0 to DATA_WIDTH/8 - 1 loop
-                    wstrb_tmp(i) := '1';
-                end loop;
-                process_4_WSTRB_var <= wstrb_tmp;
-                while (aw_flag = '0' or w_flag = '0') loop
-                    wait until clk'event and clk = '1';
-                    if (aw_flag /= '1') then
-                        aw_flag := TRAN_s_axi_control_AWREADY and AWVALID_reg;
-                    end if;
-                    if (w_flag /= '1') then
-                        w_flag := TRAN_s_axi_control_WREADY and WVALID_reg;
-                    end if;
-                    process_4_AWVALID_var <= not aw_flag;
-                    process_4_WVALID_var <= not w_flag;
-                end loop;
-
-                process_4_BREADY_var <= '1';
-                while (TRAN_s_axi_control_BVALID /= '1') loop
-                    --wait for response 
-                    wait until clk'event and clk = '1';
-                end loop;
-                wait until clk'event and clk = '1';
-                process_4_BREADY_var <= '0';
-                if (TRAN_s_axi_control_BRESP = (2 => '0')) then
-                    write_bias_resp := 1;
-                    --input success. in fact BRESP is always 2'b00
-                end if;
---=======================one single write operate======================
-
-                    image_mem_bias(write_bias_count * four_byte_num  + i) := bias_data_tmp_reg;
-                    end if;
-                end loop;
-                process_busy := '0';
-                write_one_bias_data_done <= '1';
-                wait until clk'event and clk = '1';
-                write_one_bias_data_done <= '0';
-            end if;
-            process_4_finish <= '1';
-        end if;
-        wait until clk'event and clk = '1';
-    end loop;
-    wait;
-end process;
 gen_write_numOfInNeurons_run_flag : process (reset , clk)
 begin
     if (reset = '0') then
@@ -1313,7 +636,7 @@ write_numOfInNeurons_proc : process
     variable c_bitwidth : INTEGER;
     variable i : INTEGER;
     variable j : INTEGER;
-    variable process_5_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
+    variable process_1_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
     variable numOfInNeurons_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
     variable aw_flag : STD_LOGIC;
     variable w_flag : STD_LOGIC;
@@ -1322,10 +645,10 @@ begin
     wait until reset = '1';
         wait until clk'event and clk = '1';
     c_bitwidth := numOfInNeurons_c_bitwidth;
-    process_num := 5;
+    process_num := 1;
     count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
     while (true) loop
-        process_5_finish <= '0';
+        process_1_finish <= '0';
 
         if (ongoing_process_number = process_num and process_busy = '0' ) then
             get_ack := 1;
@@ -1349,14 +672,14 @@ begin
                 write_numOfInNeurons_resp := 0;
                 aw_flag := '0';
                 w_flag := '0';
-                process_5_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(numOfInNeurons_data_in_addr + write_numOfInNeurons_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
-                process_5_AWVALID_var <= '1';
-                process_5_WDATA_var   <= numOfInNeurons_data_tmp_reg;
-                process_5_WVALID_var  <= '1';
+                process_1_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(numOfInNeurons_data_in_addr + write_numOfInNeurons_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
+                process_1_AWVALID_var <= '1';
+                process_1_WDATA_var   <= numOfInNeurons_data_tmp_reg;
+                process_1_WVALID_var  <= '1';
                 for i in 0 to DATA_WIDTH/8 - 1 loop
                     wstrb_tmp(i) := '1';
                 end loop;
-                process_5_WSTRB_var <= wstrb_tmp;
+                process_1_WSTRB_var <= wstrb_tmp;
                 while (aw_flag = '0' or w_flag = '0') loop
                     wait until clk'event and clk = '1';
                     if (aw_flag /= '1') then
@@ -1365,17 +688,17 @@ begin
                     if (w_flag /= '1') then
                         w_flag := TRAN_s_axi_control_WREADY and WVALID_reg;
                     end if;
-                    process_5_AWVALID_var <= not aw_flag;
-                    process_5_WVALID_var <= not w_flag;
+                    process_1_AWVALID_var <= not aw_flag;
+                    process_1_WVALID_var <= not w_flag;
                 end loop;
 
-                process_5_BREADY_var <= '1';
+                process_1_BREADY_var <= '1';
                 while (TRAN_s_axi_control_BVALID /= '1') loop
                     --wait for response 
                     wait until clk'event and clk = '1';
                 end loop;
                 wait until clk'event and clk = '1';
-                process_5_BREADY_var <= '0';
+                process_1_BREADY_var <= '0';
                 if (TRAN_s_axi_control_BRESP = (2 => '0')) then
                     write_numOfInNeurons_resp := 1;
                     --input success. in fact BRESP is always 2'b00
@@ -1390,123 +713,7 @@ begin
                 wait until clk'event and clk = '1';
                 write_one_numOfInNeurons_data_done <= '0';
             end if;
-            process_5_finish <= '1';
-        end if;
-        wait until clk'event and clk = '1';
-    end loop;
-    wait;
-end process;
-gen_write_numOfOutNeurons_run_flag : process (reset , clk)
-begin
-    if (reset = '0') then
-        numOfOutNeurons_write_data_finish <= '0';
-        write_numOfOutNeurons_run_flag <= '0'; 
-        write_numOfOutNeurons_count := 0;
-        count_operate_depth_by_bitwidth_and_depth (numOfOutNeurons_c_bitwidth, numOfOutNeurons_DEPTH, numOfOutNeurons_OPERATE_DEPTH);
-    elsif (clk'event and clk = '1') then
-        if (TRAN_control_start_in = '1') then
-            numOfOutNeurons_write_data_finish <= '0';
-        end if;
-        if (AESL_ready_reg = '1') then
-            write_numOfOutNeurons_run_flag <= '1'; 
-            write_numOfOutNeurons_count := 0;
-        end if;
-        if (write_one_numOfOutNeurons_data_done = '1') then
-            write_numOfOutNeurons_count := write_numOfOutNeurons_count + 1;
-            if (write_numOfOutNeurons_count = numOfOutNeurons_OPERATE_DEPTH) then
-                write_numOfOutNeurons_run_flag <= '0'; 
-                numOfOutNeurons_write_data_finish <= '1';
-            end if;
-        end if;
-    end if;
-end process;
-
-write_numOfOutNeurons_proc : process
-    variable write_numOfOutNeurons_resp : INTEGER;
-    variable process_num  : INTEGER;
-    variable get_ack : INTEGER;
-    variable four_byte_num : INTEGER;
-    variable c_bitwidth : INTEGER;
-    variable i : INTEGER;
-    variable j : INTEGER;
-    variable process_6_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
-    variable numOfOutNeurons_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
-    variable aw_flag : STD_LOGIC;
-    variable w_flag : STD_LOGIC;
-    variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 );
-begin
-    wait until reset = '1';
-        wait until clk'event and clk = '1';
-    c_bitwidth := numOfOutNeurons_c_bitwidth;
-    process_num := 6;
-    count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
-    while (true) loop
-        process_6_finish <= '0';
-
-        if (ongoing_process_number = process_num and process_busy = '0' ) then
-            get_ack := 1;
-            if (write_numOfOutNeurons_run_flag = '1' and get_ack = 1) then
-                process_busy := '1';
-                -- write numOfOutNeurons data 
-                for i in 0 to four_byte_num - 1 loop
-                    if (numOfOutNeurons_c_bitwidth < 32) then
-                        numOfOutNeurons_data_tmp_reg := mem_numOfOutNeurons(write_numOfOutNeurons_count);
-                    else 
-                        for j in 0 to 31 loop
-                            if (i*32 + j < numOfOutNeurons_c_bitwidth) then
-                                numOfOutNeurons_data_tmp_reg(j) := mem_numOfOutNeurons(write_numOfOutNeurons_count)(i*32 + j);
-                            else 
-                                numOfOutNeurons_data_tmp_reg(j) := '0';
-                            end if;
-                        end loop;
-                    end if;
-                    if(image_mem_numOfOutNeurons(write_numOfOutNeurons_count * four_byte_num  + i)/=numOfOutNeurons_data_tmp_reg) then
---=======================one single write operate======================
-                write_numOfOutNeurons_resp := 0;
-                aw_flag := '0';
-                w_flag := '0';
-                process_6_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(numOfOutNeurons_data_in_addr + write_numOfOutNeurons_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
-                process_6_AWVALID_var <= '1';
-                process_6_WDATA_var   <= numOfOutNeurons_data_tmp_reg;
-                process_6_WVALID_var  <= '1';
-                for i in 0 to DATA_WIDTH/8 - 1 loop
-                    wstrb_tmp(i) := '1';
-                end loop;
-                process_6_WSTRB_var <= wstrb_tmp;
-                while (aw_flag = '0' or w_flag = '0') loop
-                    wait until clk'event and clk = '1';
-                    if (aw_flag /= '1') then
-                        aw_flag := TRAN_s_axi_control_AWREADY and AWVALID_reg;
-                    end if;
-                    if (w_flag /= '1') then
-                        w_flag := TRAN_s_axi_control_WREADY and WVALID_reg;
-                    end if;
-                    process_6_AWVALID_var <= not aw_flag;
-                    process_6_WVALID_var <= not w_flag;
-                end loop;
-
-                process_6_BREADY_var <= '1';
-                while (TRAN_s_axi_control_BVALID /= '1') loop
-                    --wait for response 
-                    wait until clk'event and clk = '1';
-                end loop;
-                wait until clk'event and clk = '1';
-                process_6_BREADY_var <= '0';
-                if (TRAN_s_axi_control_BRESP = (2 => '0')) then
-                    write_numOfOutNeurons_resp := 1;
-                    --input success. in fact BRESP is always 2'b00
-                end if;
---=======================one single write operate======================
-
-                    image_mem_numOfOutNeurons(write_numOfOutNeurons_count * four_byte_num  + i) := numOfOutNeurons_data_tmp_reg;
-                    end if;
-                end loop;
-                process_busy := '0';
-                write_one_numOfOutNeurons_data_done <= '1';
-                wait until clk'event and clk = '1';
-                write_one_numOfOutNeurons_data_done <= '0';
-            end if;
-            process_6_finish <= '1';
+            process_1_finish <= '1';
         end if;
         wait until clk'event and clk = '1';
     end loop;
@@ -1545,7 +752,7 @@ write_activation_proc : process
     variable c_bitwidth : INTEGER;
     variable i : INTEGER;
     variable j : INTEGER;
-    variable process_7_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
+    variable process_2_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0);
     variable activation_data_tmp_reg : STD_LOGIC_VECTOR(31 downto 0);
     variable aw_flag : STD_LOGIC;
     variable w_flag : STD_LOGIC;
@@ -1554,10 +761,10 @@ begin
     wait until reset = '1';
         wait until clk'event and clk = '1';
     c_bitwidth := activation_c_bitwidth;
-    process_num := 7;
+    process_num := 2;
     count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
     while (true) loop
-        process_7_finish <= '0';
+        process_2_finish <= '0';
 
         if (ongoing_process_number = process_num and process_busy = '0' ) then
             get_ack := 1;
@@ -1581,14 +788,14 @@ begin
                 write_activation_resp := 0;
                 aw_flag := '0';
                 w_flag := '0';
-                process_7_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(activation_data_in_addr + write_activation_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
-                process_7_AWVALID_var <= '1';
-                process_7_WDATA_var   <= activation_data_tmp_reg;
-                process_7_WVALID_var  <= '1';
+                process_2_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(activation_data_in_addr + write_activation_count * four_byte_num * 4 + i * 4, ADDR_WIDTH));
+                process_2_AWVALID_var <= '1';
+                process_2_WDATA_var   <= activation_data_tmp_reg;
+                process_2_WVALID_var  <= '1';
                 for i in 0 to DATA_WIDTH/8 - 1 loop
                     wstrb_tmp(i) := '1';
                 end loop;
-                process_7_WSTRB_var <= wstrb_tmp;
+                process_2_WSTRB_var <= wstrb_tmp;
                 while (aw_flag = '0' or w_flag = '0') loop
                     wait until clk'event and clk = '1';
                     if (aw_flag /= '1') then
@@ -1597,17 +804,17 @@ begin
                     if (w_flag /= '1') then
                         w_flag := TRAN_s_axi_control_WREADY and WVALID_reg;
                     end if;
-                    process_7_AWVALID_var <= not aw_flag;
-                    process_7_WVALID_var <= not w_flag;
+                    process_2_AWVALID_var <= not aw_flag;
+                    process_2_WVALID_var <= not w_flag;
                 end loop;
 
-                process_7_BREADY_var <= '1';
+                process_2_BREADY_var <= '1';
                 while (TRAN_s_axi_control_BVALID /= '1') loop
                     --wait for response 
                     wait until clk'event and clk = '1';
                 end loop;
                 wait until clk'event and clk = '1';
-                process_7_BREADY_var <= '0';
+                process_2_BREADY_var <= '0';
                 if (TRAN_s_axi_control_BRESP = (2 => '0')) then
                     write_activation_resp := 1;
                     --input success. in fact BRESP is always 2'b00
@@ -1622,7 +829,7 @@ begin
                 wait until clk'event and clk = '1';
                 write_one_activation_data_done <= '0';
             end if;
-            process_7_finish <= '1';
+            process_2_finish <= '1';
         end if;
         wait until clk'event and clk = '1';
     end loop;
@@ -1658,9 +865,9 @@ write_start_proc : process
 begin
     wait until reset = '1';
         wait until clk'event and clk = '1';
-    process_num := 8;
+    process_num := 3;
     while (true) loop
-        process_8_finish <= '0';
+        process_3_finish <= '0';
         if (ongoing_process_number = process_num and process_busy = '0' ) then
             if (write_start_run_flag = '1') then
                 process_busy := '1';
@@ -1670,14 +877,14 @@ begin
                 write_start_resp := 0;
                 aw_flag := '0';
                 w_flag := '0';
-                process_8_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(START_ADDR, ADDR_WIDTH));
-                process_8_AWVALID_var <= '1';
-                process_8_WDATA_var   <= write_start_tmp;
-                process_8_WVALID_var  <= '1';
+                process_3_AWADDR_var <= STD_LOGIC_VECTOR(to_unsigned(START_ADDR, ADDR_WIDTH));
+                process_3_AWVALID_var <= '1';
+                process_3_WDATA_var   <= write_start_tmp;
+                process_3_WVALID_var  <= '1';
                 for i in 0 to DATA_WIDTH/8 - 1 loop
                     wstrb_tmp(i) := '1';
                 end loop;
-                process_8_WSTRB_var <= wstrb_tmp;
+                process_3_WSTRB_var <= wstrb_tmp;
                 while (aw_flag = '0' or w_flag = '0') loop
                     wait until clk'event and clk = '1';
                     if (aw_flag /= '1') then
@@ -1686,17 +893,17 @@ begin
                     if (w_flag /= '1') then
                         w_flag := TRAN_s_axi_control_WREADY and WVALID_reg;
                     end if;
-                    process_8_AWVALID_var <= not aw_flag;
-                    process_8_WVALID_var <= not w_flag;
+                    process_3_AWVALID_var <= not aw_flag;
+                    process_3_WVALID_var <= not w_flag;
                 end loop;
 
-                process_8_BREADY_var <= '1';
+                process_3_BREADY_var <= '1';
                 while (TRAN_s_axi_control_BVALID /= '1') loop
                     --wait for response 
                     wait until clk'event and clk = '1';
                 end loop;
                 wait until clk'event and clk = '1';
-                process_8_BREADY_var <= '0';
+                process_3_BREADY_var <= '0';
                 if (TRAN_s_axi_control_BRESP = (2 => '0')) then
                     write_start_resp := 1;
                     --input success. in fact BRESP is always 2'b00
@@ -1708,639 +915,13 @@ begin
                 wait until clk'event and clk = '1';
                 AESL_write_start_finish <= '0';
             end if;
-            process_8_finish <= '1';
+            process_3_finish <= '1';
         end if;
         wait until clk'event and clk = '1';
     end loop;
     wait;
 end process;
 
-gen_read_output_r_run_flag : process (reset , clk)
-begin
-    if (reset = '0') then
-        output_r_read_data_finish <= '0';
-        read_output_r_run_flag <= '0'; 
-        read_output_r_count := 0;
-    elsif (clk'event and clk = '1') then
-        if (AESL_done_index_reg = '1') then
-            read_output_r_run_flag <= '1'; 
-        end if;
-        if (TRAN_control_transaction_done_in = '1') then
-            output_r_read_data_finish <= '0';
-            read_output_r_count := 0; 
-        end if;
-        if (read_one_output_r_data_done = '1') then
-            read_output_r_count := read_output_r_count + 1;
-            if (read_output_r_count = output_r_OPERATE_DEPTH) then
-                read_output_r_run_flag <= '0'; 
-                output_r_read_data_finish <= '1';
-            end if;
-        end if;
-    end if;
-end process;
-
-read_output_r_proc : process
-    variable read_output_r_resp : INTEGER;
-    variable process_num : INTEGER;
-    variable get_vld : INTEGER;
-    variable four_byte_num : INTEGER;
-    variable c_bitwidth : INTEGER;
-    variable process_9_RDATA_tmp : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0');
-    variable i : INTEGER;
-    variable j : INTEGER;
-    variable aw_flag : STD_LOGIC;
-    variable w_flag : STD_LOGIC;
-    variable wstrb_tmp : STD_LOGIC_VECTOR(DATA_WIDTH/8 - 1 downto 0 ) := (others => '0');
-
-begin
-    wait until reset = '1';
-        wait until clk'event and clk = '1';
-    c_bitwidth := output_r_c_bitwidth;
-    process_num := 9;
-    count_c_data_four_byte_num_by_bitwidth (c_bitwidth , four_byte_num) ;
-    while (true) loop
-        process_9_finish <= '0';
-        if (ongoing_process_number = process_num and process_busy = '0' ) then
-            if (read_output_r_run_flag = '1') then
-                process_busy := '1';
-                get_vld := 1;
-                if (get_vld = 1) then
-                    --read output_r data 
-                    for i in 0 to four_byte_num - 1 loop
---=======================one single read operate======================
-                read_output_r_resp := 0;
-                process_9_ARADDR_var <= STD_LOGIC_VECTOR(to_unsigned(output_r_data_out_addr + read_output_r_count * four_byte_num * 4 + 4*i, ADDR_WIDTH));
-                process_9_ARVALID_var <= '1';
-                while (TRAN_s_axi_control_ARREADY /= '1') loop
-                    wait until clk'event and clk = '1';
-                end loop;
-                wait until clk'event and clk = '1';
-                process_9_ARVALID_var <= '0';
-                process_9_RREADY_var <= '1';
-                while (TRAN_s_axi_control_RVALID /= '1') loop
-                    --wait for response 
-                    wait until clk'event and clk = '1';
-                end loop;
-                wait until clk'event and clk = '1';
-                process_9_RDATA_tmp := TRAN_s_axi_control_RDATA;
-                process_9_RREADY_var <= '0';
-                if (TRAN_s_axi_control_RRESP = (2 => '0') ) then
-                    read_output_r_resp := 1;
-                    --output success. in fact RRESP is always 2'b00
-                end if;
-                wait until clk'event and clk = '1';
-
---=======================one single read operate end======================
-
-                        if (output_r_c_bitwidth < 32) then
-                            mem_output_r(read_output_r_count) := process_9_RDATA_tmp;
-                        else
-                            for j in 0 to 32 - 1 loop
-                                if (i*32 + j < output_r_c_bitwidth) then
-                                    mem_output_r(read_output_r_count)(i*32 + j) := process_9_RDATA_tmp(j);
-                                end if;
-                            end loop;
-                        end if;
-                    end loop;
-                    
-                    read_one_output_r_data_done <= '1';
-                    wait until clk'event and clk = '1';
-                    read_one_output_r_data_done <= '0';
-                end if;
-                process_busy := '0';
-            end if;
-            process_9_finish <= '1';
-        end if;
-        wait until clk'event and clk = '1';
-    end loop;
-end process;
---------------------------Read file------------------------ 
- 
--- Read data from file 
-read_input_r_file_process : process
-  file        fp          :   TEXT;
-  variable    fstatus     :   FILE_OPEN_STATUS;
-  variable    token_line  :   LINE;
-  variable    token       :   STRING(1 to 128);
-  variable    token_tmp : STD_LOGIC_VECTOR(input_r_c_bitwidth - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_8 : STD_LOGIC_VECTOR(8 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_16 : STD_LOGIC_VECTOR(16 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_32 : STD_LOGIC_VECTOR(32 - 1 downto 0) := (others => '0'); 
-  variable    transaction_idx : INTEGER; 
-  variable    i : INTEGER; 
-  variable    j : INTEGER; 
-  variable    factor : INTEGER; 
-  variable    remain  :   INTEGER; 
-  variable    read_counter :   INTEGER; 
-begin
-  transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (input_r_c_bitwidth , factor);
-  file_open(fstatus, fp, TV_IN_input_r , READ_MODE);
-  if(fstatus /= OPEN_OK) then
-      assert false report "Open file " & TV_IN_input_r & " failed!!!" severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  if(token(1 to 13) /= "[[[runtime]]]") then
-      assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  while(token(1 to 14) /= "[[[/runtime]]]") loop
-        if(token(1 to 15) /= "[[transaction]]") then
-            assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-        end if;
-        esl_read_token(fp, token_line, token);  -- Skip transaction number
-      wait until clk'event and clk = '1';
-      wait for 0.2 ns;
-      while(AESL_ready_reg /= '1') loop
-          wait until clk'event and clk = '1';
-          wait for 0.2 ns;
-      end loop;
-      read_counter := 0;
-      for i in 0 to input_r_DEPTH - 1 loop
-          read_counter := read_counter + 1;
-          esl_read_token(fp, token_line, token);
-          token_tmp := esl_str2lv_hex(token, input_r_c_bitwidth);
-          remain := i mod factor;
-          if (factor = 4) then
-              tmp_cache_mem_8 (7 downto 0) := (others => '0');
-              for j in 0 to input_r_c_bitwidth - 1 loop
-                  tmp_cache_mem_8 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (7 downto 0) := tmp_cache_mem_8;
-              elsif (remain = 1) then
-                  tmp_cache_mem (15 downto 8) := tmp_cache_mem_8;
-              elsif (remain = 2) then
-                  tmp_cache_mem (23 downto 16) := tmp_cache_mem_8;
-              elsif (remain = 3) then
-                  tmp_cache_mem (31 downto 24) := tmp_cache_mem_8;
-                  mem_input_r(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 2) then
-              tmp_cache_mem_16 (15 downto 0) := (others => '0');
-              for j in 0 to input_r_c_bitwidth - 1 loop
-                  tmp_cache_mem_16 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (15 downto 0) := tmp_cache_mem_16;
-              elsif (remain = 1) then
-                  tmp_cache_mem (31 downto 16) := tmp_cache_mem_16;
-                  mem_input_r(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 1) then
-              if (input_r_c_bitwidth < 32) then
-                  tmp_cache_mem_32 (31 downto 0) := (others => '0');
-                  for j in 0 to input_r_c_bitwidth - 1 loop
-                      tmp_cache_mem_32 (j downto j) := token_tmp (j downto j);
-                  end loop;
-                  mem_input_r(i)(31 downto 0) := tmp_cache_mem_32;
-              else
-                  mem_input_r(i) := token_tmp;
-              end if;
-          end if;
-      end loop;
-      remain := read_counter mod factor;
-      if (factor = 4) then
-          if (remain /= 0) then
-              mem_input_r(input_r_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      elsif (factor = 2) then
-          if (remain /= 0) then
-              mem_input_r(input_r_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      end if;
-      esl_read_token(fp, token_line, token);
-      if(token(1 to 16) /= "[[/transaction]]") then
-          assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-      end if;
-      esl_read_token(fp, token_line, token);
-      transaction_idx := transaction_idx + 1; 
-  end loop;
-  file_close(fp);
-    wait;
-end process;
- 
---------------------------Read file------------------------ 
- 
--- Read data from file 
-read_output_r_file_process : process
-  file        fp          :   TEXT;
-  variable    fstatus     :   FILE_OPEN_STATUS;
-  variable    token_line  :   LINE;
-  variable    token       :   STRING(1 to 128);
-  variable    token_tmp : STD_LOGIC_VECTOR(output_r_c_bitwidth - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_8 : STD_LOGIC_VECTOR(8 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_16 : STD_LOGIC_VECTOR(16 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_32 : STD_LOGIC_VECTOR(32 - 1 downto 0) := (others => '0'); 
-  variable    transaction_idx : INTEGER; 
-  variable    i : INTEGER; 
-  variable    j : INTEGER; 
-  variable    factor : INTEGER; 
-  variable    remain  :   INTEGER; 
-  variable    read_counter :   INTEGER; 
-begin
-  transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (output_r_c_bitwidth , factor);
-  file_open(fstatus, fp, TV_IN_output_r , READ_MODE);
-  if(fstatus /= OPEN_OK) then
-      assert false report "Open file " & TV_IN_output_r & " failed!!!" severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  if(token(1 to 13) /= "[[[runtime]]]") then
-      assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  while(token(1 to 14) /= "[[[/runtime]]]") loop
-        if(token(1 to 15) /= "[[transaction]]") then
-            assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-        end if;
-        esl_read_token(fp, token_line, token);  -- Skip transaction number
-      wait until clk'event and clk = '1';
-      wait for 0.2 ns;
-      while(AESL_ready_reg /= '1') loop
-          wait until clk'event and clk = '1';
-          wait for 0.2 ns;
-      end loop;
-      read_counter := 0;
-      for i in 0 to output_r_DEPTH - 1 loop
-          read_counter := read_counter + 1;
-          esl_read_token(fp, token_line, token);
-          token_tmp := esl_str2lv_hex(token, output_r_c_bitwidth);
-          remain := i mod factor;
-          if (factor = 4) then
-              tmp_cache_mem_8 (7 downto 0) := (others => '0');
-              for j in 0 to output_r_c_bitwidth - 1 loop
-                  tmp_cache_mem_8 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (7 downto 0) := tmp_cache_mem_8;
-              elsif (remain = 1) then
-                  tmp_cache_mem (15 downto 8) := tmp_cache_mem_8;
-              elsif (remain = 2) then
-                  tmp_cache_mem (23 downto 16) := tmp_cache_mem_8;
-              elsif (remain = 3) then
-                  tmp_cache_mem (31 downto 24) := tmp_cache_mem_8;
-                  mem_output_r(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 2) then
-              tmp_cache_mem_16 (15 downto 0) := (others => '0');
-              for j in 0 to output_r_c_bitwidth - 1 loop
-                  tmp_cache_mem_16 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (15 downto 0) := tmp_cache_mem_16;
-              elsif (remain = 1) then
-                  tmp_cache_mem (31 downto 16) := tmp_cache_mem_16;
-                  mem_output_r(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 1) then
-              if (output_r_c_bitwidth < 32) then
-                  tmp_cache_mem_32 (31 downto 0) := (others => '0');
-                  for j in 0 to output_r_c_bitwidth - 1 loop
-                      tmp_cache_mem_32 (j downto j) := token_tmp (j downto j);
-                  end loop;
-                  mem_output_r(i)(31 downto 0) := tmp_cache_mem_32;
-              else
-                  mem_output_r(i) := token_tmp;
-              end if;
-          end if;
-      end loop;
-      remain := read_counter mod factor;
-      if (factor = 4) then
-          if (remain /= 0) then
-              mem_output_r(output_r_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      elsif (factor = 2) then
-          if (remain /= 0) then
-              mem_output_r(output_r_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      end if;
-      esl_read_token(fp, token_line, token);
-      if(token(1 to 16) /= "[[/transaction]]") then
-          assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-      end if;
-      esl_read_token(fp, token_line, token);
-      transaction_idx := transaction_idx + 1; 
-  end loop;
-  file_close(fp);
-    wait;
-end process;
- 
---------------------------Write file----------------------- 
- 
--- Write data to file 
- 
-write_output_r_file_proc : process
-  file        fp              :   TEXT;
-  variable    fstatus         :   FILE_OPEN_STATUS;
-  variable    token_line      :   LINE;
-  variable    token           :   STRING(1 to 1024);
-  variable    transaction_idx :   INTEGER;
-  variable    i               :   INTEGER; 
-  variable    tmp_cache_mem : STD_LOGIC_VECTOR(output_r_c_bitwidth - 1 downto 0) := (others => '0'); 
-  variable    factor : INTEGER; 
-  variable    remain : INTEGER; 
-  variable    mem_page : INTEGER; 
-begin
-  transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (output_r_c_bitwidth , factor);
-  while(true) loop
-      wait until clk'event and clk = '1';
-      while (output_r_read_data_finish /= '1' or TRAN_control_transaction_done_in = '1') loop
-          wait until clk'event and clk = '1';
-      end loop;
-      wait for 0.1 ns;
-      file_open(fstatus, fp, TV_OUT_output_r, APPEND_MODE);
-      if(fstatus /= OPEN_OK) then
-          assert false report "Open file " & TV_OUT_output_r & " failed!!!" severity failure;
-      end if;
-      write(token_line, "[[transaction]]    " & integer'image(transaction_idx));
-      writeline(fp, token_line);
-      for i in 0 to (output_r_DEPTH - output_r_DEPTH mod factor) - 1 loop
-          remain := i mod factor;
-          if (factor = 4) then
-              if (remain = 0) then
-                  tmp_cache_mem := mem_output_r(i/factor)(7 downto 0);
-              elsif (remain = 1) then
-                  tmp_cache_mem := mem_output_r(i/factor)(15 downto 8);
-              elsif (remain = 2) then
-                  tmp_cache_mem := mem_output_r(i/factor)(23 downto 16);
-              elsif (remain = 3) then
-                  tmp_cache_mem := mem_output_r(i/factor)(31 downto 24);
-              end if;
-              write(token_line, "0x" & esl_conv_string_hex(tmp_cache_mem));
-              writeline(fp, token_line);
-          elsif (factor = 2) then
-              if (remain = 0) then
-                  tmp_cache_mem := mem_output_r(i/factor)(15 downto 0);
-              elsif (remain = 1) then
-                  tmp_cache_mem := mem_output_r(i/factor)(31 downto 16);
-              end if;
-              write(token_line, "0x" & esl_conv_string_hex(tmp_cache_mem));
-              writeline(fp, token_line);
-          elsif (factor = 1) then
-              write(token_line, "0x" & esl_conv_string_hex(mem_output_r(i)));
-              writeline(fp, token_line);
-          end if;
-      end loop;
-      remain := (output_r_DEPTH - 1) mod factor;
-      if (factor = 4) then
-          if (remain = 2) then
-              write(token_line, "0x" & esl_conv_string_hex(mem_output_r(output_r_DEPTH/factor)(7 downto 0)));
-              writeline(fp, token_line);
-              write(token_line, "0x" & esl_conv_string_hex(mem_output_r(output_r_DEPTH/factor)(15 downto 8)));
-              writeline(fp, token_line);
-              write(token_line, "0x" & esl_conv_string_hex(mem_output_r(output_r_DEPTH/factor)(23 downto 16)));
-              writeline(fp, token_line);
-          elsif (remain = 1) then
-              write(token_line, "0x" & esl_conv_string_hex(mem_output_r(output_r_DEPTH/factor)(7 downto 0)));
-              writeline(fp, token_line);
-              write(token_line, "0x" & esl_conv_string_hex(mem_output_r(output_r_DEPTH/factor)(15 downto 8)));
-              writeline(fp, token_line);
-          elsif (remain = 0) then
-              write(token_line, "0x" & esl_conv_string_hex(mem_output_r(output_r_DEPTH/factor)(7 downto 0)));
-              writeline(fp, token_line);
-          end if;
-      elsif (factor = 2) then
-          if (remain = 0) then
-              write(token_line, "0x" & esl_conv_string_hex(mem_output_r(output_r_DEPTH/factor)(15 downto 0)));
-              writeline(fp, token_line);
-          end if;
-      end if;
-      write(token_line, string'("[[/transaction]]"));
-      writeline(fp, token_line);
-      transaction_idx := transaction_idx + 1;
-      file_close(fp);
-      while (TRAN_control_start_in /= '1') loop
-          wait until clk'event and clk = '1';
-      end loop;
-  end loop;
-end process;
- 
---------------------------Read file------------------------ 
- 
--- Read data from file 
-read_weights_file_process : process
-  file        fp          :   TEXT;
-  variable    fstatus     :   FILE_OPEN_STATUS;
-  variable    token_line  :   LINE;
-  variable    token       :   STRING(1 to 128);
-  variable    token_tmp : STD_LOGIC_VECTOR(weights_c_bitwidth - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_8 : STD_LOGIC_VECTOR(8 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_16 : STD_LOGIC_VECTOR(16 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_32 : STD_LOGIC_VECTOR(32 - 1 downto 0) := (others => '0'); 
-  variable    transaction_idx : INTEGER; 
-  variable    i : INTEGER; 
-  variable    j : INTEGER; 
-  variable    factor : INTEGER; 
-  variable    remain  :   INTEGER; 
-  variable    read_counter :   INTEGER; 
-begin
-  transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (weights_c_bitwidth , factor);
-  file_open(fstatus, fp, TV_IN_weights , READ_MODE);
-  if(fstatus /= OPEN_OK) then
-      assert false report "Open file " & TV_IN_weights & " failed!!!" severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  if(token(1 to 13) /= "[[[runtime]]]") then
-      assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  while(token(1 to 14) /= "[[[/runtime]]]") loop
-        if(token(1 to 15) /= "[[transaction]]") then
-            assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-        end if;
-        esl_read_token(fp, token_line, token);  -- Skip transaction number
-      wait until clk'event and clk = '1';
-      wait for 0.2 ns;
-      while(AESL_ready_reg /= '1') loop
-          wait until clk'event and clk = '1';
-          wait for 0.2 ns;
-      end loop;
-      read_counter := 0;
-      for i in 0 to weights_DEPTH - 1 loop
-          read_counter := read_counter + 1;
-          esl_read_token(fp, token_line, token);
-          token_tmp := esl_str2lv_hex(token, weights_c_bitwidth);
-          remain := i mod factor;
-          if (factor = 4) then
-              tmp_cache_mem_8 (7 downto 0) := (others => '0');
-              for j in 0 to weights_c_bitwidth - 1 loop
-                  tmp_cache_mem_8 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (7 downto 0) := tmp_cache_mem_8;
-              elsif (remain = 1) then
-                  tmp_cache_mem (15 downto 8) := tmp_cache_mem_8;
-              elsif (remain = 2) then
-                  tmp_cache_mem (23 downto 16) := tmp_cache_mem_8;
-              elsif (remain = 3) then
-                  tmp_cache_mem (31 downto 24) := tmp_cache_mem_8;
-                  mem_weights(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 2) then
-              tmp_cache_mem_16 (15 downto 0) := (others => '0');
-              for j in 0 to weights_c_bitwidth - 1 loop
-                  tmp_cache_mem_16 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (15 downto 0) := tmp_cache_mem_16;
-              elsif (remain = 1) then
-                  tmp_cache_mem (31 downto 16) := tmp_cache_mem_16;
-                  mem_weights(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 1) then
-              if (weights_c_bitwidth < 32) then
-                  tmp_cache_mem_32 (31 downto 0) := (others => '0');
-                  for j in 0 to weights_c_bitwidth - 1 loop
-                      tmp_cache_mem_32 (j downto j) := token_tmp (j downto j);
-                  end loop;
-                  mem_weights(i)(31 downto 0) := tmp_cache_mem_32;
-              else
-                  mem_weights(i) := token_tmp;
-              end if;
-          end if;
-      end loop;
-      remain := read_counter mod factor;
-      if (factor = 4) then
-          if (remain /= 0) then
-              mem_weights(weights_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      elsif (factor = 2) then
-          if (remain /= 0) then
-              mem_weights(weights_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      end if;
-      esl_read_token(fp, token_line, token);
-      if(token(1 to 16) /= "[[/transaction]]") then
-          assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-      end if;
-      esl_read_token(fp, token_line, token);
-      transaction_idx := transaction_idx + 1; 
-  end loop;
-  file_close(fp);
-    wait;
-end process;
- 
---------------------------Read file------------------------ 
- 
--- Read data from file 
-read_bias_file_process : process
-  file        fp          :   TEXT;
-  variable    fstatus     :   FILE_OPEN_STATUS;
-  variable    token_line  :   LINE;
-  variable    token       :   STRING(1 to 128);
-  variable    token_tmp : STD_LOGIC_VECTOR(bias_c_bitwidth - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_8 : STD_LOGIC_VECTOR(8 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_16 : STD_LOGIC_VECTOR(16 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_32 : STD_LOGIC_VECTOR(32 - 1 downto 0) := (others => '0'); 
-  variable    transaction_idx : INTEGER; 
-  variable    i : INTEGER; 
-  variable    j : INTEGER; 
-  variable    factor : INTEGER; 
-  variable    remain  :   INTEGER; 
-  variable    read_counter :   INTEGER; 
-begin
-  transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (bias_c_bitwidth , factor);
-  file_open(fstatus, fp, TV_IN_bias , READ_MODE);
-  if(fstatus /= OPEN_OK) then
-      assert false report "Open file " & TV_IN_bias & " failed!!!" severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  if(token(1 to 13) /= "[[[runtime]]]") then
-      assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  while(token(1 to 14) /= "[[[/runtime]]]") loop
-        if(token(1 to 15) /= "[[transaction]]") then
-            assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-        end if;
-        esl_read_token(fp, token_line, token);  -- Skip transaction number
-      wait until clk'event and clk = '1';
-      wait for 0.2 ns;
-      while(AESL_ready_reg /= '1') loop
-          wait until clk'event and clk = '1';
-          wait for 0.2 ns;
-      end loop;
-      read_counter := 0;
-      for i in 0 to bias_DEPTH - 1 loop
-          read_counter := read_counter + 1;
-          esl_read_token(fp, token_line, token);
-          token_tmp := esl_str2lv_hex(token, bias_c_bitwidth);
-          remain := i mod factor;
-          if (factor = 4) then
-              tmp_cache_mem_8 (7 downto 0) := (others => '0');
-              for j in 0 to bias_c_bitwidth - 1 loop
-                  tmp_cache_mem_8 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (7 downto 0) := tmp_cache_mem_8;
-              elsif (remain = 1) then
-                  tmp_cache_mem (15 downto 8) := tmp_cache_mem_8;
-              elsif (remain = 2) then
-                  tmp_cache_mem (23 downto 16) := tmp_cache_mem_8;
-              elsif (remain = 3) then
-                  tmp_cache_mem (31 downto 24) := tmp_cache_mem_8;
-                  mem_bias(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 2) then
-              tmp_cache_mem_16 (15 downto 0) := (others => '0');
-              for j in 0 to bias_c_bitwidth - 1 loop
-                  tmp_cache_mem_16 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (15 downto 0) := tmp_cache_mem_16;
-              elsif (remain = 1) then
-                  tmp_cache_mem (31 downto 16) := tmp_cache_mem_16;
-                  mem_bias(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 1) then
-              if (bias_c_bitwidth < 32) then
-                  tmp_cache_mem_32 (31 downto 0) := (others => '0');
-                  for j in 0 to bias_c_bitwidth - 1 loop
-                      tmp_cache_mem_32 (j downto j) := token_tmp (j downto j);
-                  end loop;
-                  mem_bias(i)(31 downto 0) := tmp_cache_mem_32;
-              else
-                  mem_bias(i) := token_tmp;
-              end if;
-          end if;
-      end loop;
-      remain := read_counter mod factor;
-      if (factor = 4) then
-          if (remain /= 0) then
-              mem_bias(bias_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      elsif (factor = 2) then
-          if (remain /= 0) then
-              mem_bias(bias_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      end if;
-      esl_read_token(fp, token_line, token);
-      if(token(1 to 16) /= "[[/transaction]]") then
-          assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-      end if;
-      esl_read_token(fp, token_line, token);
-      transaction_idx := transaction_idx + 1; 
-  end loop;
-  file_close(fp);
-    wait;
-end process;
- 
 --------------------------Read file------------------------ 
  
 -- Read data from file 
@@ -2437,115 +1018,6 @@ begin
       elsif (factor = 2) then
           if (remain /= 0) then
               mem_numOfInNeurons(numOfInNeurons_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      end if;
-      esl_read_token(fp, token_line, token);
-      if(token(1 to 16) /= "[[/transaction]]") then
-          assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-      end if;
-      esl_read_token(fp, token_line, token);
-      transaction_idx := transaction_idx + 1; 
-  end loop;
-  file_close(fp);
-    wait;
-end process;
- 
---------------------------Read file------------------------ 
- 
--- Read data from file 
-read_numOfOutNeurons_file_process : process
-  file        fp          :   TEXT;
-  variable    fstatus     :   FILE_OPEN_STATUS;
-  variable    token_line  :   LINE;
-  variable    token       :   STRING(1 to 128);
-  variable    token_tmp : STD_LOGIC_VECTOR(numOfOutNeurons_c_bitwidth - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem : STD_LOGIC_VECTOR(DATA_WIDTH - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_8 : STD_LOGIC_VECTOR(8 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_16 : STD_LOGIC_VECTOR(16 - 1 downto 0) := (others => '0'); 
-  variable    tmp_cache_mem_32 : STD_LOGIC_VECTOR(32 - 1 downto 0) := (others => '0'); 
-  variable    transaction_idx : INTEGER; 
-  variable    i : INTEGER; 
-  variable    j : INTEGER; 
-  variable    factor : INTEGER; 
-  variable    remain  :   INTEGER; 
-  variable    read_counter :   INTEGER; 
-begin
-  transaction_idx := 0; 
-  count_seperate_factor_by_bitwidth (numOfOutNeurons_c_bitwidth , factor);
-  file_open(fstatus, fp, TV_IN_numOfOutNeurons , READ_MODE);
-  if(fstatus /= OPEN_OK) then
-      assert false report "Open file " & TV_IN_numOfOutNeurons & " failed!!!" severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  if(token(1 to 13) /= "[[[runtime]]]") then
-      assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-  end if;
-  esl_read_token(fp, token_line, token);
-  while(token(1 to 14) /= "[[[/runtime]]]") loop
-        if(token(1 to 15) /= "[[transaction]]") then
-            assert false report "ERROR: Simulation using HLS TB failed." severity failure;
-        end if;
-        esl_read_token(fp, token_line, token);  -- Skip transaction number
-      wait until clk'event and clk = '1';
-      wait for 0.2 ns;
-      while(AESL_ready_reg /= '1') loop
-          wait until clk'event and clk = '1';
-          wait for 0.2 ns;
-      end loop;
-      read_counter := 0;
-      for i in 0 to numOfOutNeurons_DEPTH - 1 loop
-          read_counter := read_counter + 1;
-          esl_read_token(fp, token_line, token);
-          token_tmp := esl_str2lv_hex(token, numOfOutNeurons_c_bitwidth);
-          remain := i mod factor;
-          if (factor = 4) then
-              tmp_cache_mem_8 (7 downto 0) := (others => '0');
-              for j in 0 to numOfOutNeurons_c_bitwidth - 1 loop
-                  tmp_cache_mem_8 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (7 downto 0) := tmp_cache_mem_8;
-              elsif (remain = 1) then
-                  tmp_cache_mem (15 downto 8) := tmp_cache_mem_8;
-              elsif (remain = 2) then
-                  tmp_cache_mem (23 downto 16) := tmp_cache_mem_8;
-              elsif (remain = 3) then
-                  tmp_cache_mem (31 downto 24) := tmp_cache_mem_8;
-                  mem_numOfOutNeurons(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 2) then
-              tmp_cache_mem_16 (15 downto 0) := (others => '0');
-              for j in 0 to numOfOutNeurons_c_bitwidth - 1 loop
-                  tmp_cache_mem_16 (j downto j) := token_tmp (j downto j);
-              end loop;
-              if (remain = 0) then
-                  tmp_cache_mem (15 downto 0) := tmp_cache_mem_16;
-              elsif (remain = 1) then
-                  tmp_cache_mem (31 downto 16) := tmp_cache_mem_16;
-                  mem_numOfOutNeurons(i/factor)(31 downto 0) := tmp_cache_mem;
-                  tmp_cache_mem (DATA_WIDTH - 1 downto 0) := (others => '0');
-              end if;
-          elsif (factor = 1) then
-              if (numOfOutNeurons_c_bitwidth < 32) then
-                  tmp_cache_mem_32 (31 downto 0) := (others => '0');
-                  for j in 0 to numOfOutNeurons_c_bitwidth - 1 loop
-                      tmp_cache_mem_32 (j downto j) := token_tmp (j downto j);
-                  end loop;
-                  mem_numOfOutNeurons(i)(31 downto 0) := tmp_cache_mem_32;
-              else
-                  mem_numOfOutNeurons(i) := token_tmp;
-              end if;
-          end if;
-      end loop;
-      remain := read_counter mod factor;
-      if (factor = 4) then
-          if (remain /= 0) then
-              mem_numOfOutNeurons(numOfOutNeurons_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
-          end if;
-      elsif (factor = 2) then
-          if (remain /= 0) then
-              mem_numOfOutNeurons(numOfOutNeurons_DEPTH/factor)(31 downto 0) := tmp_cache_mem;
           end if;
       end if;
       esl_read_token(fp, token_line, token);

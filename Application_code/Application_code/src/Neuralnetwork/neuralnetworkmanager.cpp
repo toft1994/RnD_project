@@ -22,6 +22,25 @@ int8_t neuralnetwork_manager::setup_manager(std::string fileName) {
 	if(fileP.openfile(fileName)){
 		return -1;
 	}
+
+	nnLV_ = std::move(fileP.parseStringTest(fileName));
+	totalLayers_ = nnLV_.size();
+
+	if(fileP.closefile()){
+		return -1;
+	}
+
+	return 0;
+}
+
+/*int8_t neuralnetwork_manager::setup_manager(std::string fileName) {
+	FileParserSD fileP = FileParserSD();
+	if(fileP.mount()){
+		return -1;
+	}
+	if(fileP.openfile(fileName)){
+		return -1;
+	}
 	std::string out = fileP.readfile();
 	if(out == "FF"){
 		fileP.closefile();
@@ -34,7 +53,7 @@ int8_t neuralnetwork_manager::setup_manager(std::string fileName) {
 	nnLV_ = std::move(fileP.parseString(std::move(out)));
 	totalLayers_ = nnLV_.size();
 	return 0;
-}
+}*/
 
 u16 neuralnetwork_manager::run_network(u16 * input, u16 inputSize) {
 	u16 res = 0xffff;
