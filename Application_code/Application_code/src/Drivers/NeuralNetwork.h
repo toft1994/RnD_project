@@ -20,13 +20,15 @@ public:
 
 private:
 	void setInput(u16* input, u16 * size);
+	void getOutput(u16* output, u16 * size);
 	void setBias(u16* bias, u16* size);
 	void setWeights(u16* weights, u16* inputSize, u16* outputSize);
 	void setInputneurons(u16* inputSize);
 	void setOutputneurons(u16* outputSize);
 	void setActivation(u8* activation);
 
-	XNnlayer ptr;
+	XNnlayer instance;
+	XNnlayer * ptr;
 };
 
 #endif /* SRC_DRIVERS_NEURALNETWORK_H_ */

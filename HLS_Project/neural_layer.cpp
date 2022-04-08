@@ -1,105 +1,145 @@
 #include "nnLayer.hpp"
 
-void relu(dataType* data) {
+static const unsigned short int size = SIZE;
+
+dataType abs(dataType x) {
+#pragma HLS inline
+	if (x < 0) {
+		return -x;
+	} else {
+		return x;
+	}
+}
+
+void relu(dataType * output_, dataType * input_, unsigned short int numOfOutputNeurons) {
 	#pragma HLS inline
-	for (unsigned short int i = 0; i < SIZE; i++)
+	for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
 	{
-		if (data[i] < 0)
+		if (input_[i] < 0)
 		{
-			data[i] = 0;
+			output_[i] = 0;
+		}
+		else {
+			output_[i] = input_[i];
 		}
 	}
 }
 
-static unsigned short int outNeurons = 0;
-static unsigned short int weightIndexAdded = 0;
-static unsigned short int inNeurons = 0;
+void sigmod_approx(dataType * output_, dataType * input_, unsigned short int numOfOutputNeurons) {
+	#pragma HLS inline
+	for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+	{
+		#pragma HLS pipeline off
+		output_[i] = dataType(0.5)*(input_[i]/(dataType(1)+abs(input_[i])))+dataType(0.5);
+	}
+}
 
-void nnlayer(dataType input[SIZE], dataType output[SIZE], dataType weights[WEIGHT_SIZE], dataType bias[SIZE], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
-#pragma HLS INTERFACE mode=s_axilite port=input //storage_impl=bram bundle=nnI1
-#pragma HLS INTERFACE mode=s_axilite port=output //storage_impl=bram bundle=nnIn2
-#pragma HLS INTERFACE mode=s_axilite port=weights //storage_impl=bram bundle=nnIn3
-#pragma HLS INTERFACE mode=s_axilite port=bias //storage_impl=bram bundle=nnIn4
-#pragma HLS INTERFACE mode=s_axilite port=numOfInNeurons
-#pragma HLS INTERFACE mode=s_axilite port=numOfOutNeurons
+//https://stackoverflow.com/questions/6984440/approximate-ex
+void softmax_approx(dataType * output_, dataType * input_, unsigned short int numOfOutputNeurons) {
+#pragma HLS inline
+	static const dataType CONSTANT(0.693147181);
+	static const dataType one = dataType(1);
+	softmaxSum_type sum = 0;
+	softmaxSum_type resArray[SIZE] = {0};
+	//#pragma HLS BIND_STORAGE variable=resArray type=ram_1p impl=bram
+
+	for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+	{
+		#pragma HLS pipeline off
+		if (input_[i] > 11) {
+			input_[i] = 11;
+		}
+		else if (input_[i] < -11) {
+			input_[i] = -11;
+		}
+
+		dataType fixed(abs(dataType(input_[i]))/CONSTANT);
+		dataType whole = fixed.range(FIXED_BIT,FIXED_FRAC);
+		dataType tmp = (fixed-whole+one);
+
+		if (input_[i] > 0) {
+			resArray[i] = (1 << whole.range(FIXED_BIT,FIXED_FRAC)) * tmp;
+		}
+		else if (input_[i] < 0){
+			resArray[i] = dataType(one/tmp)*dataType(one/(1 << whole.range(SOFTMAX_BIT,SOFTMAX_FRAC)));
+		}
+		else {
+			resArray[i] = one;
+		}
+
+		sum += resArray[i];
+	}
+
+	if (sum > 0) {
+		for (unsigned short int i = 0; i < SIZE; i++)
+		{
+			#pragma HLS pipeline off
+			output_[i] = resArray[i]/sum;
+		}
+	}
+}
+
+void applyBias(dataType * bias, dataType * output_, unsigned short int numOfOutputNeurons) {
+#pragma HLS inline
+	for (int i = 0; i < numOfOutputNeurons; i++) {
+		output_[i] = bias[i];
+	}
+}
+
+void runLayer(dataType * input_, dataType * output_, dataType * weights_, unsigned short int numOfOutputNeurons) {
+#pragma HLS inline
+	for (unsigned short int outNeurons = 0; outNeurons < numOfOutputNeurons; outNeurons++)
+	{
+		#pragma HLS pipeline off
+		for (unsigned short int inNeurons = 0; inNeurons < SIZE; inNeurons++)
+		{
+			#pragma HLS pipeline off
+			#pragma HLS UNROLL factor=size
+			output_[outNeurons] += (weights_[inNeurons+(outNeurons*SIZE)] * input_[inNeurons]);
+		}
+	}
+}
+
+void runActivation(dataType * output_, dataType * input, unsigned short int numOfOutputNeurons, unsigned char activation) {
+#pragma HLS inline
+    if(activation == 1) {
+    	relu(output_, input, numOfOutputNeurons);
+    }
+    else if (activation == 2) {
+    	sigmod_approx(output_, input, numOfOutputNeurons);
+    }
+    else if (activation == 3) {
+    	softmax_approx(output_, input, numOfOutputNeurons);
+    }
+    else {
+    	for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+    	{
+			#pragma HLS pipeline off
+    		output_[i] = input[i];
+    	}
+    }
+}
+
+void nnlayer(dataType input[SIZE], dataType output[SIZE], dataType bias[SIZE], dataType weights[WEIGHT_SIZE], unsigned short int numOfOutputNeurons, unsigned char activation) {
+#pragma HLS INTERFACE mode=s_axilite port=input
+#pragma HLS INTERFACE mode=s_axilite port=output
+#pragma HLS INTERFACE mode=s_axilite port=bias
+#pragma HLS INTERFACE mode=s_axilite port=weights
+#pragma HLS INTERFACE mode=s_axilite port=numOfOutputNeurons
 #pragma HLS INTERFACE mode=s_axilite port=activation
 #pragma HLS INTERFACE mode=s_axilite port=return
 
 #pragma HLS ARRAY_PARTITION variable=input type=complete
 #pragma HLS ARRAY_PARTITION variable=output type=complete
-#pragma HLS ARRAY_PARTITION variable=weights type=complete
-#pragma HLS ARRAY_PARTITION variable=bias type=complete
+#pragma HLS ARRAY_PARTITION variable=weights type=cyclic factor=size
+#pragma HLS BIND_STORAGE variable=weights type=RAM_1WNR impl=BRAM
 
-	for (inNeurons = 0; inNeurons < MAX_SIZE; inNeurons++)
-	{
-		for (outNeurons = 0; outNeurons < MAX_SIZE; outNeurons++)
-		{
-			#pragma HLS UNROLL factor = 64
-			output[outNeurons] += (weights[inNeurons+weightIndexAdded] * input[inNeurons]);
-		}
-		weightIndexAdded+=numOfInNeurons;
-	}
 
-	for (outNeurons = 0; outNeurons < MAX_SIZE; outNeurons++) {
-		output[outNeurons] += bias[outNeurons];
-	}
+	static dataType output_[SIZE] = {0};
+	//#pragma HLS ARRAY_PARTITION variable=output_ type=complete
 
-	if(activation == 1) {
-		relu(output);
-	}
-	weightIndexAdded = 0;
+	applyBias(bias, output_, numOfOutputNeurons);
+	runLayer(input, output_, weights, numOfOutputNeurons);
+    runActivation(output, output_, numOfOutputNeurons, activation);
 }
 
-/*
- * #include "1_neuron_layer.hpp"
-#include <cstring>
-
-const int size = SIZE;
-const int max_size = MAX_SIZE;
-const int max_weight_size = MAX_SIZE*SIZE;
-
-void relu(dataType* data) {
-	#pragma HLS inline
-	for (short int i = 0; i < SIZE; i++)
-	{
-		#pragma HLS PIPELINE
-		if (data[i] < 0)
-		{
-			data[i] = 0;
-		}
-	}
-}
-
-void nnlayer(dataType input[MAX_SIZE], dataType output[SIZE], dataType weights[WEIGHT_MAX_SIZE], dataType bias[SIZE], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {
-#pragma HLS INTERFACE mode=s_axilite port=input
-#pragma HLS INTERFACE mode=s_axilite port=output
-#pragma HLS INTERFACE mode=s_axilite port=weights
-#pragma HLS INTERFACE mode=s_axilite port=bias
-#pragma HLS INTERFACE mode=s_axilite port=numOfInNeurons
-#pragma HLS INTERFACE mode=s_axilite port=numOfOutNeurons
-#pragma HLS INTERFACE mode=s_axilite port=activation
-#pragma HLS INTERFACE mode=s_axilite port=return
-	unsigned short int outNeurons = 0;
-	unsigned short int inNeurons = 0;
-	unsigned short int weightIndexAdded = 0;
-
-	for (outNeurons = 0; outNeurons < numOfOutNeurons; outNeurons++) {
-		output[outNeurons] = bias[outNeurons];
-	}
-
-	for (inNeurons = 0; inNeurons < numOfInNeurons; inNeurons++)
-	{
-		for (outNeurons = 0; outNeurons < numOfOutNeurons; outNeurons++)
-		{
-			#pragma HLS UNROLL
-			output[outNeurons] += (weights[outNeurons+weightIndexAdded] * input[inNeurons]);
-		}
-		weightIndexAdded+=numOfOutNeurons;
-	}
-
-	if(activation == 1) {
-		relu(output);
-	}
-}
- *
- */

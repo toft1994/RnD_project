@@ -9,7 +9,7 @@
 # -out option specifies the output directory of the platform project.
 
 platform create -name {design_1_wrapper}\
--hw {C:\Users\jespe\Desktop\Uni_Civil_10_Semester\RnD\RnD_project\vivado_project\design_1_wrapper.xsa}\
+-hw {C:\Users\jespe\Desktop\Uni_Civil_10_Semester\RnD\RnD_project\Vivado_project\design_1_wrapper.xsa}\
 -out {C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/Application_code}
 
 platform write
@@ -26,15 +26,20 @@ bsp write
 bsp reload
 catch {bsp regenerate}
 catch {bsp regenerate}
-platform generate -domains freertos10_xilinx_ps7_cortexa9_0 
-platform config -updatehw {C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/Vivado_project/design_1_wrapper.xsa}
-platform generate -domains 
+domain active {zynq_fsbl}
 bsp reload
 bsp reload
+catch {bsp regenerate}
+platform generate -domains freertos10_xilinx_ps7_cortexa9_0,zynq_fsbl 
 platform active {design_1_wrapper}
-platform config -updatehw {C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/Vivado_project/design_1_wrapper.xsa}
-platform generate -domains 
-platform config -updatehw {C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/Vivado_project/design_1_wrapper.xsa}
-platform generate -domains 
-platform active {design_1_wrapper}
-platform generate -domains 
+domain active {freertos10_xilinx_ps7_cortexa9_0}
+bsp reload
+bsp reload
+catch {bsp regenerate}
+platform generate
+platform clean
+platform generate
+platform generate
+platform clean
+platform clean
+platform generate

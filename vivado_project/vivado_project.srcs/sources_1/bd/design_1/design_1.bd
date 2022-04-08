@@ -237,7 +237,7 @@
             "value": "150.000000"
           },
           "PCW_FPGA2_PERIPHERAL_FREQMHZ": {
-            "value": "50.000000"
+            "value": "50"
           },
           "PCW_FPGA_FCLK0_ENABLE": {
             "value": "1"
@@ -753,7 +753,7 @@
             "value": "1"
           },
           "PCW_QSPI_PERIPHERAL_FREQMHZ": {
-            "value": "200.000000"
+            "value": "200"
           },
           "PCW_QSPI_QSPI_IO": {
             "value": "MIO 1 .. 6"
@@ -1234,8 +1234,8 @@
       },
       "nnlayer_0": {
         "vlnv": "xilinx.com:hls:nnlayer:1.0",
-        "xci_name": "design_1_nnlayer_0_0",
-        "xci_path": "ip\\design_1_nnlayer_0_0\\design_1_nnlayer_0_0.xci",
+        "xci_name": "design_1_nnlayer_0_4",
+        "xci_path": "ip\\design_1_nnlayer_0_4\\design_1_nnlayer_0_4.xci",
         "inst_hier_path": "nnlayer_0"
       }
     },

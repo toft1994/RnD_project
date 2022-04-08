@@ -155,8 +155,7 @@ extern "C" {
 }
 # 2 "<built-in>" 2
 # 1 "HLS_Project/neural_layer.cpp" 2
-# 1 "HLS_Project/1_neuron_layer.hpp" 1
-
+# 1 "HLS_Project/nnLayer.hpp" 1
 
 
 
@@ -5667,62 +5666,149 @@ inline bool operator!=(
 
 }
 # 412 "C:/Xilinx/Vitis_HLS/2021.2/common/technology/autopilot\\ap_fixed.h" 2
-# 6 "HLS_Project/1_neuron_layer.hpp" 2
-
+# 5 "HLS_Project/nnLayer.hpp" 2
+# 14 "HLS_Project/nnLayer.hpp"
 typedef ap_fixed<16,8> dataType;
+typedef ap_fixed<32,16> softmaxSum_type;
 
-__attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(dataType input[256], dataType output[256], dataType weights[256*256], dataType bias[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation);
+__attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(dataType input[128], dataType output[128], dataType bias[128], dataType weights[128*128], unsigned short int numOfOutputNeurons, unsigned char activation);
 # 2 "HLS_Project/neural_layer.cpp" 2
 
-void relu(dataType* data) {
+static const unsigned short int size = 128;
+
+dataType abs(dataType x) {
 #pragma HLS inline
- VITIS_LOOP_5_1: for (unsigned short int i = 0; i < 256; i++)
+ if (x < 0) {
+  return -x;
+ } else {
+  return x;
+ }
+}
+
+void relu(dataType * output_, dataType * input_, unsigned short int numOfOutputNeurons) {
+#pragma HLS inline
+ VITIS_LOOP_16_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
  {
-  if (data[i] < 0)
+  if (input_[i] < 0)
   {
-   data[i] = 0;
+   output_[i] = 0;
+  }
+  else {
+   output_[i] = input_[i];
   }
  }
 }
 
-static unsigned short int outNeurons = 0;
-static unsigned short int weightIndexAdded = 0;
-static unsigned short int inNeurons = 0;
+void sigmod_approx(dataType * output_, dataType * input_, unsigned short int numOfOutputNeurons) {
+#pragma HLS inline
+ VITIS_LOOP_30_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+ {
+#pragma HLS pipeline off
+ output_[i] = dataType(0.5)*(input_[i]/(dataType(1)+abs(input_[i])))+dataType(0.5);
+ }
+}
 
-__attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(dataType input[256], dataType output[256], dataType weights[256*256], dataType bias[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation) {_ssdm_SpecArrayDimSize(input, 256);_ssdm_SpecArrayDimSize(output, 256);_ssdm_SpecArrayDimSize(weights, 65536);_ssdm_SpecArrayDimSize(bias, 256);
+
+void softmax_approx(dataType * output_, dataType * input_, unsigned short int numOfOutputNeurons) {
+#pragma HLS inline
+ static const dataType CONSTANT(0.693147181);
+ static const dataType one = dataType(1);
+ softmaxSum_type sum = 0;
+ softmaxSum_type resArray[128] = {0};
+
+
+ VITIS_LOOP_46_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+ {
+#pragma HLS pipeline off
+ dataType fixed(abs(dataType(input_[i]))/CONSTANT);
+  dataType whole = fixed.range(16,16 -8);
+  dataType tmp = (fixed-whole+one);
+
+  if (input_[i] > 0) {
+   resArray[i] = (1 << whole.range(16,16 -8)) * tmp;
+  }
+  else if (input_[i] < 0){
+   resArray[i] = dataType(one/tmp)*dataType(one/(1 << whole.range(32,32 -16)));
+  }
+  else {
+   resArray[i] = one;
+  }
+
+  sum += resArray[i];
+ }
+
+ if (sum > 0) {
+  VITIS_LOOP_67_2: for (unsigned short int i = 0; i < 128; i++)
+  {
+#pragma HLS pipeline off
+ output_[i] = resArray[i]/sum;
+  }
+ }
+}
+
+void applyBias(dataType * bias, dataType * output_, unsigned short int numOfOutputNeurons) {
+#pragma HLS inline
+ VITIS_LOOP_77_1: for (int i = 0; i < numOfOutputNeurons; i++) {
+  output_[i] = bias[i];
+ }
+}
+
+void runLayer(dataType * input_, dataType * output_, dataType * weights_, unsigned short int numOfOutputNeurons) {
+#pragma HLS inline
+ VITIS_LOOP_84_1: for (unsigned short int outNeurons = 0; outNeurons < numOfOutputNeurons; outNeurons++)
+ {
+#pragma HLS pipeline off
+ VITIS_LOOP_87_2: for (unsigned short int inNeurons = 0; inNeurons < 128; inNeurons++)
+  {
+#pragma HLS pipeline off
+#pragma HLS UNROLL factor=size
+ output_[outNeurons] += (weights_[inNeurons+(outNeurons*128)] * input_[inNeurons]);
+  }
+ }
+}
+
+void runActivation(dataType * output_, dataType * input, unsigned short int numOfOutputNeurons, unsigned char activation) {
+#pragma HLS inline
+ if(activation == 1) {
+     relu(output_, input, numOfOutputNeurons);
+    }
+    else if (activation == 2) {
+     sigmod_approx(output_, input, numOfOutputNeurons);
+    }
+    else if (activation == 3) {
+     softmax_approx(output_, input, numOfOutputNeurons);
+    }
+    else {
+     VITIS_LOOP_108_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+     {
+#pragma HLS pipeline off
+ output_[i] = input[i];
+     }
+    }
+}
+
+__attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(dataType input[128], dataType output[128], dataType bias[128], dataType weights[128*128], unsigned short int numOfOutputNeurons, unsigned char activation) {_ssdm_SpecArrayDimSize(input, 128);_ssdm_SpecArrayDimSize(output, 128);_ssdm_SpecArrayDimSize(bias, 128);_ssdm_SpecArrayDimSize(weights, 16384);
 #pragma HLSDIRECTIVE TOP name=nnlayer
-# 18 "HLS_Project/neural_layer.cpp"
+# 116 "HLS_Project/neural_layer.cpp"
 
 #pragma HLS INTERFACE mode=s_axilite port=input
 #pragma HLS INTERFACE mode=s_axilite port=output
-#pragma HLS INTERFACE mode=s_axilite port=weights
 #pragma HLS INTERFACE mode=s_axilite port=bias
-#pragma HLS INTERFACE mode=s_axilite port=numOfInNeurons
-#pragma HLS INTERFACE mode=s_axilite port=numOfOutNeurons
+#pragma HLS INTERFACE mode=s_axilite port=weights
+#pragma HLS INTERFACE mode=s_axilite port=numOfOutputNeurons
 #pragma HLS INTERFACE mode=s_axilite port=activation
 #pragma HLS INTERFACE mode=s_axilite port=return
 
 #pragma HLS ARRAY_PARTITION variable=input type=complete
 #pragma HLS ARRAY_PARTITION variable=output type=complete
-#pragma HLS ARRAY_PARTITION variable=weights type=complete
-#pragma HLS ARRAY_PARTITION variable=bias type=complete
+#pragma HLS ARRAY_PARTITION variable=weights type=cyclic factor=size
+#pragma HLS BIND_STORAGE variable=weights type=RAM_1WNR impl=BRAM
 
- VITIS_LOOP_33_1: for (inNeurons = 0; inNeurons < 256; inNeurons++)
- {
-  VITIS_LOOP_35_2: for (outNeurons = 0; outNeurons < 256; outNeurons++)
-  {
-#pragma HLS UNROLL factor = 64
- output[outNeurons] += (weights[inNeurons+weightIndexAdded] * input[inNeurons]);
-  }
-  weightIndexAdded+=numOfInNeurons;
- }
 
- VITIS_LOOP_43_3: for (outNeurons = 0; outNeurons < 256; outNeurons++) {
-  output[outNeurons] += bias[outNeurons];
- }
+ static dataType output_[128] = {0};
 
- if(activation == 1) {
-  relu(output);
- }
- weightIndexAdded = 0;
+
+ applyBias(bias, output_, numOfOutputNeurons);
+ runLayer(input, output_, weights, numOfOutputNeurons);
+    runActivation(output, output_, numOfOutputNeurons, activation);
 }

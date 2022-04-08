@@ -2,9 +2,8 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/test_bench.cpp"
-# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/1_neuron_layer.hpp" 1
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/nnLayer.hpp" 1
        
-
 
 
 # 1 "C:/Xilinx/Vitis_HLS/2021.2/include/ap_fixed.h" 1
@@ -55120,52 +55119,120 @@ inline bool operator!=(
 
 }
 # 412 "C:/Xilinx/Vitis_HLS/2021.2/include/ap_fixed.h" 2
-# 6 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/1_neuron_layer.hpp" 2
-
+# 5 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/nnLayer.hpp" 2
+# 14 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/nnLayer.hpp"
 typedef ap_fixed<16,8> dataType;
+typedef ap_fixed<32,8> softmaxSum_type;
 
-void nnlayer(dataType input[256], dataType output[256], dataType weights[256*256], dataType bias[256], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation);
+void nnlayer(dataType input[128], dataType output[128], dataType bias[128], dataType weights[128*128], unsigned short int numOfOutputNeurons, unsigned char activation);
 # 2 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/test_bench.cpp" 2
 
 
 int main(){
- const int outputSize = 256;
- const int inputSize = 3;
- dataType input[256];
- dataType output[256] = {0};
- dataType weights[256*256];
- dataType bias[256];
+ int outputSize = 3;
+ int inputSize = 5;
+ dataType input[128] = {0};
+ dataType output[128] = {0};
+ dataType weights[128*128] = {0};
+ dataType bias[128] = {0};
 
  int counter = 1;
  int incrementer = 0;
- for(int i = 0; i < 256; i++) {
-  input[i] = dataType(i);
-  bias[i] = 1;
- }
-
- bias[256 -1] = -100;
-
- for(int i = 0; i < 256*256; i++) {
-  weights[i] = dataType(incrementer);
-  if(counter >= inputSize){
-   counter = 0;
-   incrementer++;
+ for(int i = 0; i < 128; i++) {
+  if (i < inputSize) {
+   input[i] = dataType(1);
   }
-  counter++;
- }
-
- std::cout << "STARTING" << std::endl;
- nnlayer(input, output, weights, bias, inputSize, outputSize, 1);
-
- for(int i = 0; i < 30; i++) {
-  if (output[i] != dataType(i+i+i+1)) {
-   return -i;
+  else {
+   input[i] = dataType(0);
+  }
+  if (i < outputSize) {
+   bias[i] = dataType(1);
+  }
+  else {
+   bias[i] = dataType(0);
   }
  }
 
- if(output[256 -1] == 0)
+ for(int i = 0; i < 128; i++) {
+  for (int x = 0; x < 128; x++) {
+   if (x < inputSize && i < outputSize) {
+    weights[(i*128)+x] = dataType(incrementer*0.15);
+    if(counter >= inputSize){
+     counter = 0;
+     incrementer++;
+    }
+    counter++;
+   }
+   else {
+    weights[(i*128)+x] = dataType(0);
+   }
+  }
+ }
+
+ nnlayer(input, output, bias, weights, outputSize, 3);
+
+ dataType test = 0.1328125;
+ if(output[0] != test){
+  return -1;
+ }
+ test = 0.27734375;
+ if(output[1] != test){
+  return -1;
+ }
+ test = 0.5859375;
+ if(output[2] != test){
+  return -1;
+ }
+
+ outputSize = 128;
+ inputSize = 3;
+
+ for(int i = 0; i < 128; i++) {
+  if (i < inputSize) {
+   input[i] = dataType(1);
+  }
+  else {
+   input[i] = dataType(0);
+  }
+  if (i < outputSize) {
+   bias[i] = dataType(1);
+  }
+  else {
+   bias[i] = dataType(0);
+  }
+ }
+
+ bias[0] = dataType(-100);
+ incrementer = 0;
+ counter = 1;
+
+ for(int i = 0; i < 128; i++) {
+  for (int x = 0; x < 128; x++) {
+   if (x < inputSize && i < outputSize) {
+    weights[(i*128)+x] = dataType(incrementer*1);
+    if(counter >= inputSize){
+     counter = 0;
+     incrementer++;
+    }
+    counter++;
+   }
+   else {
+    weights[(i*128)+x] = 0;
+   }
+  }
+ }
+
+ nnlayer(input, output, bias, weights, outputSize, 1);
+
+ if(output[0] != 0)
  {
   return -1;
+ }
+
+ for(int i = 1; i < 8; i++) {
+  if (output[i] != dataType((i*inputSize)+1)) {
+   return -i;
+  }
  }
 
  return 0;

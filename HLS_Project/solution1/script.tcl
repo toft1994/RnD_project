@@ -7,10 +7,10 @@ open_project HLS_Project
 set_top nnlayer
 add_files HLS_Project/neural_layer.cpp
 add_files -tb HLS_Project/test_bench.cpp -cflags "-Wno-unknown-pragmas" -csimflags "-Wno-unknown-pragmas"
-open_solution "solution1" -flow_target vitis
+open_solution "solution1" -flow_target vivado
 set_part {xc7z020-clg484-1}
 create_clock -period 10 -name default
-config_export -format ip_catalog -output C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project -rtl verilog
+config_export -format ip_catalog -output C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project -rtl verilog -vivado_clock 10
 config_interface -m_axi_alignment_byte_size 64 -m_axi_latency 64 -m_axi_max_widen_bitwidth 512
 config_rtl -register_reset_num 3
 set_clock_uncertainty 1.25
