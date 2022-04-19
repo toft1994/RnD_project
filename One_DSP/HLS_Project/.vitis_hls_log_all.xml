@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog>
+        <logs message="WARNING: [RTGEN 206-101] Design contains AXI ports. Reset is fixed to synchronous and active low." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:38:32.876+0200" type="Warning"/>
+        <logs message="WARNING: [HLS 200-960] Cannot flatten loop 'VITIS_LOOP_94_1' (Neuron_1/neural_layer.cpp:94:43) in function 'nnlayer' the outer loop is not a perfect loop because there is nontrivial logic before entering the inner loop.&#xD;&#xA;Resolution: For help on HLS 200-960 see www.xilinx.com/cgi-bin/docs/rdoc?v=2021.2;t=hls+guidance;d=200-960.html" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:38:23.411+0200" type="Warning"/>
+        <logs message="WARNING: [SYNCHK 200-24] C:/Xilinx/Vitis_HLS/2021.2/common/technology/autopilot\ap_fixed_ref.h:640: Index for bit vector operation is out of bound." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:38:21.822+0200" type="Warning"/>
+      </synLog>
+      <simLog>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_r, possible cause: There are uninitialized variables in the C design." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:40:39.860+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.553+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.533+0200" type="Warning"/>
+        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.513+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.493+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.473+0200" type="Warning"/>
+        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.453+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.433+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.413+0200" type="Warning"/>
+        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.393+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.373+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.353+0200" type="Warning"/>
+        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.333+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.313+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.283+0200" type="Warning"/>
+        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.273+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.253+0200" type="Warning"/>
+        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.233+0200" type="Warning"/>
+        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.193+0200" type="Warning"/>
+      </simLog>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>

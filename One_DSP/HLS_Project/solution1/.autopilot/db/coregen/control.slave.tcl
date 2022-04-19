@@ -1,0 +1,2 @@
+dict set slaves control {ports {numOfInNeurons {type i_ap_none width 16} numOfOutputNeurons {type i_ap_none width 16} activation {type i_ap_none width 8} input_r {type i_ap_memory width 16} output_r {type o_ap_memory width 16} bias {type i_ap_memory width 16} weights {type i_ap_memory width 16} ap_start {type ap_ctrl width 1} ap_done {type ap_ctrl width 1} ap_ready {type ap_ctrl width 1} ap_idle {type ap_ctrl width 1}} mems {input_r {width 16} output_r {width 16} bias {width 16} weights {width 16}} has_ctrl 1}
+set datawidth 32

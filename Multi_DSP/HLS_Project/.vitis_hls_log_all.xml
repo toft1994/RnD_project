@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <simLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <simLog>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_127, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.782+0200" type="Warning"/>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_126, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.770+0200" type="Warning"/>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_125, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.742+0200" type="Warning"/>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_124, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.734+0200" type="Warning"/>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_123, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.722+0200" type="Warning"/>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_122, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.707+0200" type="Warning"/>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_121, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.695+0200" type="Warning"/>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_120, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.683+0200" type="Warning"/>
+        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_119, possible cause: There are uninitialized variables in the C design." projectName="HLS_Project" solutionName="solution1" date="2022-04-10T01:40:26.671+0200" type="Warning"/>
+      </simLog>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>
