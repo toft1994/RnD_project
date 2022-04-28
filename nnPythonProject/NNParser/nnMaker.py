@@ -85,7 +85,7 @@ def TrainNetwork(neurons, act, epo, inputSize):
 
     store_test_images_labels(X_pca_test, y_test)
     store_bias_CSV("bias.csv", model)
-    store_weight_CSV("weights.csv", model, False)
+    store_weight_CSV("weights.csv", model, True)
     store_bias_CSV("bias_opti.csv", model)
     store_weight_CSV("weights_opti.csv", model, False) # Den skal nok være false anyways!!
 
@@ -185,8 +185,8 @@ def createNNConfigFile(filename, bias, weights, act):
     file1.close()
 
 if __name__ == '__main__':
-    neurons = [120, 120, 120, 80, 60, 10]
-    act = ["relu", "relu", "relu", "relu", "relu", "softmax"]
+    neurons = [120, 120, 120, 120, 120, 120, 120, 80, 60, 10]
+    act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
 
     TrainNetwork(neurons, act, 5, 120)
 
