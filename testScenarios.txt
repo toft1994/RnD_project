@@ -1,0 +1,123 @@
+Testscenarios:
+
+1:
+    neurons = [128, 68, 88, 68, 10]
+    act = ["relu", "relu", "relu", "relu", "softmax"]
+	files called: "t1opti.txt, "t1norm.txt"
+	epoch = 5
+	Test loss: 0.03824496641755104
+	Test accuracy: 0.9885500073432922
+	Total params: 38,098
+	AHW: 	0.9682
+	ATH: 	2.98617
+	TATH: 	29861.7
+	ASW: 	0.9687
+	ATS: 	12.0172
+	TATS: 	120172
+
+2:  neurons = [128, 128, 128, 68, 10]
+    act = ["relu", "relu", "relu", "relu", "softmax"]
+	files called: "t2opti.txt, "t2norm.txt"
+	epoch = 5
+	Test loss: 0.031096603721380234
+	Test accuracy: 0.9904333353042603
+	Total params: 58,998
+	AHW: 	0.9675
+	ATH: 	4.32688
+	TATH: 	43268.8
+	ASW: 	0.9675
+	ATS: 	18.7853
+	TATS: 	187853
+	
+3:  neurons = [128, 128, 128, 128, 50, 68, 10]
+    act = ["relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
+	files called: "t3opti.txt, "t3norm.txt"
+	epoch = 5
+	Test loss: 0.05856135115027428
+	Test accuracy: 0.9819333553314209
+	Total params: 76,656
+	AHW: 	0.9501
+	ATH: 	5.8063
+	TATH: 	58063
+	ASW: 	0.95
+	ATS: 	24.4828
+	TATS:	244828
+	
+4:  neurons = [128, 128, 128, 128, 128, 128, 50, 68, 10]
+    act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
+	files called: "t4opti.txt, "t4norm.txt"
+	epoch = 5
+	Test loss: 0.06777898222208023
+	Test accuracy: 0.9812666773796082
+	Total params: 109,680
+	AHW: 	0.7993
+	ATH: 	8.13572
+	TATH: 	81357.2
+	ASW: 	0.7998
+	ATS: 	35.1121
+	TATS:	351121
+	
+5:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
+    act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
+	files called: "t5opti.txt, "t5norm.txt"
+	epoch = 5
+	Test loss: 0.06743112951517105
+	Test accuracy: 0.9819333553314209
+	Total params: 142,704
+	AHW: 	0.816
+	ATH: 	10.4655
+	TATH: 	104655
+	ASW: 	0.8176
+	ATS: 	45.8689
+	TATS:	458689
+	
+6:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
+    act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
+	files called: "t6opti.txt, "t6norm.txt"
+	epoch = 5
+	Test loss: 0.11041963845491409
+	Test accuracy: 0.9702833294868469
+	Total params: 175,728
+	AHW: 	0.698
+	ATH: 	12.7961
+	TATH: 	127961
+	ASW: 	0.698
+	ATS: 	56.6826
+	TATS:	566826
+	
+7:  neurons = [128, 128, 128, 68, 10]
+    act = ["relu", "relu", "relu", sigmoid_approx, "softmax"]
+	files called: "t7opti.txt, "t7norm.txt"
+	epoch = 5
+	Test loss: 0.04429211467504501
+	Test accuracy: 0.9889000058174133
+	Total params: 58,998
+	AHW: 	0.9716
+	ATH: 	4.34895
+	TATH: 	43489.5
+	ASW: 	0.9716
+	ATS: 	18.9523
+	TATS:	189523
+	
+8:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
+    act = ["relu", "relu", "relu", "relu", sigmoid_approx, "relu", "relu", "relu", "relu", sigmoid_approx, "softmax"]
+	files called: "t8opti.txt, "t8norm.txt"
+	epoch = 20
+	Test loss: 0.6210696697235107
+	Test accuracy: 0.8099499940872192
+	Total params: 142,704
+	AHW: 	0.045
+	ATH: 	10.5252
+	TATH: 	105252
+	ASW: 	0.0452
+	ATS: 	46.1498
+	TATS:	461498
+	
+	
+
+
+Hardware softmax res: 
+0,0,0,0.00390625,0,0,0,0.988281,0,0
+
+Software softmax res: 
+0,0,0,0.00390625,0,0,0,0.988281,0,0
