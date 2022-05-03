@@ -1,5 +1,13 @@
 Testscenarios:
 
+AHW = Accuracy hardware
+ATH = Average time hardware
+TTH = Total time hardware
+
+ASW = Accuracy software
+ATS = Average time software
+TTS = Total time software
+
 1:
     neurons = [128, 68, 88, 68, 10]
     act = ["relu", "relu", "relu", "relu", "softmax"]
@@ -10,10 +18,15 @@ Testscenarios:
 	Total params: 38,098
 	AHW: 	0.9682
 	ATH: 	2.98617
-	TATH: 	29861.7
+	TTH: 	29861.7
 	ASW: 	0.9687
 	ATS: 	12.0172
-	TATS: 	120172
+	TTS: 	120172
+	
+	NON OPTI:
+	AHW: 	0.9682
+	ATH: 	4.39764
+	TTH: 	43976.4
 
 2:  neurons = [128, 128, 128, 68, 10]
     act = ["relu", "relu", "relu", "relu", "softmax"]
@@ -24,10 +37,15 @@ Testscenarios:
 	Total params: 58,998
 	AHW: 	0.9675
 	ATH: 	4.32688
-	TATH: 	43268.8
+	TTH: 	43268.8
 	ASW: 	0.9675
 	ATS: 	18.7853
-	TATS: 	187853
+	TTS: 	187853
+	
+	NON OPTI:
+	AHW: 	0.9675
+	ATH: 	6.73837
+	TTH: 	67383.7
 	
 3:  neurons = [128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
@@ -38,10 +56,15 @@ Testscenarios:
 	Total params: 76,656
 	AHW: 	0.9501
 	ATH: 	5.8063
-	TATH: 	58063
+	TTH: 	58063
 	ASW: 	0.95
 	ATS: 	24.4828
-	TATS:	244828
+	TTS:	244828
+	
+	NON OPTI:
+	AHW: 	0.9501
+	ATH: 	8.74243
+	TTH: 	87424.3
 	
 4:  neurons = [128, 128, 128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
@@ -52,10 +75,15 @@ Testscenarios:
 	Total params: 109,680
 	AHW: 	0.7993
 	ATH: 	8.13572
-	TATH: 	81357.2
+	TTH: 	81357.2
 	ASW: 	0.7998
 	ATS: 	35.1121
-	TATS:	351121
+	TTS:	351121
+	
+	NON OPTI:
+	AHW: 	0.7993
+	ATH: 	12.4612
+	TTH: 	124612
 	
 5:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
@@ -66,10 +94,15 @@ Testscenarios:
 	Total params: 142,704
 	AHW: 	0.816
 	ATH: 	10.4655
-	TATH: 	104655
+	TTH: 	104655
 	ASW: 	0.8176
 	ATS: 	45.8689
-	TATS:	458689
+	TTS:	458689
+	
+	NON OPTI:
+	AHW: 	0.816
+	ATH: 	16.1804
+	TTH: 	161804
 	
 6:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
@@ -80,10 +113,15 @@ Testscenarios:
 	Total params: 175,728
 	AHW: 	0.698
 	ATH: 	12.7961
-	TATH: 	127961
+	TTH: 	127961
 	ASW: 	0.698
 	ATS: 	56.6826
-	TATS:	566826
+	TTS:	566826
+	
+	NON OPTI:
+	AHW: 	0.6981
+	ATH: 	19.8967
+	TTH: 	198968
 	
 7:  neurons = [128, 128, 128, 68, 10]
     act = ["relu", "relu", "relu", sigmoid_approx, "softmax"]
@@ -94,10 +132,15 @@ Testscenarios:
 	Total params: 58,998
 	AHW: 	0.9716
 	ATH: 	4.34895
-	TATH: 	43489.5
+	TTH: 	43489.5
 	ASW: 	0.9716
 	ATS: 	18.9523
-	TATS:	189523
+	TTS:	189523
+	
+	NON OPTI:
+	AHW: 	0.9716
+	ATH: 	6.73847
+	TTH: 	67384.7
 	
 8:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", sigmoid_approx, "relu", "relu", "relu", "relu", sigmoid_approx, "softmax"]
@@ -108,12 +151,15 @@ Testscenarios:
 	Total params: 142,704
 	AHW: 	0.045
 	ATH: 	10.5252
-	TATH: 	105252
+	TTH: 	105252
 	ASW: 	0.0452
 	ATS: 	46.1498
-	TATS:	461498
+	TTS:	461498
 	
-	
+	NON OPTI:
+	AHW: 	0.045
+	ATH: 	16.1815
+	TTH: 	161815
 
 
 Hardware softmax res: 
