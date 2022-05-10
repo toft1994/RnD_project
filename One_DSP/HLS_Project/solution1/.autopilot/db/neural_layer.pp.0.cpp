@@ -1,4 +1,4 @@
-# 1 "Neuron_1/neural_layer.cpp"
+# 1 "HLS_Project/neural_layer.cpp"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 395 "<built-in>" 3
@@ -154,8 +154,8 @@ extern "C" {
 
 }
 # 2 "<built-in>" 2
-# 1 "Neuron_1/neural_layer.cpp" 2
-# 1 "Neuron_1/nnLayer.hpp" 1
+# 1 "HLS_Project/neural_layer.cpp" 2
+# 1 "HLS_Project/nnLayer.hpp" 1
 
 
 
@@ -5666,15 +5666,15 @@ inline bool operator!=(
 
 }
 # 412 "C:/Xilinx/Vitis_HLS/2021.2/common/technology/autopilot\\ap_fixed.h" 2
-# 5 "Neuron_1/nnLayer.hpp" 2
-# 22 "Neuron_1/nnLayer.hpp"
+# 5 "HLS_Project/nnLayer.hpp" 2
+# 22 "HLS_Project/nnLayer.hpp"
 typedef ap_fixed<16,8> fixedInput;
 typedef ap_fixed<16,8> fixedOutput;
 typedef ap_ufixed<32,16> softmax_type;
 typedef ap_ufixed<64,32> softmaxSum_type;
 
 __attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput weights[128*128], fixedInput bias[128], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation);
-# 2 "Neuron_1/neural_layer.cpp" 2
+# 2 "HLS_Project/neural_layer.cpp" 2
 
 static const unsigned short int size = 128;
 
@@ -5750,7 +5750,7 @@ void softmax_approx(fixedInput * output_, fixedInput * input_, unsigned short in
  }
 
  if (sum > 0) {
-  VITIS_LOOP_77_3: for (unsigned short int i = 0; i < 128; i++)
+  VITIS_LOOP_77_3: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
   {
 #pragma HLS pipeline off
  output_[i] = resArray[i]/sum;
@@ -5758,20 +5758,16 @@ void softmax_approx(fixedInput * output_, fixedInput * input_, unsigned short in
  }
 }
 
-void applyBias(fixedInput * bias, fixedInput * output_, unsigned short int numOfOutputNeurons) {
+void runLayer(fixedInput * input_, fixedInput * output_, fixedInput * bias, fixedInput * weights_, unsigned short int numOfInNeurons, unsigned short int numOfOutputNeurons) {
 #pragma HLS inline
- VITIS_LOOP_87_1: for (int i = 0; i < numOfOutputNeurons; i++) {
-  output_[i] = bias[i];
- }
-}
-
-void runLayer(fixedInput * input_, fixedInput * output_, fixedInput * weights_, unsigned short int numOfInNeurons, unsigned short int numOfOutputNeurons) {
-#pragma HLS inline
- VITIS_LOOP_94_1: for (unsigned short int outNeurons = 0; outNeurons < numOfOutputNeurons; outNeurons++)
+ VITIS_LOOP_87_1: for (unsigned short int outNeurons = 0; outNeurons < numOfOutputNeurons; outNeurons++)
  {
-  VITIS_LOOP_96_2: for (unsigned short int inNeurons = 0; inNeurons < numOfInNeurons; inNeurons++)
+#pragma HLS pipeline off
+ output_[outNeurons] = bias[outNeurons];
+  VITIS_LOOP_91_2: for (unsigned short int inNeurons = 0; inNeurons < numOfInNeurons; inNeurons++)
   {
-   output_[outNeurons] += (weights_[inNeurons + (outNeurons*128)] * input_[inNeurons]);
+#pragma HLS pipeline off
+ output_[outNeurons] += (weights_[inNeurons + (outNeurons*numOfInNeurons)] * input_[inNeurons]);
   }
  }
 }
@@ -5789,7 +5785,7 @@ void runActivation(fixedInput * output_, fixedInput * input, unsigned char activ
      softmax_approx(output_, input, numOfOutputNeurons);
     }
     else {
-     VITIS_LOOP_116_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+     VITIS_LOOP_112_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
      {
       output_[i] = input[i];
      }
@@ -5798,7 +5794,7 @@ void runActivation(fixedInput * output_, fixedInput * input, unsigned char activ
 
 __attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput bias[128], fixedInput weights[128*128], unsigned short int numOfInNeurons, unsigned short int numOfOutputNeurons, unsigned char activation) {_ssdm_SpecArrayDimSize(input, 128);_ssdm_SpecArrayDimSize(output, 128);_ssdm_SpecArrayDimSize(bias, 128);_ssdm_SpecArrayDimSize(weights, 16384);
 #pragma HLSDIRECTIVE TOP name=nnlayer
-# 123 "Neuron_1/neural_layer.cpp"
+# 119 "HLS_Project/neural_layer.cpp"
 
 #pragma HLS INTERFACE mode=s_axilite port=input
 #pragma HLS INTERFACE mode=s_axilite port=output
@@ -5811,7 +5807,6 @@ __attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(fixedInput input[128], fi
 
  static fixedInput output_[128] = {0};
 
- applyBias(bias, output_, numOfOutputNeurons);
- runLayer(input, output_, weights, numOfInNeurons, numOfOutputNeurons);
+ runLayer(input, output_, bias, weights, numOfInNeurons, numOfOutputNeurons);
     runActivation(output, output_, activation, numOfOutputNeurons);
 }

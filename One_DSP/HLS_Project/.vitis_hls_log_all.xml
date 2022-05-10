@@ -2,44 +2,22 @@
 <vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
   <errorLogs>
     <logs>
-      <synLog/>
       <simLog/>
-      <mgLog/>
-      <packageLog/>
-      <csimLog/>
     </logs>
   </errorLogs>
   <warningLogs>
     <logs>
-      <synLog>
-        <logs message="WARNING: [RTGEN 206-101] Design contains AXI ports. Reset is fixed to synchronous and active low." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:38:32.876+0200" type="Warning"/>
-        <logs message="WARNING: [HLS 200-960] Cannot flatten loop 'VITIS_LOOP_94_1' (Neuron_1/neural_layer.cpp:94:43) in function 'nnlayer' the outer loop is not a perfect loop because there is nontrivial logic before entering the inner loop.&#xD;&#xA;Resolution: For help on HLS 200-960 see www.xilinx.com/cgi-bin/docs/rdoc?v=2021.2;t=hls+guidance;d=200-960.html" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:38:23.411+0200" type="Warning"/>
-        <logs message="WARNING: [SYNCHK 200-24] C:/Xilinx/Vitis_HLS/2021.2/common/technology/autopilot\ap_fixed_ref.h:640: Index for bit vector operation is out of bound." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:38:21.822+0200" type="Warning"/>
-      </synLog>
       <simLog>
-        <logs message="WARNING: [SIM 212-201] RTL produces unknown value 'x' or 'X' on port output_r, possible cause: There are uninitialized variables in the C design." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:40:39.860+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.553+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.533+0200" type="Warning"/>
-        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.513+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.493+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.473+0200" type="Warning"/>
-        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.453+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.433+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.413+0200" type="Warning"/>
-        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.393+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.373+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.353+0200" type="Warning"/>
-        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.333+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.313+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.283+0200" type="Warning"/>
-        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.273+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound (16) or lower bound (8) out of range (16)." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.253+0200" type="Warning"/>
-        <logs message="WARNING: Higher bound(16) or lower(8) bound out of range." projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.233+0200" type="Warning"/>
-        <logs message="WARNING: Out of bounds in range()" projectName="Neuron_1" solutionName="solution1" date="2022-04-12T22:39:53.193+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1441. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread().&#xD;&#xA;Compiling module xil_defaultlib.nodf_module_intf&#xD;&#xA;Compiling module xil_defaultlib.seq_loop_intf(FSM_WIDTH=149)&#xD;&#xA;Compiling module xil_defaultlib.dataflow_monitor_1&#xD;&#xA;Compiling module xil_defaultlib.apatb_nnlayer_top&#xD;&#xA;Compiling module work.glbl&#xD;&#xA;Built simulation snapshot nnlayer&#xD;&#xA;&#xD;&#xA;****** xsim v2021.2 (64-bit)&#xD;&#xA;  **** SW Build 3367213 on Tue Oct 19 02:48:09 MDT 2021&#xD;&#xA;  **** IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021&#xD;&#xA;    ** Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.&#xD;&#xA;&#xD;&#xA;source xsim.dir/nnlayer/xsim_script.tcl&#xD;&#xA;# xsim {nnlayer} -autoloadwcfg -tclbatch {nnlayer.tcl}&#xD;&#xA;Time resolution is 1 ps&#xD;&#xA;source nnlayer.tcl&#xD;&#xA;## run all&#xD;&#xA;////////////////////////////////////////////////////////////////////////////////////&#xD;&#xA;// Inter-Transaction Progress: Completed Transaction / Total Transaction&#xD;&#xA;// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%&#xD;&#xA;//&#xD;&#xA;// RTL Simulation : &quot;Inter-Transaction Progress&quot; [&quot;Intra-Transaction Progress&quot;] @ &quot;Simulation Time&quot;&#xD;&#xA;////////////////////////////////////////////////////////////////////////////////////&#xD;&#xA;// RTL Simulation : 0 / 4 [n/a] @ &quot;155000&quot;&#xD;&#xA;// RTL Simulation : 1 / 4 [n/a] @ &quot;1496605000&quot;&#xD;&#xA;// RTL Simulation : 2 / 4 [n/a] @ &quot;2695615000&quot;&#xD;&#xA;// RTL Simulation : 3 / 4 [n/a] @ &quot;4721375000&quot;&#xD;&#xA;// RTL Simulation : 4 / 4 [n/a] @ &quot;6710045000&quot;&#xD;&#xA;////////////////////////////////////////////////////////////////////////////////////&#xD;&#xA;$finish called at time : 6710105 ns : File &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/nnlayer.autotb.v&quot; Line 305&#xD;&#xA;run: Time (s): cpu = 00:00:02 ; elapsed = 00:00:15 . Memory (MB): peak = 1172.461 ; gain = 0.000&#xD;&#xA;## quit" projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:03:22.867+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1400. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread()." projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:02:58.240+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1391. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread()." projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:02:58.225+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1324. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread()." projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:02:58.206+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1283. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread()." projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:02:58.194+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1274. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread()." projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:02:58.179+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1076. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread()." projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:02:58.165+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1035. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread()." projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:02:58.153+0200" type="Warning"/>
+        <logs message="WARNING: [XSIM 43-3373] &quot;C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/solution1/sim/verilog/AESL_axi_slave_control.v&quot; Line 1026. System function $fread is used as system task. This system function should have a LHS e.g. x=$fread()." projectName="HLS_Project" solutionName="solution1" date="2022-05-10T10:02:58.138+0200" type="Warning"/>
       </simLog>
-      <mgLog/>
-      <packageLog/>
-      <csimLog/>
     </logs>
   </warningLogs>
 </vivadoHLSLog:LogRoot>

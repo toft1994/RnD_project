@@ -11,159 +11,184 @@ TTS = Total time software
 1:
     neurons = [128, 68, 88, 68, 10]
     act = ["relu", "relu", "relu", "relu", "softmax"]
-	files called: "t1opti.txt, "t1norm.txt"
+	files called: "t1opti,txt, "t1norm,txt"
 	epoch = 5
-	Test loss: 0.03824496641755104
-	Test accuracy: 0.9885500073432922
+	Test loss: 0,03824496641755104
+	Test accuracy: 0,9885500073432922
 	Total params: 38,098
-	AHW: 	0.9682
-	ATH: 	2.98617
-	TTH: 	29861.7
-	ASW: 	0.9687
-	ATS: 	12.0172
+	AHW: 	0,9682
+	ATH: 	2.62688
+	TTH: 	26268.8
+	AETH:	0.433275
+	TETH:	4332.75
+	ASW: 	0,9687
+	ATS: 	12,0172
 	TTS: 	120172
-	
+
 	NON OPTI:
-	AHW: 	0.9682
-	ATH: 	4.39764
-	TTH: 	43976.4
+	AHW: 	0,9682
+	ATH: 	4.16799
+	TTH: 	41679.9
+	AETH:	1.97474
+	TETH:	19747.4
 
 2:  neurons = [128, 128, 128, 68, 10]
     act = ["relu", "relu", "relu", "relu", "softmax"]
-	files called: "t2opti.txt, "t2norm.txt"
+	files called: "t2opti,txt, "t2norm,txt"
 	epoch = 5
-	Test loss: 0.031096603721380234
-	Test accuracy: 0.9904333353042603
+	Test loss: 0,031096603721380234
+	Test accuracy: 0,9904333353042603
 	Total params: 58,998
-	AHW: 	0.9675
-	ATH: 	4.32688
-	TTH: 	43268.8
-	ASW: 	0.9675
-	ATS: 	18.7853
+	AHW: 	0,9675
+	ATH: 	4.03354
+	TTH: 	40335.4
+	AETH:	0.657676
+	TETH: 	6576.76
+	ASW: 	0,9675
+	ATS: 	18,7853
 	TTS: 	187853
-	
+
 	NON OPTI:
-	AHW: 	0.9675
-	ATH: 	6.73837
-	TTH: 	67383.7
+	AHW: 	0,9675
+	ATH: 	6.42469
+	TTH: 	64246.9
+	AETH:	3.04775
+	TETH:	30477.5
 	
 3:  neurons = [128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
-	files called: "t3opti.txt, "t3norm.txt"
+	files called: "t3opti,txt, "t3norm,txt"
 	epoch = 5
-	Test loss: 0.05856135115027428
-	Test accuracy: 0.9819333553314209
+	Test loss: 0,05856135115027428
+	Test accuracy: 0,9819333553314209
 	Total params: 76,656
-	AHW: 	0.9501
-	ATH: 	5.8063
-	TTH: 	58063
-	ASW: 	0.95
-	ATS: 	24.4828
+	AHW: 	0,9501
+	ATH: 	5.2477
+	TTH: 	52477
+	AETH:	0.858673
+	TETH:	8586.73
+	ASW: 	0,95
+	ATS: 	24,4828
 	TTS:	244828
 	
 	NON OPTI:
-	AHW: 	0.9501
-	ATH: 	8.74243
-	TTH: 	87424.3
+	AHW: 	0,9501
+	ATH: 	8.34893
+	TTH: 	83489.3
+	AETH:	3.95913
+	TETH:	39591.3
 	
 4:  neurons = [128, 128, 128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
-	files called: "t4opti.txt, "t4norm.txt"
+	files called: "t4opti,txt, "t4norm,txt"
 	epoch = 5
-	Test loss: 0.06777898222208023
-	Test accuracy: 0.9812666773796082
+	Test loss: 0,06777898222208023
+	Test accuracy: 0,9812666773796082
 	Total params: 109,680
-	AHW: 	0.7993
-	ATH: 	8.13572
-	TTH: 	81357.2
-	ASW: 	0.7998
-	ATS: 	35.1121
+	AHW: 	0,7993
+	ATH: 	7.49712
+	TTH: 	74971.2
+	AETH:	1.22557
+	TETH:	12255.7
+	ASW: 	0,7998
+	ATS: 	35,1121
 	TTS:	351121
 	
 	NON OPTI:
-	AHW: 	0.7993
-	ATH: 	12.4612
-	TTH: 	124612
+	AHW: 	0,7993
+	ATH: 	11.9308
+	TTH: 	119308
+	AETH:	5.66184
+	TETH:	56618.4
 	
 5:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
-	files called: "t5opti.txt, "t5norm.txt"
+	files called: "t5opti,txt, "t5norm,txt"
 	epoch = 5
-	Test loss: 0.06743112951517105
-	Test accuracy: 0.9819333553314209
+	Test loss: 0,06743112951517105
+	Test accuracy: 0,9819333553314209
 	Total params: 142,704
-	AHW: 	0.816
-	ATH: 	10.4655
-	TTH: 	104655
-	ASW: 	0.8176
-	ATS: 	45.8689
+	AHW: 	0,816
+	ATH: 	9.74743
+	TTH: 	97474.3
+	AETH:	1.59259
+	TETH:	15925.9
+	ASW: 	0,8176
+	ATS: 	45,8689
 	TTS:	458689
 	
 	NON OPTI:
-	AHW: 	0.816
-	ATH: 	16.1804
-	TTH: 	161804
+	AHW: 	0,816
+	ATH: 	15.5155
+	TTH: 	155155
+	AETH:	7.36529
+	TETH:	73652.9
 	
 6:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
-	files called: "t6opti.txt, "t6norm.txt"
+	files called: "t6opti,txt, "t6norm,txt"
 	epoch = 5
-	Test loss: 0.11041963845491409
-	Test accuracy: 0.9702833294868469
+	Test loss: 0,11041963845491409
+	Test accuracy: 0,9702833294868469
 	Total params: 175,728
-	AHW: 	0.698
-	ATH: 	12.7961
-	TTH: 	127961
-	ASW: 	0.698
-	ATS: 	56.6826
+	AHW: 	0,698
+	ATH: 	11.9942
+	TTH: 	119942
+	AETH:	1.95968
+	TETH:	19596.8
+	ASW: 	0,698
+	ATS: 	56,6826
 	TTS:	566826
 	
 	NON OPTI:
-	AHW: 	0.6981
-	ATH: 	19.8967
-	TTH: 	198968
+	AHW: 	0,6981
+	ATH: 	19.0965
+	TTH: 	190965
+	AETH:	9.06911
+	TETH:	90691.1
 	
 7:  neurons = [128, 128, 128, 68, 10]
     act = ["relu", "relu", "relu", sigmoid_approx, "softmax"]
-	files called: "t7opti.txt, "t7norm.txt"
+	files called: "t7opti,txt, "t7norm,txt"
 	epoch = 5
-	Test loss: 0.04429211467504501
-	Test accuracy: 0.9889000058174133
+	Test loss: 0,04429211467504501
+	Test accuracy: 0,9889000058174133
 	Total params: 58,998
-	AHW: 	0.9716
-	ATH: 	4.34895
-	TTH: 	43489.5
-	ASW: 	0.9716
-	ATS: 	18.9523
+	AHW: 	0,9716
+	ATH: 	4.0337
+	TTH: 	40337
+	AETH:	0.657996
+	TETH:	6579.96
+	ASW: 	0,9716
+	ATS: 	18,9523
 	TTS:	189523
 	
 	NON OPTI:
-	AHW: 	0.9716
-	ATH: 	6.73847
-	TTH: 	67384.7
+	AHW: 	0,9716
+	ATH: 	6.44499
+	TTH: 	64449.9
+	AETH:	3.06883
+	TETH:	30688.3
 	
 8:  neurons = [128, 128, 128, 128, 128, 128, 128, 128, 50, 68, 10]
     act = ["relu", "relu", "relu", "relu", sigmoid_approx, "relu", "relu", "relu", "relu", sigmoid_approx, "softmax"]
-	files called: "t8opti.txt, "t8norm.txt"
+	files called: "t8opti,txt, "t8norm,txt"
 	epoch = 20
-	Test loss: 0.6210696697235107
-	Test accuracy: 0.8099499940872192
+	Test loss: 0,6210696697235107
+	Test accuracy: 0,8099499940872192
 	Total params: 142,704
-	AHW: 	0.045
-	ATH: 	10.5252
-	TTH: 	105252
-	ASW: 	0.0452
-	ATS: 	46.1498
+	AHW: 	0,045
+	ATH: 	9.74807
+	TTH: 	97480.7
+	AETH:	1.5935
+	TETH:	15935
+	ASW: 	0,0452
+	ATS: 	46,1498
 	TTS:	461498
 	
 	NON OPTI:
-	AHW: 	0.045
-	ATH: 	16.1815
-	TTH: 	161815
-
-
-Hardware softmax res: 
-0,0,0,0.00390625,0,0,0,0.988281,0,0
-
-Software softmax res: 
-0,0,0,0.00390625,0,0,0,0.988281,0,0
+	AHW: 	0,045
+	ATH: 	15.5732
+	TTH: 	155732
+	AETH:	7.42297
+	TETH:	74229.7

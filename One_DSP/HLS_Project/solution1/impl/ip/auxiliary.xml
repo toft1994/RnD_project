@@ -9,5 +9,5 @@
   <xd:arg xd:name="numOfOutputNeurons" xd:originalName="numOfOutputNeurons" xd:direction="in" xd:interfaceRef="s_axi_control" xd:busTypeRef="axilite" xd:offset="0x18" xd:handshakeRef="ap_none" xd:dataWidth="32"/>
   <xd:arg xd:name="activation" xd:originalName="activation" xd:direction="in" xd:interfaceRef="s_axi_control" xd:busTypeRef="axilite" xd:offset="0x20" xd:handshakeRef="ap_none" xd:dataWidth="32"/>
   <xd:latencyEstimates xd:best-case="undef" xd:worst-case="undef" xd:average-case="undef"/>
-  <xd:resourceEstimates xd:LUT="4401" xd:FF="3860" xd:BRAM="0" xd:DSP="6"/>
+  <xd:resourceEstimates xd:LUT="3434" xd:FF="2714" xd:BRAM="0" xd:DSP="7"/>
 </xd:acceleratorMap>

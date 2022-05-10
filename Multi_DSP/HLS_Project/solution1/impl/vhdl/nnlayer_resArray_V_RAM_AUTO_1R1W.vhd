@@ -10,8 +10,8 @@ use ieee.std_logic_unsigned.all;
 entity nnlayer_resArray_V_RAM_AUTO_1R1W is 
     generic(
             DataWidth     : integer := 32; 
-            AddressWidth     : integer := 8; 
-            AddressRange    : integer := 256
+            AddressWidth     : integer := 7; 
+            AddressRange    : integer := 128
     ); 
     port (
           address0     : in std_logic_vector(AddressWidth-1 downto 0); 

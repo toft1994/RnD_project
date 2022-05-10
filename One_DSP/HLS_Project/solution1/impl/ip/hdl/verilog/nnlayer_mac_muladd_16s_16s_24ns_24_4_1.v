@@ -4,7 +4,7 @@
 // ==============================================================
 `timescale 1 ns / 1 ps
 
-module nnlayer_mac_muladd_16s_16s_24ns_24_4_1_DSP48_0(
+module nnlayer_mac_muladd_16s_16s_24ns_24_4_1_DSP48_1(
     input clk,
     input rst,
     input ce,
@@ -68,7 +68,7 @@ output[dout_WIDTH - 1:0] dout;
 
 
 
-nnlayer_mac_muladd_16s_16s_24ns_24_4_1_DSP48_0 nnlayer_mac_muladd_16s_16s_24ns_24_4_1_DSP48_0_U(
+nnlayer_mac_muladd_16s_16s_24ns_24_4_1_DSP48_1 nnlayer_mac_muladd_16s_16s_24ns_24_4_1_DSP48_1_U(
     .clk( clk ),
     .rst( reset ),
     .ce( ce ),

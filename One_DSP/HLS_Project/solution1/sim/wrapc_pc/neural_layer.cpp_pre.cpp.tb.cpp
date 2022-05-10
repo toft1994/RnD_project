@@ -2,11 +2,11 @@
 // Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2021.2 (64-bit)
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // ==============================================================
-# 1 "C:/HLS_projects/Neuron_1/neural_layer.cpp"
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/neural_layer.cpp"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "C:/HLS_projects/Neuron_1/neural_layer.cpp"
-# 1 "C:/HLS_projects/Neuron_1/nnLayer.hpp" 1
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/neural_layer.cpp"
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/nnLayer.hpp" 1
        
 
 
@@ -55123,15 +55123,15 @@ inline bool operator!=(
 
 }
 # 412 "C:/Xilinx/Vitis_HLS/2021.2/include/ap_fixed.h" 2
-# 5 "C:/HLS_projects/Neuron_1/nnLayer.hpp" 2
-# 22 "C:/HLS_projects/Neuron_1/nnLayer.hpp"
+# 5 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/nnLayer.hpp" 2
+# 22 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/nnLayer.hpp"
 typedef ap_fixed<16,8> fixedInput;
 typedef ap_fixed<16,8> fixedOutput;
 typedef ap_ufixed<32,16> softmax_type;
 typedef ap_ufixed<64,32> softmaxSum_type;
 
 void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput weights[128*128], fixedInput bias[128], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation);
-# 2 "C:/HLS_projects/Neuron_1/neural_layer.cpp" 2
+# 2 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/neural_layer.cpp" 2
 
 static const unsigned short int size = 128;
 
@@ -55207,7 +55207,7 @@ void softmax_approx(fixedInput * output_, fixedInput * input_, unsigned short in
  }
 
  if (sum > 0) {
-  for (unsigned short int i = 0; i < 128; i++)
+  for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
   {
 #pragma HLS pipeline off
    output_[i] = resArray[i]/sum;
@@ -55215,20 +55215,16 @@ void softmax_approx(fixedInput * output_, fixedInput * input_, unsigned short in
  }
 }
 
-void applyBias(fixedInput * bias, fixedInput * output_, unsigned short int numOfOutputNeurons) {
-#pragma HLS inline
- for (int i = 0; i < numOfOutputNeurons; i++) {
-  output_[i] = bias[i];
- }
-}
-
-void runLayer(fixedInput * input_, fixedInput * output_, fixedInput * weights_, unsigned short int numOfInNeurons, unsigned short int numOfOutputNeurons) {
+void runLayer(fixedInput * input_, fixedInput * output_, fixedInput * bias, fixedInput * weights_, unsigned short int numOfInNeurons, unsigned short int numOfOutputNeurons) {
 #pragma HLS inline
  for (unsigned short int outNeurons = 0; outNeurons < numOfOutputNeurons; outNeurons++)
  {
+#pragma HLS pipeline off
+  output_[outNeurons] = bias[outNeurons];
   for (unsigned short int inNeurons = 0; inNeurons < numOfInNeurons; inNeurons++)
   {
-   output_[outNeurons] += (weights_[inNeurons + (outNeurons*128)] * input_[inNeurons]);
+#pragma HLS pipeline off
+   output_[outNeurons] += (weights_[inNeurons + (outNeurons*numOfInNeurons)] * input_[inNeurons]);
   }
  }
 }
@@ -55265,8 +55261,7 @@ void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput bias[128]
 
  static fixedInput output_[128] = {0};
 
- applyBias(bias, output_, numOfOutputNeurons);
- runLayer(input, output_, weights, numOfInNeurons, numOfOutputNeurons);
+ runLayer(input, output_, bias, weights, numOfInNeurons, numOfOutputNeurons);
     runActivation(output, output_, activation, numOfOutputNeurons);
 }
 #ifndef HLS_FASTSIM
@@ -55289,5 +55284,5 @@ apatb_nnlayer_ir(input, output, bias, weights, numOfInNeurons, numOfOutputNeuron
 return ;
 }
 #endif
-# 138 "C:/HLS_projects/Neuron_1/neural_layer.cpp"
+# 133 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/neural_layer.cpp"
 

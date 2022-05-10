@@ -35,6 +35,18 @@ def to_fixed(f,e,totalBits):
         b = 2**totalBits - abs(b)
     return b
 
+def to_float(x,e):
+    c = abs(x)
+    sign = 1 
+    if x < 0:
+        # convert back from two's complement
+        c = x - 1 
+        c = ~c
+        sign = -1
+    f = (1.0 * c) / (2 ** e)
+    f = f * sign
+    return f
+
 def TrainNetwork(neurons, act, epo, inputSize):
     # Model / data parameters
     num_classes = 10
@@ -76,6 +88,34 @@ def TrainNetwork(neurons, act, epo, inputSize):
 
     model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
     model.fit(X_pca_train, y_train, batch_size=batch_size, epochs=epochs)
+
+    print(model.layers[0].get_weights())
+
+    for layer in model.layers:
+        all = []
+        weights_ = []
+        bias_ = []
+        layer_get_weights = layer.get_weights()[0]
+        for neuron in layer_get_weights:
+            adder = []
+            for weight in neuron:
+                adder.append(to_float(to_fixed(weight, 8, 16),8))
+            weights_.append(adder)
+        
+        layer_get_bias = layer.get_weights()[1]
+        for neuron in layer_get_bias:
+            bias_.append(to_float(to_fixed(neuron,8,16),8))
+
+        print(layer.get_weights()[0].shape)
+        print(np.asarray(weights_).shape)
+        print(layer.get_weights()[1].shape)
+        print(np.asarray(bias_).shape)
+        print(np.asarray(layer.get_weights()).shape)
+        print(np.asarray([weights_, bias_]).shape)
+
+        layer.set_weights([weights_, bias_])
+
+                
 
     score = model.evaluate(X_pca_train, y_train, verbose=0)
     predict = model.predict(X_pca_test)
@@ -185,10 +225,12 @@ def createNNConfigFile(filename, bias, weights, act):
     file1.close()
 
 if __name__ == '__main__':
-    neurons = [120, 120, 120, 120, 120, 120, 120, 80, 60, 10]
-    act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
+    #neurons = [120, 120, 120, 120, 120, 120, 120, 80, 60, 10]
+    #act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
+    neurons = [10, 10]
+    act = ["relu", "softmax"]
 
-    TrainNetwork(neurons, act, 5, 120)
+    TrainNetwork(neurons, act, 1, 10)
 
     bias = load_dat_files('bias.csv')
     weights = load_dat_files('weights.csv')

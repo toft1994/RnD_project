@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<item key="devices_info_Local" value="{&quot;cables&quot;:[{&quot;name&quot;:&quot;Digilent Zed 210248570753&quot;,&quot;indexContextMap&quot;:{&quot;2&quot;:&quot;jsn-Zed-210248570753-4ba00477-0&quot;,&quot;3&quot;:&quot;jsn-Zed-210248570753-23727093-0&quot;}}]}"/>
-	<item key="Application_Code_system-bitFile" value="${project_loc:Application_Code}/_ide/bitstream/design_1_wrapper.bit"/>
-	<item key="Application_Code_system-bmmFile" value=""/>
-	<item key="Application_Code_system-target" value="Local"/>
-	<item key="Application_Code_system-device" value="Auto Detect"/>
-	<item key="Application_Code_system-partial_bit" value="false"/>
-	<item key="Application_Code_system-skip_rev_check" value="false"/>
-	<item key="programfpga.sdxproject" value="Application_Code_system"/>
 </section>

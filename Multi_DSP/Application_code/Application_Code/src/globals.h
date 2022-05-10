@@ -1,7 +1,6 @@
 //
 // Created by MIKKELJENSEN on 25-02-2022.
 //
-
 #ifndef FILEPARSER_GLOBALS_H
 #define FILEPARSER_GLOBALS_H
 
@@ -12,5 +11,6 @@
 
 typedef u16 CUSTOMTYPE;
 typedef ap_fixed<16,8> FIXEDCONVERT;
+
 
 #endif //FILEPARSER_GLOBALS_H

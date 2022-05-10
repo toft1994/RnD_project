@@ -1,8 +1,8 @@
-# 1 "C:/HLS_projects/Neuron_1/test_bench.cpp"
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/test_bench.cpp"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "C:/HLS_projects/Neuron_1/test_bench.cpp"
-# 1 "C:/HLS_projects/Neuron_1/nnLayer.hpp" 1
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/test_bench.cpp"
+# 1 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/nnLayer.hpp" 1
        
 
 
@@ -55119,15 +55119,15 @@ inline bool operator!=(
 
 }
 # 412 "C:/Xilinx/Vitis_HLS/2021.2/include/ap_fixed.h" 2
-# 5 "C:/HLS_projects/Neuron_1/nnLayer.hpp" 2
-# 22 "C:/HLS_projects/Neuron_1/nnLayer.hpp"
+# 5 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/nnLayer.hpp" 2
+# 22 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/nnLayer.hpp"
 typedef ap_fixed<16,8> fixedInput;
 typedef ap_fixed<16,8> fixedOutput;
 typedef ap_ufixed<32,16> softmax_type;
 typedef ap_ufixed<64,32> softmaxSum_type;
 
 void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput weights[128*128], fixedInput bias[128], unsigned short int numOfInNeurons, unsigned short numOfOutNeurons, unsigned char activation);
-# 2 "C:/HLS_projects/Neuron_1/test_bench.cpp" 2
+# 2 "C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/HLS_Project/test_bench.cpp" 2
 
 
 int main(){
@@ -55155,19 +55155,14 @@ int main(){
   }
  }
 
- for(int i = 0; i < 128; i++) {
-  for (int x = 0; x < 128; x++) {
-   if (x < inputSize && i < outputSize) {
-    weights[(i*128)+x] = fixedInput(incrementer*0.15);
-    if(counter >= inputSize){
-     counter = 0;
-     incrementer++;
-    }
-    counter++;
+ for(int i = 0; i < outputSize; i++) {
+  for (int x = 0; x < inputSize; x++) {
+   weights[(i*inputSize)+x] = fixedInput(incrementer*0.15);
+   if(counter >= inputSize){
+    counter = 0;
+    incrementer++;
    }
-   else {
-    weights[(i*128)+x] = fixedInput(0);
-   }
+   counter++;
   }
  }
 
@@ -55208,19 +55203,14 @@ int main(){
  incrementer = 0;
  counter = 1;
 
- for(int i = 0; i < 128; i++) {
-  for (int x = 0; x < 128; x++) {
-   if (x < inputSize && i < outputSize) {
-    weights[(i*128)+x] = fixedInput(incrementer*1);
-    if(counter >= inputSize){
-     counter = 0;
-     incrementer++;
-    }
-    counter++;
+ for(int i = 0; i < outputSize; i++) {
+  for (int x = 0; x < inputSize; x++) {
+   weights[(i*inputSize)+x] = fixedInput(incrementer*1);
+   if(counter >= inputSize){
+    counter = 0;
+    incrementer++;
    }
-   else {
-    weights[(i*128)+x] = 0;
-   }
+   counter++;
   }
  }
 
@@ -55236,6 +55226,9 @@ int main(){
    return -i;
   }
  }
+
+ nnlayer(input, output, bias, weights, 128, 128, 2);
+ nnlayer(input, output, bias, weights, 128, 128, 0);
 
  return 0;
 }

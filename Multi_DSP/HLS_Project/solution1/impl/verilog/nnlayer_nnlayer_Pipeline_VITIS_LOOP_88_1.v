@@ -54,20 +54,19 @@ reg    ap_idle_pp0;
 wire    ap_block_state1_pp0_stage0_iter0;
 wire    ap_block_state2_pp0_stage0_iter1;
 wire    ap_block_pp0_stage0_subdone;
-wire   [0:0] icmp_ln88_fu_100_p2;
+wire   [0:0] icmp_ln88_fu_95_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] i_cast4_fu_112_p1;
-reg   [63:0] i_cast4_reg_147;
+wire   [63:0] i_cast4_fu_107_p1;
+reg   [63:0] i_cast4_reg_127;
 wire    ap_block_pp0_stage0_11001;
 wire    ap_block_pp0_stage0;
-reg   [7:0] i_fu_52;
-wire   [7:0] add_ln88_fu_106_p2;
+reg   [7:0] i_fu_46;
+wire   [7:0] add_ln88_fu_101_p2;
 wire    ap_loop_init;
 reg   [7:0] ap_sig_allocacmp_i_1;
-wire   [15:0] i_cast_fu_96_p1;
-wire   [12:0] trunc_ln_fu_122_p4;
+wire   [15:0] i_cast_fu_91_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -132,22 +131,22 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        if (((icmp_ln88_fu_100_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
-            i_fu_52 <= add_ln88_fu_106_p2;
+        if (((icmp_ln88_fu_95_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
+            i_fu_46 <= add_ln88_fu_101_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_52 <= 8'd0;
+            i_fu_46 <= 8'd0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((icmp_ln88_fu_100_p2 == 1'd0) & (1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        i_cast4_reg_147[7 : 0] <= i_cast4_fu_112_p1[7 : 0];
+    if (((icmp_ln88_fu_95_p2 == 1'd0) & (1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        i_cast4_reg_127[7 : 0] <= i_cast4_fu_107_p1[7 : 0];
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln88_fu_100_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((icmp_ln88_fu_95_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -190,7 +189,7 @@ always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_sig_allocacmp_i_1 = 8'd0;
     end else begin
-        ap_sig_allocacmp_i_1 = i_fu_52;
+        ap_sig_allocacmp_i_1 = i_fu_46;
     end
 end
 
@@ -229,7 +228,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln88_fu_106_p2 = (ap_sig_allocacmp_i_1 + 8'd1);
+assign add_ln88_fu_101_p2 = (ap_sig_allocacmp_i_1 + 8'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -249,22 +248,20 @@ assign ap_enable_reg_pp0_iter0 = ap_start_int;
 
 assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
-assign bias_address0 = i_cast4_fu_112_p1;
+assign bias_address0 = i_cast4_fu_107_p1;
 
-assign i_cast4_fu_112_p1 = ap_sig_allocacmp_i_1;
+assign i_cast4_fu_107_p1 = ap_sig_allocacmp_i_1;
 
-assign i_cast_fu_96_p1 = ap_sig_allocacmp_i_1;
+assign i_cast_fu_91_p1 = ap_sig_allocacmp_i_1;
 
-assign icmp_ln88_fu_100_p2 = ((i_cast_fu_96_p1 == numOfOutputNeurons) ? 1'b1 : 1'b0);
+assign icmp_ln88_fu_95_p2 = ((i_cast_fu_91_p1 == numOfOutputNeurons) ? 1'b1 : 1'b0);
 
-assign output_V_address0 = i_cast4_reg_147;
+assign output_V_address0 = i_cast4_reg_127;
 
-assign output_V_d0 = $signed(trunc_ln_fu_122_p4);
-
-assign trunc_ln_fu_122_p4 = {{bias_q0[15:3]}};
+assign output_V_d0 = bias_q0;
 
 always @ (posedge ap_clk) begin
-    i_cast4_reg_147[63:8] <= 56'b00000000000000000000000000000000000000000000000000000000;
+    i_cast4_reg_127[63:8] <= 56'b00000000000000000000000000000000000000000000000000000000;
 end
 
 endmodule //nnlayer_nnlayer_Pipeline_VITIS_LOOP_88_1

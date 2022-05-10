@@ -34,6 +34,10 @@ private:
     std::shared_ptr<CUSTOMTYPE> getWeightsFromSMatch(std::string, unsigned int, unsigned int numberOfOutputs);
     std::shared_ptr<CUSTOMTYPE> getBiasFromSMatch(std::string, unsigned int);
 
+    //SW
+    std::shared_ptr<FIXEDCONVERT> getWeightsFromSMatchSW(std::string weightString, unsigned int numberOfWeights, unsigned int numberOfOutputs);
+    std::shared_ptr<FIXEDCONVERT> getBiasFromSMatchSW(std::string biasString, unsigned int numberOfBias);
+
     std::shared_ptr<CUSTOMTYPE> parseTestInputsLine(const std::string inLine, u16* size);
     nnLayer parseWeightsBiasline(std::string);
 

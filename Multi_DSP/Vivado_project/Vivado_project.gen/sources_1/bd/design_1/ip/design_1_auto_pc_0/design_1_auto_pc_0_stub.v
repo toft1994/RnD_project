@@ -1,10 +1,10 @@
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2021.2 (win64) Build 3367213 Tue Oct 19 02:48:09 MDT 2021
-// Date        : Tue Mar 15 16:59:57 2022
+// Date        : Tue May 10 10:41:40 2022
 // Host        : DESKTOP-IFL7HB3 running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode synth_stub -rename_top design_1_auto_pc_0 -prefix
-//               design_1_auto_pc_0_ design_1_auto_pc_0_stub.v
+// Command     : write_verilog -force -mode synth_stub
+//               c:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/Multi_DSP/Vivado_project/Vivado_project.gen/sources_1/bd/design_1/ip/design_1_auto_pc_0/design_1_auto_pc_0_stub.v
 // Design      : design_1_auto_pc_0
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7z020clg484-1

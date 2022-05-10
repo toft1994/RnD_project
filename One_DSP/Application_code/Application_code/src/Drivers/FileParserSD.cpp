@@ -106,7 +106,7 @@ std::vector<nnLayer> FileParserSD::getWeightsBias() {
     while(index < info.fsize) {
         std::string line = getFileLine(index, info.fsize);
         nnLayerVector.push_back(std::move(parseWeightsBiasline(line)));
-        index += line.length() + 1;
+        index += line.length() + 2;
     }
 
     return nnLayerVector;
@@ -132,9 +132,9 @@ std::string FileParserSD::getFileLine(unsigned int oldStop, unsigned int totalSi
 		}
 		ret.append(tmpArray, NumberOfBytesRead);
 	}
-	while(ret.find("\n") == std::string::npos || totalSize < ret.size() + oldStop);
+	while(ret.find("\r\n") == std::string::npos || totalSize < ret.size() + oldStop);
 
-	ret = ret.substr(0, ret.find("\n"));
+	ret = ret.substr(0, ret.find("\r\n"));
 	return ret;
 }
 
@@ -188,7 +188,6 @@ std::shared_ptr<CUSTOMTYPE> FileParserSD::getWeightsFromSMatch(std::string weigh
     std::shared_ptr<CUSTOMTYPE> w(new CUSTOMTYPE[numberOfWeights]{0});
     for (unsigned int i = 0; i < numberOfWeights; ++i) {
         std::getline(sstream, buf, ',');
-        //w.get()[i] = FIXEDCONVERT(std::stof(buf)).bits_to_uint64();
         w.get()[i] = std::stof(buf);
     }
 
@@ -205,7 +204,6 @@ std::shared_ptr<CUSTOMTYPE> FileParserSD::getBiasFromSMatch(std::string biasStri
     std::shared_ptr<CUSTOMTYPE> b(new CUSTOMTYPE[numberOfBias+1]{0});
     for (unsigned int i = 0; i < numberOfBias; ++i) {
         std::getline(sstream, buf, ',');
-        //b.get()[i] = FIXEDCONVERT(std::stof(buf)).bits_to_uint64();
         b.get()[i] = std::stof(buf);
     }
 

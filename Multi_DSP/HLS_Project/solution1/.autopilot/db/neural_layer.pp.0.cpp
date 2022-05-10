@@ -5673,7 +5673,7 @@ typedef ap_fixed<16,8> fixedOutput;
 typedef ap_ufixed<32,16> softmax_type;
 typedef ap_ufixed<64,32> softmaxSum_type;
 
-__attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput bias[128], fixedInput weights[128*128], unsigned short int numOfOutputNeurons, unsigned char activation);
+__attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput bias[128], fixedInput weights[128*128], unsigned short int numOfInputNeurons, unsigned short int numOfOutputNeurons, unsigned char activation);
 # 2 "HLS_Project/neural_layer.cpp" 2
 
 static const unsigned short int size = 128;
@@ -5705,8 +5705,7 @@ void sigmod_approx(fixedInput * output_, fixedInput * input_, unsigned short int
 #pragma HLS inline
  VITIS_LOOP_30_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
  {
-#pragma HLS pipeline off
- output_[i] = fixedInput(0.5)*(input_[i]/(fixedInput(1)+abs(input_[i])))+fixedInput(0.5);
+  output_[i] = fixedInput(0.5)*(input_[i]/(fixedInput(1)+abs(input_[i])))+fixedInput(0.5);
  }
 }
 
@@ -5719,18 +5718,15 @@ void softmax_approx(fixedInput * output_, fixedInput * input_, unsigned short in
  softmax_type resArray[128] = {0};
  char overflow = 0;
 
- VITIS_LOOP_46_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++) {
+ VITIS_LOOP_45_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++) {
   if (input_[i] > 11 && input_[i] - 11 > overflow) {
    overflow = input_[i] - 11;
   }
  }
 
-
- VITIS_LOOP_53_2: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+ VITIS_LOOP_51_2: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
  {
-#pragma HLS pipeline off
-
- if (input_[i] - overflow < -11) {
+  if (input_[i] - overflow < -11) {
    input_[i] = -11;
   }
   fixedInput fixed(abs(fixedInput(input_[i]-overflow))/CONSTANT);
@@ -5751,31 +5747,21 @@ void softmax_approx(fixedInput * output_, fixedInput * input_, unsigned short in
  }
 
  if (sum > 0) {
-  VITIS_LOOP_78_3: for (unsigned short int i = 0; i < 128; i++)
+  VITIS_LOOP_74_3: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
   {
-#pragma HLS pipeline off
- output_[i] = resArray[i]/sum;
+   output_[i] = resArray[i]/sum;
   }
  }
 }
 
-void applyBias(fixedInput * bias, fixedInput * output_, unsigned short int numOfOutputNeurons) {
+void runLayer(fixedInput * input_, fixedInput * output_, fixedInput * bias, fixedInput * weights_, unsigned short int numOfInputNeurons, unsigned short int numOfOutputNeurons) {
 #pragma HLS inline
- VITIS_LOOP_88_1: for (int i = 0; i < numOfOutputNeurons; i++) {
-  output_[i] = bias[i];
- }
-}
-
-void runLayer(fixedInput * input_, fixedInput * output_, fixedInput * weights_, unsigned short int numOfOutputNeurons) {
-#pragma HLS inline
- VITIS_LOOP_95_1: for (unsigned short int outNeurons = 0; outNeurons < numOfOutputNeurons; outNeurons++)
+ VITIS_LOOP_83_1: for (unsigned short int outNeurons = 0; outNeurons < numOfOutputNeurons; outNeurons++)
  {
-#pragma HLS pipeline off
- VITIS_LOOP_98_2: for (unsigned short int inNeurons = 0; inNeurons < 128; inNeurons++)
+  output_[outNeurons] = bias[outNeurons];
+  VITIS_LOOP_86_2: for (unsigned short int inNeurons = 0; inNeurons < numOfInputNeurons; inNeurons++)
   {
-#pragma HLS pipeline off
-#pragma HLS UNROLL factor=size
- output_[outNeurons] += (weights_[inNeurons+(outNeurons*128)] * input_[inNeurons]);
+   output_[outNeurons] += (weights_[inNeurons+(outNeurons*numOfInputNeurons)] * input_[inNeurons]);
   }
  }
 }
@@ -5792,36 +5778,35 @@ void runActivation(fixedInput * output_, fixedInput * input, unsigned short int 
      softmax_approx(output_, input, numOfOutputNeurons);
     }
     else {
-     VITIS_LOOP_119_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
+     VITIS_LOOP_105_1: for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
      {
-#pragma HLS pipeline off
- output_[i] = input[i];
+      output_[i] = input[i];
      }
     }
 }
 
-__attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput bias[128], fixedInput weights[128*128], unsigned short int numOfOutputNeurons, unsigned char activation) {_ssdm_SpecArrayDimSize(input, 128);_ssdm_SpecArrayDimSize(output, 128);_ssdm_SpecArrayDimSize(bias, 128);_ssdm_SpecArrayDimSize(weights, 16384);
+__attribute__((sdx_kernel("nnlayer", 0))) void nnlayer(fixedInput input[128], fixedInput output[128], fixedInput bias[128], fixedInput weights[128*128], unsigned short int numOfInputNeurons, unsigned short int numOfOutputNeurons, unsigned char activation) {_ssdm_SpecArrayDimSize(input, 128);_ssdm_SpecArrayDimSize(output, 128);_ssdm_SpecArrayDimSize(bias, 128);_ssdm_SpecArrayDimSize(weights, 16384);
 #pragma HLSDIRECTIVE TOP name=nnlayer
-# 127 "HLS_Project/neural_layer.cpp"
+# 112 "HLS_Project/neural_layer.cpp"
 
 #pragma HLS INTERFACE mode=s_axilite port=input
 #pragma HLS INTERFACE mode=s_axilite port=output
 #pragma HLS INTERFACE mode=s_axilite port=bias
 #pragma HLS INTERFACE mode=s_axilite port=weights
+#pragma HLS INTERFACE mode=s_axilite port=numOfInputNeurons
 #pragma HLS INTERFACE mode=s_axilite port=numOfOutputNeurons
 #pragma HLS INTERFACE mode=s_axilite port=activation
 #pragma HLS INTERFACE mode=s_axilite port=return
 
-#pragma HLS ARRAY_PARTITION variable=input type=complete
-#pragma HLS ARRAY_PARTITION variable=output type=complete
-#pragma HLS ARRAY_PARTITION variable=weights type=cyclic factor=size
-#pragma HLS BIND_STORAGE variable=weights type=RAM_1WNR impl=BRAM
+
+
+
 
 
  static fixedInput output_[128] = {0};
 
 
- applyBias(bias, output_, numOfOutputNeurons);
- runLayer(input, output_, weights, numOfOutputNeurons);
+
+ runLayer(input, output_, bias, weights, numOfInputNeurons, numOfOutputNeurons);
     runActivation(output, output_, numOfOutputNeurons, activation);
 }

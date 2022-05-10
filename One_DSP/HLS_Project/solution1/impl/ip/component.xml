@@ -749,7 +749,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>211480d9</spirit:value>
+            <spirit:value>f055461d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -765,7 +765,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>4d62157a</spirit:value>
+            <spirit:value>d23f704a</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -781,7 +781,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>14e0d40e</spirit:value>
+            <spirit:value>2e8d7b63</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -797,7 +797,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>6cad62d3</spirit:value>
+            <spirit:value>ce8393a0</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1193,10 +1193,6 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_flow_control_loop_pipe_sequential_init.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/verilog/nnlayer_mac_muladd_16s_16s_24ns_24_4_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
@@ -1209,27 +1205,7 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_16_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_30_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_45_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_87_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_96_2.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_116_1.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_mul_mul_14s_14s_14_4_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1245,7 +1221,7 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_sdiv_24ns_17s_24_28_1.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_sdiv_24ns_17s_24_28_seq_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1253,7 +1229,7 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_udiv_56ns_56ns_16_60_seq_1.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_udiv_56ns_64ns_16_60_seq_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1269,11 +1245,6 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_flow_control_loop_pipe_sequential_init.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/verilog/nnlayer_mac_muladd_16s_16s_24ns_24_4_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
@@ -1289,32 +1260,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_16_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_30_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_45_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_87_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_96_2.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_nnlayer_Pipeline_VITIS_LOOP_116_1.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_mul_mul_14s_14s_14_4_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1333,7 +1279,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_sdiv_24ns_17s_24_28_1.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_sdiv_24ns_17s_24_28_seq_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1343,7 +1289,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/nnlayer_udiv_56ns_56ns_16_60_seq_1.v</spirit:name>
+        <spirit:name>hdl/verilog/nnlayer_udiv_56ns_64ns_16_60_seq_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1365,10 +1311,6 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_flow_control_loop_pipe_sequential_init.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/vhdl/nnlayer_mac_muladd_16s_16s_24ns_24_4_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
@@ -1381,27 +1323,7 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_16_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_30_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_45_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_87_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_96_2.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_116_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_mul_mul_14s_14s_14_4_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1413,7 +1335,7 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_sdiv_24ns_17s_24_28_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_sdiv_24ns_17s_24_28_seq_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1421,13 +1343,13 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_udiv_56ns_56ns_16_60_seq_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_udiv_56ns_64ns_16_60_seq_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/vhdl/nnlayer.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_fa54bcc2</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_431c26c4</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -1438,11 +1360,6 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_flow_control_loop_pipe_sequential_init.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/vhdl/nnlayer_mac_muladd_16s_16s_24ns_24_4_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
@@ -1458,32 +1375,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_16_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_30_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_45_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_87_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_96_2.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_nnlayer_Pipeline_VITIS_LOOP_116_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_mul_mul_14s_14s_14_4_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1498,7 +1390,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_sdiv_24ns_17s_24_28_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_sdiv_24ns_17s_24_28_seq_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1508,7 +1400,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/nnlayer_udiv_56ns_56ns_16_60_seq_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/nnlayer_udiv_56ns_64ns_16_60_seq_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1622,8 +1514,8 @@
       </xilinx:taxonomies>
       <xilinx:displayName>Nnlayer</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2112459101</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2022-04-12T20:42:05Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2112497407</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2022-05-09T11:07:33Z</xilinx:coreCreationDateTime>
       <xilinx:sdxKernelAttributes>
         <xilinx:sdx_kernel>true</xilinx:sdx_kernel>
         <xilinx:sdx_kernel_type>hls</xilinx:sdx_kernel_type>
@@ -1633,7 +1525,7 @@
       <xilinx:xilinxVersion>2021.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="f8a800c3"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="de906164"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="050c6cf5"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="a69c74e7"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="1e3af913"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="6ee937a0"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="a1aeb932"/>

@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include "../Drivers/FileParserSD.h"
 #include "../Drivers/NeuralNetwork.h"
-
+#include "../Drivers/NeuralNetworkSW.h"
 #include "xscutimer.h"
 #define ONE_SECOND 325000000
 
@@ -21,21 +21,25 @@ public:
 	virtual ~neuralnetwork_manager();
 
 	u8 setup_manager(std::string fileName);
+	u16 run_network(u16 * input, u16 inputSize, bool hardware);
+	float getTime();
+	float getIPCoreTotExeTime();
+	u16 getLastSize();
+	u16* getLastOutput();
 
-	u16 run_network(u16 * input, u16 inputSize);
-
-	void printTime(u32 startTime);
 private:
-	u8 totalLayers_ = 0;
-	u8 currentLayer_ = 0;
-	u16 currentHardware = 0;
-
 	std::vector<nnLayer> nnLV_;
-	NeuralNetwork nn_ = NeuralNetwork();
+	static NeuralNetwork nn_hardware;
+	static NeuralNetworkSW nn_software;
+	void addTime(u32 startTime);
 
 	static XScuTimer timerInstance;
 	static float totalTime;
+	static float IPCoreTotExeTime;
 	static XScuTimer_Config *ConfigPtr;
+
+	u16 lastOutput[MAX_NN_SIZE] = {0};
+	u16 lastOutputSize = 0;
 };
 
 #endif /* SRC_NEURALNETWORK_NEURALNETWORKMANAGER_H_ */

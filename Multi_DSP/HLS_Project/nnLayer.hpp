@@ -24,4 +24,4 @@ typedef ap_fixed<FIXED_OUT_BIT,FIXED_OUT_WHOLE> fixedOutput;
 typedef ap_ufixed<SOFTMAX_BIT,SOFTMAX_WHOLE> softmax_type;
 typedef ap_ufixed<SOFTMAX_SUM_BIT,SOFTMAX_SUM_WHOLE> softmaxSum_type;
 
-void nnlayer(fixedInput input[SIZE], fixedInput output[SIZE], fixedInput bias[SIZE], fixedInput weights[WEIGHT_SIZE], unsigned short int numOfOutputNeurons, unsigned char activation);
+void nnlayer(fixedInput input[SIZE], fixedInput output[SIZE], fixedInput bias[SIZE], fixedInput weights[WEIGHT_SIZE], unsigned short int numOfInputNeurons, unsigned short int numOfOutputNeurons, unsigned char activation);

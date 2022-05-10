@@ -2,7 +2,7 @@
 set TopModule "nnlayer"
 set ClockPeriod 10
 set ClockList ap_clk
-set HasVivadoClockPeriod 1
+set HasVivadoClockPeriod 0
 set CombLogicFlag 0
 set PipelineFlag 0
 set DataflowTaskPipelineFlag 1
@@ -17,9 +17,9 @@ set HasDSPModule 1
 set ResetLevelFlag 0
 set ResetStyle control
 set ResetSyncFlag 1
-set ResetRegisterFlag 1
+set ResetRegisterFlag 0
 set ResetVariableFlag 0
-set ResetRegisterNum 3
+set ResetRegisterNum 0
 set FsmEncStyle onehot
 set MaxFanout 0
 set RtlPrefix {}
@@ -44,7 +44,7 @@ set SCTraceOption all
 set TargetInfo xc7z020:-clg484:-1
 set SourceFiles {sc {} c ../neural_layer.cpp}
 set SourceFlags {sc {} c {{}}}
-set DirectiveFile C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/HLS_Project/solution1/solution1.directive
+set DirectiveFile C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/Multi_DSP/HLS_Project/solution1/solution1.directive
 set TBFiles {verilog ../test_bench.cpp bc ../test_bench.cpp vhdl ../test_bench.cpp sc ../test_bench.cpp cas ../test_bench.cpp c {}}
 set SpecLanguage C
 set TVInFiles {bc {} c {} sc {} cas {} vhdl {} verilog {}}

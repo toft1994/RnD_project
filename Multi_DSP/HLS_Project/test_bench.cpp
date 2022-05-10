@@ -26,34 +26,38 @@ int main(){
 		}
 	}
 
-	for(int i = 0; i < SIZE; i++) {
-		for (int x = 0; x < SIZE; x++) {
+	for(int i = 0; i < outputSize; i++) {
+		for (int x = 0; x < inputSize; x++) {
 			if (x < inputSize && i < outputSize) {
-				weights[(i*SIZE)+x] = fixedInput(incrementer*0.15);
+				weights[(i*inputSize)+x] = fixedInput(incrementer*0.15);
 				if(counter >= inputSize){
 					counter = 0;
 					incrementer++;
 				}
 				counter++;
 			}
-			else {
+			/*else {
 				weights[(i*SIZE)+x] = fixedInput(0);
-			}
+			}*/
 		}
+		output[i] = fixedInput(0);
 	}
 
-	nnlayer(input, output, bias, weights, outputSize, 3);
+	nnlayer(input, output, bias, weights, inputSize, outputSize, 3);
 
 	fixedInput test = 0.1328125;
 	if(output[0] != test){
+		std::cout << output[0] << std::endl;
 		return -1;
 	}
 	test = 0.27734375;
 	if(output[1] != test){
+		std::cout << output[1] << std::endl;
 		return -1;
 	}
 	test = 0.5859375;
 	if(output[2] != test){
+		std::cout << output[2] << std::endl;
 		return -1;
 	}
 
@@ -79,23 +83,23 @@ int main(){
 	incrementer = 0;
 	counter = 1;
 
-	for(int i = 0; i < SIZE; i++) {
-		for (int x = 0; x < SIZE; x++) {
+	for(int i = 0; i < outputSize; i++) {
+		for (int x = 0; x < inputSize; x++) {
 			if (x < inputSize && i < outputSize) {
-				weights[(i*SIZE)+x] = fixedInput(incrementer*1);
+				weights[(i*inputSize)+x] = fixedInput(incrementer*1);
 				if(counter >= inputSize){
 					counter = 0;
 					incrementer++;
 				}
 				counter++;
 			}
-			else {
+			/*else {
 				weights[(i*SIZE)+x] = 0;
-			}
+			}*/
 		}
 	}
 
-	nnlayer(input, output, bias, weights, outputSize, 1);
+	nnlayer(input, output, bias, weights, inputSize, outputSize, 1);
 
 	if(output[0] != 0)
 	{
@@ -107,6 +111,9 @@ int main(){
 			return -i;
 		}
 	}
+
+	nnlayer(input, output, bias, weights, SIZE, SIZE, 2);
+	nnlayer(input, output, bias, weights, SIZE, SIZE, 0);
 
 	return 0;
 }

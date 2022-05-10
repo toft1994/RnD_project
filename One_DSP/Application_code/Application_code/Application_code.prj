@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="ASCII"?>
-<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="Application_code" location="C:/HLS_projects_OneDPS/Application_code/Application_code" platform="C:/HLS_projects_OneDPS/Application_code/design_1_wrapper/export/design_1_wrapper/design_1_wrapper.xpfm" platformUID="xilinx:::0.0(custom)" systemProject="Application_code_system" sysConfig="design_1_wrapper" runtime="cpp" cpu="freertos10_xilinx_ps7_cortexa9_0" cpuInstance="ps7_cortexa9_0" os="freertos10_xilinx" language="CPP" mssSignature="8b5e7c8033ac9d2705e6f5619fddfe1f">
-  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.1975249838">
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="Application_code" location="C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/Application_code/Application_code" platform="C:/Users/jespe/Desktop/Uni_Civil_10_Semester/RnD/RnD_project/One_DSP/Application_code/design_1_wrapper/export/design_1_wrapper/design_1_wrapper.xpfm" platformUID="xilinx:zedboard::0.0(custom)" systemProject="Application_code_system" sysConfig="design_1_wrapper" runtime="cpp" cpu="standalone_ps7_cortexa9_0" cpuInstance="ps7_cortexa9_0" os="standalone" language="CPP" mssSignature="f2c07783c7b8311bf0126acee9969f52">
+  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.395766021" dirty="true">
     <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
     <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
   </configuration>
-  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.1046556773" dirty="true">
+  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.1501492713">
     <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
   </configuration>
   <template appTemplateName="empty_application"/>
 </sdkproject:SdkProject>

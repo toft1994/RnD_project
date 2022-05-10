@@ -74,7 +74,7 @@ void softmax_approx(fixedInput * output_, fixedInput * input_, unsigned short in
 	}
 
 	if (sum > 0) {
-		for (unsigned short int i = 0; i < SIZE; i++)
+		for (unsigned short int i = 0; i < numOfOutputNeurons; i++)
 		{
 			#pragma HLS pipeline off
 			output_[i] = resArray[i]/sum;
@@ -82,20 +82,16 @@ void softmax_approx(fixedInput * output_, fixedInput * input_, unsigned short in
 	}
 }
 
-void applyBias(fixedInput * bias, fixedInput * output_, unsigned short int numOfOutputNeurons) {
-#pragma HLS inline
-	for (int i = 0; i < numOfOutputNeurons; i++) {
-		output_[i] = bias[i];
-	}
-}
-
-void runLayer(fixedInput * input_, fixedInput * output_, fixedInput * weights_, unsigned short int numOfInNeurons, unsigned short int numOfOutputNeurons) {
+void runLayer(fixedInput * input_, fixedInput * output_, fixedInput * bias, fixedInput * weights_, unsigned short int numOfInNeurons, unsigned short int numOfOutputNeurons) {
 #pragma HLS inline
 	for (unsigned short int outNeurons = 0; outNeurons < numOfOutputNeurons; outNeurons++)
 	{
+		#pragma HLS pipeline off
+		output_[outNeurons] = bias[outNeurons];
 		for (unsigned short int inNeurons = 0; inNeurons < numOfInNeurons; inNeurons++)
 		{
-			output_[outNeurons] += (weights_[inNeurons + (outNeurons*SIZE)] * input_[inNeurons]);
+			#pragma HLS pipeline off
+			output_[outNeurons] += (weights_[inNeurons + (outNeurons*numOfInNeurons)] * input_[inNeurons]);
 		}
 	}
 }
@@ -132,7 +128,6 @@ void nnlayer(fixedInput input[SIZE], fixedInput output[SIZE], fixedInput bias[SI
 
 	static fixedInput output_[SIZE] = {0};
 
-	applyBias(bias, output_, numOfOutputNeurons);
-	runLayer(input, output_, weights, numOfInNeurons, numOfOutputNeurons);
+	runLayer(input, output_, bias, weights, numOfInNeurons, numOfOutputNeurons);
     runActivation(output, output_, activation, numOfOutputNeurons);
 }

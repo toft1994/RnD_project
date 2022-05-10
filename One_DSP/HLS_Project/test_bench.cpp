@@ -26,19 +26,14 @@ int main(){
 		}
 	}
 
-	for(int i = 0; i < SIZE; i++) {
-		for (int x = 0; x < SIZE; x++) {
-			if (x < inputSize && i < outputSize) {
-				weights[(i*SIZE)+x] = fixedInput(incrementer*0.15);
-				if(counter >= inputSize){
-					counter = 0;
-					incrementer++;
-				}
-				counter++;
+	for(int i = 0; i < outputSize; i++) {
+		for (int x = 0; x < inputSize; x++) {
+			weights[(i*inputSize)+x] = fixedInput(incrementer*0.15);
+			if(counter >= inputSize){
+				counter = 0;
+				incrementer++;
 			}
-			else {
-				weights[(i*SIZE)+x] = fixedInput(0);
-			}
+			counter++;
 		}
 	}
 
@@ -79,19 +74,14 @@ int main(){
 	incrementer = 0;
 	counter = 1;
 
-	for(int i = 0; i < SIZE; i++) {
-		for (int x = 0; x < SIZE; x++) {
-			if (x < inputSize && i < outputSize) {
-				weights[(i*SIZE)+x] = fixedInput(incrementer*1);
-				if(counter >= inputSize){
-					counter = 0;
-					incrementer++;
-				}
-				counter++;
+	for(int i = 0; i < outputSize; i++) {
+		for (int x = 0; x < inputSize; x++) {
+			weights[(i*inputSize)+x] = fixedInput(incrementer*1);
+			if(counter >= inputSize){
+				counter = 0;
+				incrementer++;
 			}
-			else {
-				weights[(i*SIZE)+x] = 0;
-			}
+			counter++;
 		}
 	}
 
@@ -107,6 +97,9 @@ int main(){
 			return -i;
 		}
 	}
+
+	nnlayer(input, output, bias, weights, SIZE, SIZE, 2);
+	nnlayer(input, output, bias, weights, SIZE, SIZE, 0);
 
 	return 0;
 }

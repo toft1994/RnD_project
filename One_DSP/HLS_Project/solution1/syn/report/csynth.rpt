@@ -4,9 +4,9 @@
 == Synthesis Summary Report of 'nnlayer'
 ================================================================
 + General Information: 
-    * Date:           Tue Apr 12 22:38:34 2022
+    * Date:           Mon May  9 13:05:47 2022
     * Version:        2021.2 (Build 3367213 on Tue Oct 19 02:48:09 MDT 2021)
-    * Project:        Neuron_1
+    * Project:        HLS_Project
     * Solution:       solution1 (Vivado IP Flow Target)
     * Product family: zynq
     * Target device:  xc7z020-clg484-1
@@ -15,27 +15,20 @@
 + Performance & Resource Estimates: 
     
     PS: '+' for module; 'o' for loop; '*' for dataflow
-    +--------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+---------+---------+-----------+-----------+-----+
-    |                Modules               | Issue|      | Latency |  Latency  | Iteration|         |  Trip |          |         |         |           |           |     |
-    |                & Loops               | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count | Pipelined|  BRAM   |   DSP   |     FF    |    LUT    | URAM|
-    +--------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+---------+---------+-----------+-----------+-----+
-    |+ nnlayer                             |     -|  0.24|        -|          -|         -|        -|      -|        no|  21 (7%)|   6 (2%)|  3860 (3%)|  4401 (8%)|    -|
-    | + nnlayer_Pipeline_VITIS_LOOP_87_1   |     -|  2.24|    65537|  6.554e+05|         -|    65537|      -|        no|        -|        -|   19 (~0%)|   66 (~0%)|    -|
-    |  o VITIS_LOOP_87_1                   |     -|  8.75|    65535|  6.554e+05|         2|        1|  65535|       yes|        -|        -|          -|          -|    -|
-    | + nnlayer_Pipeline_VITIS_LOOP_45_1   |     -|  1.41|      258|  2.580e+03|         -|      258|      -|        no|        -|        -|   38 (~0%)|  141 (~0%)|    -|
-    |  o VITIS_LOOP_45_1                   |     -|  8.75|      256|  2.560e+03|         3|        1|    255|       yes|        -|        -|          -|          -|    -|
-    | + nnlayer_Pipeline_VITIS_LOOP_30_1   |     -|  1.34|      286|  2.860e+03|         -|      286|      -|        no|        -|        -|  1649 (1%)|  1302 (2%)|    -|
-    |  o VITIS_LOOP_30_1                   |     -|  8.75|      284|  2.840e+03|        31|        1|    255|       yes|        -|        -|          -|          -|    -|
-    | + nnlayer_Pipeline_VITIS_LOOP_16_1   |     -|  1.49|      257|  2.570e+03|         -|      257|      -|        no|        -|        -|   19 (~0%)|   79 (~0%)|    -|
-    |  o VITIS_LOOP_16_1                   |     -|  8.75|      255|  2.550e+03|         2|        1|    255|       yes|        -|        -|          -|          -|    -|
-    | + nnlayer_Pipeline_VITIS_LOOP_116_1  |     -|  2.24|      257|  2.570e+03|         -|      257|      -|        no|        -|        -|   19 (~0%)|   64 (~0%)|    -|
-    |  o VITIS_LOOP_116_1                  |     -|  8.75|      255|  2.550e+03|         2|        1|    255|       yes|        -|        -|          -|          -|    -|
-    | o VITIS_LOOP_94_1                    |     -|  8.75|        -|          -|         -|        -|      -|        no|        -|        -|          -|          -|    -|
-    |  + nnlayer_Pipeline_VITIS_LOOP_96_2  |     -|  3.68|        -|          -|         -|        -|      -|        no|        -|  1 (~0%)|  106 (~0%)|  141 (~0%)|    -|
-    |   o VITIS_LOOP_96_2                  |     -|  8.75|        -|          -|         5|        1|      -|       yes|        -|        -|          -|          -|    -|
-    | o VITIS_LOOP_52_2                    |     -|  8.75|    10200|  1.020e+05|        40|        -|    255|        no|        -|        -|          -|          -|    -|
-    | o VITIS_LOOP_77_3                    |     -|  8.75|     7808|  7.808e+04|        61|        -|    128|        no|        -|        -|          -|          -|    -|
-    +--------------------------------------+------+------+---------+-----------+----------+---------+-------+----------+---------+---------+-----------+-----------+-----+
+    +---------------------+------+------+---------+--------+----------+---------+------+----------+---------+--------+-----------+-----------+-----+
+    |       Modules       | Issue|      | Latency | Latency| Iteration|         | Trip |          |         |        |           |           |     |
+    |       & Loops       | Type | Slack| (cycles)|  (ns)  |  Latency | Interval| Count| Pipelined|  BRAM   |   DSP  |     FF    |    LUT    | URAM|
+    +---------------------+------+------+---------+--------+----------+---------+------+----------+---------+--------+-----------+-----------+-----+
+    |+ nnlayer            |     -|  0.24|        -|       -|         -|        -|     -|        no|  21 (7%)|  7 (3%)|  2714 (2%)|  3434 (6%)|    -|
+    | o VITIS_LOOP_87_1   |     -|  8.75|        -|       -|         -|        -|     -|        no|        -|       -|          -|          -|    -|
+    |  o VITIS_LOOP_91_2  |     -|  8.75|        -|       -|         5|        -|     -|        no|        -|       -|          -|          -|    -|
+    | o VITIS_LOOP_16_1   |     -|  8.75|        -|       -|         2|        -|     -|        no|        -|       -|          -|          -|    -|
+    | o VITIS_LOOP_30_1   |     -|  8.75|        -|       -|        31|        -|     -|        no|        -|       -|          -|          -|    -|
+    | o VITIS_LOOP_45_1   |     -|  8.75|        -|       -|         3|        -|     -|        no|        -|       -|          -|          -|    -|
+    | o VITIS_LOOP_52_2   |     -|  8.75|        -|       -|        40|        -|     -|        no|        -|       -|          -|          -|    -|
+    | o VITIS_LOOP_77_3   |     -|  8.75|        -|       -|        61|        -|     -|        no|        -|       -|          -|          -|    -|
+    | o VITIS_LOOP_112_1  |     -|  8.75|        -|       -|         2|        -|     -|        no|        -|       -|          -|          -|    -|
+    +---------------------+------+------+---------+--------+----------+---------+------+----------+---------+--------+-----------+-----------+-----+
 
 
 ================================================================
@@ -112,43 +105,37 @@
 ================================================================
 == Bind Op Report
 ================================================================
-+--------------------------------------+-----+--------+--------------+-----+--------+---------+
-| Name                                 | DSP | Pragma | Variable     | Op  | Impl   | Latency |
-+--------------------------------------+-----+--------+--------------+-----+--------+---------+
-| + nnlayer                            | 6   |        |              |     |        |         |
-|   outNeurons_2_fu_380_p2             | -   |        | outNeurons_2 | add | fabric | 0       |
-|   i_12_fu_448_p2                     | -   |        | i_12         | add | fabric | 0       |
-|   ret_V_fu_474_p2                    | -   |        | ret_V        | sub | fabric | 0       |
-|   x_V_fu_485_p2                      | -   |        | x_V          | sub | fabric | 0       |
-|   sub_ln712_fu_498_p2                | -   |        | sub_ln712    | sub | fabric | 0       |
-|   mul_24s_26ns_50_1_1_U26            | 2   |        | mul_ln1201   | mul | auto   | 0       |
-|   sub_ln1201_fu_551_p2               | -   |        | sub_ln1201   | sub | fabric | 0       |
-|   sub_ln1201_1_fu_572_p2             | -   |        | sub_ln1201_1 | sub | fabric | 0       |
-|   ret_V_4_fu_601_p2                  | -   |        | ret_V_4      | sub | fabric | 0       |
-|   ret_V_3_fu_614_p2                  | -   |        | ret_V_3      | add | fabric | 0       |
-|   mul_32ns_26ns_42_1_1_U28           | 3   |        | r_V_2        | mul | auto   | 0       |
-|   sum_V_1_fu_722_p2                  | -   |        | sum_V_1      | add | fabric | 0       |
-|   i_11_fu_742_p2                     | -   |        | i_11         | add | fabric | 0       |
-|  + nnlayer_Pipeline_VITIS_LOOP_87_1  | 0   |        |              |     |        |         |
-|    add_ln87_fu_101_p2                | -   |        | add_ln87     | add | fabric | 0       |
-|  + nnlayer_Pipeline_VITIS_LOOP_45_1  | 0   |        |              |     |        |         |
-|    i_3_fu_99_p2                      | -   |        | i_3          | add | fabric | 0       |
-|    ret_V_fu_126_p2                   | -   |        | ret_V        | add | fabric | 0       |
-|  + nnlayer_Pipeline_VITIS_LOOP_30_1  | 0   |        |              |     |        |         |
-|    i_5_fu_116_p2                     | -   |        | i_5          | add | fabric | 0       |
-|    sub_ln712_fu_140_p2               | -   |        | sub_ln712    | sub | fabric | 0       |
-|    ret_V_fu_158_p2                   | -   |        | ret_V        | add | fabric | 0       |
-|    ret_V_1_fu_186_p2                 | -   |        | ret_V_1      | add | fabric | 0       |
-|  + nnlayer_Pipeline_VITIS_LOOP_16_1  | 0   |        |              |     |        |         |
-|    i_6_fu_102_p2                     | -   |        | i_6          | add | fabric | 0       |
-|  + nnlayer_Pipeline_VITIS_LOOP_116_1 | 0   |        |              |     |        |         |
-|    i_7_fu_97_p2                      | -   |        | i_7          | add | fabric | 0       |
-|  + nnlayer_Pipeline_VITIS_LOOP_96_2  | 1   |        |              |     |        |         |
-|    inNeurons_2_fu_140_p2             | -   |        | inNeurons_2  | add | fabric | 0       |
-|    add_ln98_fu_150_p2                | -   |        | add_ln98     | add | fabric | 0       |
-|    mac_muladd_16s_16s_24ns_24_4_1_U4 | 1   |        | mul_ln1245   | mul | dsp    | 3       |
-|    mac_muladd_16s_16s_24ns_24_4_1_U4 | 1   |        | ret_V        | add | dsp    | 3       |
-+--------------------------------------+-----+--------+--------------+-----+--------+---------+
++-------------------------------------+-----+--------+--------------+-----+--------+---------+
+| Name                                | DSP | Pragma | Variable     | Op  | Impl   | Latency |
++-------------------------------------+-----+--------+--------------+-----+--------+---------+
+| + nnlayer                           | 7   |        |              |     |        |         |
+|   outNeurons_2_fu_446_p2            | -   |        | outNeurons_2 | add | fabric | 0       |
+|   mul_mul_14s_14s_14_4_1_U6         | 1   |        | mul_i        | mul | dsp    | 3       |
+|   inNeurons_1_fu_491_p2             | -   |        | inNeurons_1  | add | fabric | 0       |
+|   add_ln94_fu_497_p2                | -   |        | add_ln94     | add | fabric | 0       |
+|   mac_muladd_16s_16s_24ns_24_4_1_U7 | 1   |        | mul_ln1245   | mul | dsp    | 3       |
+|   mac_muladd_16s_16s_24ns_24_4_1_U7 | 1   |        | ret_V        | add | dsp    | 3       |
+|   i_18_fu_549_p2                    | -   |        | i_18         | add | fabric | 0       |
+|   ret_V_7_fu_597_p2                 | -   |        | ret_V_7      | add | fabric | 0       |
+|   i_22_fu_666_p2                    | -   |        | i_22         | add | fabric | 0       |
+|   ret_V_4_fu_692_p2                 | -   |        | ret_V_4      | sub | fabric | 0       |
+|   x_V_fu_703_p2                     | -   |        | x_V          | sub | fabric | 0       |
+|   sub_ln712_2_fu_716_p2             | -   |        | sub_ln712_2  | sub | fabric | 0       |
+|   mul_24s_26ns_50_1_1_U1            | 2   |        | mul_ln1201   | mul | auto   | 0       |
+|   sub_ln1201_fu_769_p2              | -   |        | sub_ln1201   | sub | fabric | 0       |
+|   sub_ln1201_1_fu_790_p2            | -   |        | sub_ln1201_1 | sub | fabric | 0       |
+|   ret_V_8_fu_819_p2                 | -   |        | ret_V_8      | sub | fabric | 0       |
+|   ret_V_6_fu_832_p2                 | -   |        | ret_V_6      | add | fabric | 0       |
+|   mul_32ns_26ns_42_1_1_U3           | 3   |        | r_V_4        | mul | auto   | 0       |
+|   sum_V_1_fu_940_p2                 | -   |        | sum_V_1      | add | fabric | 0       |
+|   i_21_fu_959_p2                    | -   |        | i_21         | add | fabric | 0       |
+|   i_16_fu_1006_p2                   | -   |        | i_16         | add | fabric | 0       |
+|   sub_ln712_fu_1030_p2              | -   |        | sub_ln712    | sub | fabric | 0       |
+|   ret_V_1_fu_1048_p2                | -   |        | ret_V_1      | add | fabric | 0       |
+|   ret_V_2_fu_1077_p2                | -   |        | ret_V_2      | add | fabric | 0       |
+|   i_14_fu_1101_p2                   | -   |        | i_14         | add | fabric | 0       |
+|   i_12_fu_1150_p2                   | -   |        | i_12         | add | fabric | 0       |
++-------------------------------------+-----+--------+--------------+-----+--------+---------+
 
 
 ================================================================
@@ -167,26 +154,27 @@
 == User Pragma Report
 ================================================================
 * Valid Pragma Syntax
-+-----------+----------------------------------------+--------------------------------------------------------------+
-| Type      | Options                                | Location                                                     |
-+-----------+----------------------------------------+--------------------------------------------------------------+
-| inline    |                                        | Neuron_1/neural_layer.cpp:6 in abs                           |
-| inline    |                                        | Neuron_1/neural_layer.cpp:15 in relu                         |
-| inline    |                                        | Neuron_1/neural_layer.cpp:29 in sigmod_approx                |
-| inline    |                                        | Neuron_1/neural_layer.cpp:38 in softmax_approx               |
-| pipeline  | off                                    | Neuron_1/neural_layer.cpp:54 in softmax_approx               |
-| pipeline  | off                                    | Neuron_1/neural_layer.cpp:79 in softmax_approx               |
-| inline    |                                        | Neuron_1/neural_layer.cpp:86 in applybias                    |
-| inline    |                                        | Neuron_1/neural_layer.cpp:93 in runlayer                     |
-| inline    |                                        | Neuron_1/neural_layer.cpp:105 in runactivation               |
-| interface | mode=s_axilite port=input              | Neuron_1/neural_layer.cpp:124 in nnlayer, input              |
-| interface | mode=s_axilite port=output             | Neuron_1/neural_layer.cpp:125 in nnlayer, output             |
-| interface | mode=s_axilite port=bias               | Neuron_1/neural_layer.cpp:126 in nnlayer, bias               |
-| interface | mode=s_axilite port=weights            | Neuron_1/neural_layer.cpp:127 in nnlayer, weights            |
-| interface | mode=s_axilite port=numOfInNeurons     | Neuron_1/neural_layer.cpp:128 in nnlayer, numOfInNeurons     |
-| interface | mode=s_axilite port=numOfOutputNeurons | Neuron_1/neural_layer.cpp:129 in nnlayer, numOfOutputNeurons |
-| interface | mode=s_axilite port=activation         | Neuron_1/neural_layer.cpp:130 in nnlayer, activation         |
-| interface | mode=s_axilite port=return             | Neuron_1/neural_layer.cpp:131 in nnlayer, return             |
-+-----------+----------------------------------------+--------------------------------------------------------------+
++-----------+----------------------------------------+-----------------------------------------------------------------+
+| Type      | Options                                | Location                                                        |
++-----------+----------------------------------------+-----------------------------------------------------------------+
+| inline    |                                        | HLS_Project/neural_layer.cpp:6 in abs                           |
+| inline    |                                        | HLS_Project/neural_layer.cpp:15 in relu                         |
+| inline    |                                        | HLS_Project/neural_layer.cpp:29 in sigmod_approx                |
+| inline    |                                        | HLS_Project/neural_layer.cpp:38 in softmax_approx               |
+| pipeline  | off                                    | HLS_Project/neural_layer.cpp:54 in softmax_approx               |
+| pipeline  | off                                    | HLS_Project/neural_layer.cpp:79 in softmax_approx               |
+| inline    |                                        | HLS_Project/neural_layer.cpp:86 in runlayer                     |
+| pipeline  | off                                    | HLS_Project/neural_layer.cpp:89 in runlayer                     |
+| pipeline  | off                                    | HLS_Project/neural_layer.cpp:93 in runlayer                     |
+| inline    |                                        | HLS_Project/neural_layer.cpp:101 in runactivation               |
+| interface | mode=s_axilite port=input              | HLS_Project/neural_layer.cpp:120 in nnlayer, input              |
+| interface | mode=s_axilite port=output             | HLS_Project/neural_layer.cpp:121 in nnlayer, output             |
+| interface | mode=s_axilite port=bias               | HLS_Project/neural_layer.cpp:122 in nnlayer, bias               |
+| interface | mode=s_axilite port=weights            | HLS_Project/neural_layer.cpp:123 in nnlayer, weights            |
+| interface | mode=s_axilite port=numOfInNeurons     | HLS_Project/neural_layer.cpp:124 in nnlayer, numOfInNeurons     |
+| interface | mode=s_axilite port=numOfOutputNeurons | HLS_Project/neural_layer.cpp:125 in nnlayer, numOfOutputNeurons |
+| interface | mode=s_axilite port=activation         | HLS_Project/neural_layer.cpp:126 in nnlayer, activation         |
+| interface | mode=s_axilite port=return             | HLS_Project/neural_layer.cpp:127 in nnlayer, return             |
++-----------+----------------------------------------+-----------------------------------------------------------------+
 
 

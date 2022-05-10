@@ -26,6 +26,8 @@ public:
 private:
     std::shared_ptr<CUSTOMTYPE> weights;
     std::shared_ptr<CUSTOMTYPE> bias;
+    std::shared_ptr<FIXEDCONVERT> weightsSW;
+    std::shared_ptr<FIXEDCONVERT> biasSW;
     u8 act_function;
     u16 n_neurons;
 };

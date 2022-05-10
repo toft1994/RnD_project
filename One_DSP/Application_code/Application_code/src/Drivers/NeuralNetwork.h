@@ -10,13 +10,18 @@
 #include "xil_types.h"
 #include "xnnlayer.h"
 #include "xparameters.h"
+#include "xscutimer.h"
+#define ONE_SECOND 325000000
+
+#include "xgpiops.h"
+#include "xstatus.h"
+#include "xplatform_info.h"
 
 class NeuralNetwork {
 public:
 	NeuralNetwork();
 	virtual ~NeuralNetwork();
-	void run(u16* input, u16* output, u16* weights, u16* bias, u16* inputSize, u16* outputSize, u8* actiavtion);
-	void test();
+	float run(u16* input, u16* output, u16* weights, u16* bias, u16* inputSize, u16* outputSize, u8* actiavtion, XScuTimer * timerInstance);
 
 private:
 	void setInput(u16* input, u16 * size);
@@ -29,6 +34,9 @@ private:
 
 	XNnlayer instance;
 	XNnlayer * ptr;
+
+	XGpioPs_Config * ConfigPtr;
+	XGpioPs Gpio;	/* The driver instance for GPIO Device. */
 };
 
 #endif /* SRC_DRIVERS_NEURALNETWORK_H_ */
