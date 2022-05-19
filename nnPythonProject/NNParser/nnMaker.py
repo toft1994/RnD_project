@@ -106,14 +106,6 @@ def TrainNetwork(neurons, act, epo, inputSize):
         for neuron in layer_get_bias:
             bias_.append(to_float(to_fixed(neuron,8,16),8))
 
-        print(layer.get_weights()[0].shape)
-        print(np.asarray(weights_).shape)
-        print(layer.get_weights()[1].shape)
-        print(np.asarray(bias_).shape)
-        print(np.asarray(layer.get_weights()).shape)
-        print(np.asarray([weights_, bias_]).shape)
-
-        layer.set_weights([weights_, bias_])
 
                 
 
@@ -227,7 +219,7 @@ def createNNConfigFile(filename, bias, weights, act):
 if __name__ == '__main__':
     #neurons = [120, 120, 120, 120, 120, 120, 120, 80, 60, 10]
     #act = ["relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "relu", "softmax"]
-    neurons = [10, 10]
+    neurons = [4, 10]
     act = ["relu", "softmax"]
 
     TrainNetwork(neurons, act, 1, 10)
